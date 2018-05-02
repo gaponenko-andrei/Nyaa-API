@@ -1,51 +1,57 @@
 package agp.nyaa.api.mapper;
 
+import agp.nyaa.api.TestCases;
 import agp.nyaa.api.model.DataSize;
-import com.google.common.collect.ImmutableBiMap;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import properties.Constants;
+import com.google.common.collect.ImmutableMap;
+import lombok.val;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Iterator;
 
-class DataSizeUnitMapperTest {
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
-  private static final ImmutableBiMap<DataSize.Unit, String> MAPPING =
-          ImmutableBiMap.<DataSize.Unit, String>
-                  builder()
-                  .put(DataSize.Unit.BYTE, Constants.data.size.bytes.siteValue)
-                  .put(DataSize.Unit.KILOBYTE, Constants.data.size.kilobytes.siteValue)
-                  .put(DataSize.Unit.MEGABYTE, Constants.data.size.megabytes.siteValue)
-                  .put(DataSize.Unit.GIGABYTE, Constants.data.size.gigabytes.siteValue)
-                  .put(DataSize.Unit.TERABYTE, Constants.data.size.terabytes.siteValue)
+public class DataSizeUnitMapperTest {
+
+  private static final ImmutableMap<String, DataSize.Unit> MAPPING =
+          ImmutableMap.<String, DataSize.Unit>builder()
+                  .put("Bytes", DataSize.Unit.BYTE)
+                  .put("KiB", DataSize.Unit.KILOBYTE)
+                  .put("MiB", DataSize.Unit.MEGABYTE)
+                  .put("GiB", DataSize.Unit.GIGABYTE)
+                  .put("TiB", DataSize.Unit.TERABYTE)
                   .build();
 
-  //
-  // Data.Size.Unit -> Site Value
-  //
+  private final DataSizeUnitMapper<String, DataSize.Unit> mapper = DataSizeUnitMapper.fromSiteValue();
 
-  @ParameterizedTest
-  @EnumSource(DataSize.Unit.class)
-  void toSiteValueMapping(final DataSize.Unit dataSizeUnit) {
 
-    /* Arrange */
-    final Mapper<DataSize.Unit, String> mapper = DataSizeUnitMapper.toSiteValue();
+  @Test(dataProvider = "siteValuesProvider")
+  public void fromSiteValueMapping(final String siteValue) {
 
     /* Act */
-    final String mappingResult = mapper.map(dataSizeUnit);
+    val unit = mapper.map(siteValue);
 
     /* Assert */
-    assertEquals(getSiteValueBy(dataSizeUnit), mappingResult);
+    assertEquals(unit, getUnitBy(siteValue));
   }
 
   @Test
-  void toSizeValueMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class,
-            () -> DataSizeUnitMapper.toSiteValue().map(null));
+  public void fromSiteValueMapperThrowsOnNullArgument() {
+    assertThrows(NullPointerException.class, () -> mapper.map(null));
   }
 
-  private static String getSiteValueBy(final DataSize.Unit dataSizeUnit) {
-    return MAPPING.get(dataSizeUnit);
+  @Test
+  public void fromSiteValueMapperThrowsOnUnknownArgument() {
+    assertThrows(IllegalArgumentException.class, () -> mapper.map("unknown_arg"));
+  }
+
+  @DataProvider(name = "siteValuesProvider")
+  private static Iterator<Object[]> getTestSiteValues() {
+    return TestCases.from(MAPPING.keySet());
+  }
+
+  private static DataSize.Unit getUnitBy(final String siteValue) {
+    return MAPPING.get(siteValue);
   }
 }

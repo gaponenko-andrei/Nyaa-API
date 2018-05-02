@@ -1,92 +1,56 @@
 package agp.nyaa.api.mapper;
 
+import agp.nyaa.api.TestCases;
 import agp.nyaa.api.model.TorrentState;
-import com.google.common.collect.ImmutableBiMap;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import properties.Constants;
+import com.google.common.collect.ImmutableMap;
+import lombok.val;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import java.util.stream.Stream;
+import java.util.Iterator;
 
 import static agp.nyaa.api.model.TorrentState.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
-class TorrentStateMapperTest {
+public class TorrentStateMapperTest {
 
-  private static final ImmutableBiMap<String, TorrentState> CLASS_NAME_TO_INSTANCE_MAP =
-          ImmutableBiMap.<String, TorrentState>
-                  builder()
-                  .put(Constants.torrent.state.normal.className, NORMAL)
-                  .put(Constants.torrent.state.danger.className, REMAKE)
-                  .put(Constants.torrent.state.trusted.className, TRUSTED)
+  private static final ImmutableMap<String, TorrentState> MAPPING =
+          ImmutableMap.<String, TorrentState>builder()
+                  .put("default", NORMAL)
+                  .put("danger", REMAKE)
+                  .put("success", TRUSTED)
                   .build();
 
-  //
-  // TorrentState -> CSS Class
-  //
+  private final TorrentStateMapper<String, TorrentState> mapper = TorrentStateMapper.fromCssClass();
 
-  @ParameterizedTest
-  @EnumSource(TorrentState.class)
-  void toCssClassMapping(final TorrentState torrentState) {
 
-    /* Arrange */
-    final Mapper<TorrentState, String> mapper = TorrentStateMapper.toCssClass();
+  @Test(dataProvider = "cssClassesProvider")
+  public void toTorrentStateMapping(final String cssClass) {
 
     /* Act */
-    final String mappingResult = mapper.map(torrentState);
+    val mappingResult = mapper.map(cssClass);
 
     /* Assert */
-    assertEquals(getClassNameBy(torrentState), mappingResult);
+    assertEquals(mappingResult, getTorrentStateBy(cssClass));
   }
 
   @Test
-  void toCssClassMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class,
-            () -> TorrentStateMapper.toCssClass().map(null));
-  }
-
-  private static String getClassNameBy(final TorrentState torrentState) {
-    return CLASS_NAME_TO_INSTANCE_MAP.inverse().get(torrentState);
-  }
-
-  //
-  // CSS Class -> TorrentState
-  //
-
-  @ParameterizedTest
-  @MethodSource("cssClassesProvider")
-  void toTorrentStateMapping(final String cssClass) {
-
-    /* Arrange */
-    final Mapper<String, TorrentState> mapper = TorrentStateMapper.fromCssClass();
-
-    /* Act */
-    final TorrentState mappingResult = mapper.map(cssClass);
-
-    /* Assert */
-    assertEquals(getTorrentStateBy(cssClass), mappingResult);
+  public void toTorrentStateMapperThrowsOnNullArgument() {
+    assertThrows(NullPointerException.class, () -> mapper.map(null));
   }
 
   @Test
-  void toTorrentStateMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class,
-            () -> TorrentStateMapper.fromCssClass().map(null));
+  public void toTorrentStateMapperThrowsOnUnknownArgument() {
+    assertThrows(IllegalArgumentException.class, () -> mapper.map("unknown_css_class"));
   }
 
-  @Test
-  void toTorrentStateMapperThrowsOnUnknownArgument() {
-    assertThrows(IllegalArgumentException.class,
-            () -> TorrentStateMapper.fromCssClass().map("unknown_css_class"));
-  }
-
-  private static Stream<String> cssClassesProvider() {
-    return CLASS_NAME_TO_INSTANCE_MAP.keySet().stream();
+  @DataProvider(name = "cssClassesProvider")
+  private static Iterator<Object[]> getTestCssClasses() {
+    return TestCases.from(MAPPING.keySet());
   }
 
   private static TorrentState getTorrentStateBy(final String cssClass) {
-    return CLASS_NAME_TO_INSTANCE_MAP.get(cssClass);
+    return MAPPING.get(cssClass);
   }
 }

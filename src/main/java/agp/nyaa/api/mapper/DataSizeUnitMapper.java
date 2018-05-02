@@ -5,33 +5,36 @@ import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import properties.Constants;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 public abstract class DataSizeUnitMapper<T, R> implements Mapper<T, R> {
 
-  public static Mapper<DataSize.Unit, String> toSiteValue() {
-    return new ToSiteValueMapper();
+  public static DataSizeUnitMapper<String, DataSize.Unit> fromSiteValue() {
+    return new FromSiteValueMapper();
   }
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  private static final class ToSiteValueMapper extends DataSizeUnitMapper<DataSize.Unit, String> {
+  private static final class FromSiteValueMapper extends DataSizeUnitMapper<String, DataSize.Unit> {
 
-    private static final ImmutableMap<DataSize.Unit, String> MAPPING =
-            ImmutableMap.<DataSize.Unit, String>
-                    builder()
-                    .put(DataSize.Unit.BYTE, Constants.data.size.bytes.siteValue)
-                    .put(DataSize.Unit.KILOBYTE, Constants.data.size.kilobytes.siteValue)
-                    .put(DataSize.Unit.MEGABYTE, Constants.data.size.megabytes.siteValue)
-                    .put(DataSize.Unit.GIGABYTE, Constants.data.size.gigabytes.siteValue)
-                    .put(DataSize.Unit.TERABYTE, Constants.data.size.terabytes.siteValue)
+    private static final ImmutableMap<String, DataSize.Unit> MAPPING =
+            ImmutableMap.<String, DataSize.Unit>builder()
+                    .put("Bytes", DataSize.Unit.BYTE)
+                    .put("KiB", DataSize.Unit.KILOBYTE)
+                    .put("MiB", DataSize.Unit.MEGABYTE)
+                    .put("GiB", DataSize.Unit.GIGABYTE)
+                    .put("TiB", DataSize.Unit.TERABYTE)
                     .build();
 
     @Override
-    public String apply(@NonNull DataSize.Unit unit) {
-      return MAPPING.get(unit);
+    public DataSize.Unit apply(@NonNull final String siteValue) {
+      checkArgument(isKnown(siteValue), "Unknown 'siteValue': %s.");
+      return MAPPING.get(siteValue);
+    }
+
+    private static boolean isKnown(final String siteValue) {
+      return MAPPING.containsKey(siteValue);
     }
   }
-
-
 
 }

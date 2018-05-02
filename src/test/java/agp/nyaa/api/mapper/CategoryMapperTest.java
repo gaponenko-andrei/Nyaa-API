@@ -1,100 +1,56 @@
 package agp.nyaa.api.mapper;
 
+import agp.nyaa.api.TestCases;
 import agp.nyaa.api.model.Category;
-import com.google.common.collect.ImmutableBiMap;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import com.google.common.collect.ImmutableMap;
+import lombok.val;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import java.util.stream.Stream;
+import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
-class CategoryMapperTest {
+public class CategoryMapperTest {
 
-  private static final ImmutableBiMap<Category, String> MAPPING =
-          ImmutableBiMap.<Category, String>
-                  builder()
-                  .put(Category.Anime.MusicVideo.getInstance(), "/?c=1_1")
-                  .put(Category.Anime.EnglishTranslated.getInstance(), "/?c=1_2")
-                  .put(Category.Anime.NonEnglishTranslated.getInstance(), "/?c=1_3")
-                  .put(Category.Anime.NonTranslated.getInstance(), "/?c=1_4")
+  private static final ImmutableMap<String, Category> MAPPING =
+          ImmutableMap.<String, Category>builder()
+                  .put("/?c=1_1", Category.Anime.MusicVideo.getInstance())
+                  .put("/?c=1_2", Category.Anime.EnglishTranslated.getInstance())
+                  .put("/?c=1_3", Category.Anime.NonEnglishTranslated.getInstance())
+                  .put("/?c=1_4", Category.Anime.NonTranslated.getInstance())
                   .build();
 
-  //
-  // Category -> Href
-  //
+  private final CategoryMapper<String, Category> mapper = CategoryMapper.fromHref();
 
-  @ParameterizedTest
-  @MethodSource("categoriesProvider")
-  void toHrefMapping(final Category category) {
 
-    /* Arrange */
-    final Mapper<Category, String> toHrefMapper = CategoryMapper.toHref();
+  @Test(dataProvider = "hrefsProvider")
+  public void fromHrefMapping(final String href) {
 
     /* Act */
-    final String href = toHrefMapper.map(category);
+    val category = mapper.map(href);
 
     /* Assert */
-    assertEquals(getHrefBy(category), href);
-  }
-
-  @Test
-  void toHrefMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class,
-            () -> CategoryMapper.toHref().map(null));
-  }
-
-  @Test
-  void toHrefMapperThrowsOnUnknownArgument() {
-    assertThrows(IllegalArgumentException.class,
-            () -> CategoryMapper.toHref().map(Category.Anime.getInstance()));
-  }
-
-  private static Stream<Category> categoriesProvider() {
-    return MAPPING.keySet().stream();
-  }
-
-  private static String getHrefBy(final Category category) {
-    return MAPPING.get(category);
-  }
-
-  //
-  // Href -> Category
-  //
-
-  @ParameterizedTest
-  @MethodSource("hrefsProvider")
-  void fromHrefMapping(final String href) {
-
-    /* Arrange */
-    final Mapper<String, Category> fromHrefMapper = CategoryMapper.fromHref();
-
-    /* Act */
-    final Category category = fromHrefMapper.map(href);
-
-    /* Assert */
-    assertEquals(getCategoryBy(href), category);
+    assertEquals(category, getCategoryBy(href));
   }
 
   @Test
   void fromHrefMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class,
-            () -> CategoryMapper.fromHref().map(null));
+    assertThrows(NullPointerException.class, () -> mapper.map(null));
   }
 
   @Test
   void fromHrefMapperThrowsOnUnknownArgument() {
-    assertThrows(IllegalArgumentException.class,
-            () -> CategoryMapper.fromHref().map("unknown_href"));
+    assertThrows(IllegalArgumentException.class, () -> mapper.map("unknown_href"));
   }
 
-  private static Stream<String> hrefsProvider() {
-    return MAPPING.values().stream();
+  @DataProvider(name = "hrefsProvider")
+  private static Iterator<Object[]> getTestHrefs() {
+    return TestCases.from(MAPPING.keySet());
   }
 
   private static Category getCategoryBy(final String href) {
-    return MAPPING.inverse().get(href);
+    return MAPPING.get(href);
   }
 }

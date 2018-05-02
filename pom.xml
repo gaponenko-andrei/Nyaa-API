@@ -9,32 +9,44 @@
   <artifactId>nyaa.api</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+    <jsoup.version>1.11.2</jsoup.version>
+    <guava.version>24.0-jre</guava.version>
+    <lombok.version>1.16.20</lombok.version>
+    <mockito.version>1.10.19</mockito.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <surefire.version>2.21.0</surefire.version>
+    <testng.version>6.9.10</testng.version>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
-          <compilerArgs>
-            <arg>-Xplugin:Manifold</arg>
-          </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire.version}</version>
+        <configuration>
+          <forkCount>0</forkCount>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-testng</artifactId>
+            <version>${surefire.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
-
-  <properties>
-    <jsoup.version>1.11.2</jsoup.version>
-    <junit.version>5.0.3</junit.version>
-    <guava.version>24.0-jre</guava.version>
-    <lombok.version>1.16.20</lombok.version>
-    <manifold.version>0.12-alpha</manifold.version>
-    <mockito.version>1.10.19</mockito.version>
-    <slf4j.version>1.7.25</slf4j.version>
-    <j2html.version>1.2.2</j2html.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -51,19 +63,7 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!--Core Manifold support, includes properties and image manifolds-->
-    <dependency>
-      <groupId>systems.manifold</groupId>
-      <artifactId>manifold</artifactId>
-      <version>${manifold.version}</version>
-    </dependency>
-    <!--Support for structural typing and extensions-->
-    <dependency>
-      <groupId>systems.manifold</groupId>
-      <artifactId>manifold-ext</artifactId>
-      <version>${manifold.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -71,15 +71,9 @@
       <version>${slf4j.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${junit.version}</version>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -88,32 +82,6 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.j2html</groupId>
-      <artifactId>j2html</artifactId>
-      <version>${j2html.version}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
-
-  <profiles>
-    <profile>
-      <id>internal.tools-jar</id>
-      <activation>
-        <file>
-          <exists>\${java.home}/../lib/tools.jar</exists>
-        </file>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-          <version>RELEASE</version>
-          <scope>system</scope>
-          <systemPath>\${java.home}/../lib/tools.jar</systemPath>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
-
+  
 </project>

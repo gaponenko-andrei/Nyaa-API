@@ -7,7 +7,6 @@ import lombok.Value;
 public class DataSize {
 
   private int value;
-
   private Unit unit;
 
   @RequiredArgsConstructor
