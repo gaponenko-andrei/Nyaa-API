@@ -1,10 +1,14 @@
 package agp.nyaa.api.util;
 
+import agp.nyaa.api.TestCases;
 import com.google.common.base.Throwables;
 import lombok.val;
 import org.slf4j.Logger;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.Iterator;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -27,7 +31,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsEnabled();
+    givenTraceEnabledIs(true);
 
     /* Act */
     logException();
@@ -41,7 +45,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsEnabled();
+    givenTraceEnabledIs(true);
 
     /* Act */
     logException();
@@ -55,7 +59,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsEnabled();
+    givenTraceEnabledIs(true);
 
     /* Act */
     logException();
@@ -69,7 +73,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsDisabled();
+    givenTraceEnabledIs(false);
 
     /* Act */
     logException();
@@ -83,7 +87,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsDisabled();
+    givenTraceEnabledIs(false);
 
     /* Act */
     logException();
@@ -97,7 +101,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsDisabled();
+    givenTraceEnabledIs(false);
 
     /* Act */
     logException();
@@ -111,7 +115,7 @@ public class NyaaLogWriterTest {
 
     /* Arrange */
     givenException();
-    givenTraceIsDisabled();
+    givenTraceEnabledIs(false);
 
     /* Act */
     logException();
@@ -120,16 +124,29 @@ public class NyaaLogWriterTest {
     verifyExceptionMessageWasWrittenAsError();
   }
 
+  @Test(
+    dataProvider = "traceEnabledTestCasesProvider",
+    expectedExceptions = NullPointerException.class)
+  public void loggingExceptionThrowsOnNullException(final boolean traceEnabledValue) {
+
+    /* Arrange */
+    givenNullException();
+    givenTraceEnabledIs(traceEnabledValue);
+
+    /* Act */
+    logException();
+  }
+
   private void givenException() {
     exception = new NullPointerException("test exception");
   }
 
-  private void givenTraceIsEnabled() {
-    when(wrappedLogger.isTraceEnabled()).thenReturn(true);
+  private void givenNullException() {
+    exception = null;
   }
 
-  private void givenTraceIsDisabled() {
-    when(wrappedLogger.isTraceEnabled()).thenReturn(false);
+  private void givenTraceEnabledIs(final boolean traceIsEnabled) {
+    when(wrappedLogger.isTraceEnabled()).thenReturn(traceIsEnabled);
   }
 
   private void logException() {
@@ -168,5 +185,10 @@ public class NyaaLogWriterTest {
   private void verifyExceptionMessageWasWrittenAsError() {
     val message = exception.getMessage();
     verify(wrappedLogger).error(message);
+  }
+
+  @DataProvider(name = "traceEnabledTestCasesProvider")
+  private static Iterator<Object[]> getTraceEnabledTestCases() {
+    return TestCases.forBoolean();
   }
 }
