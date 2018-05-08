@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class DataSizeUnitMapper implements Mapper<String, DataSize.Unit> {
+public final class DataSizeUnitMapper implements Mapper<String, DataSize.Unit> {
 
   private static final ImmutableMap<String, DataSize.Unit> MAPPING =
     ImmutableMap.<String, DataSize.Unit>builder()

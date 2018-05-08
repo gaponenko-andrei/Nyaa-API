@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class CategoryMapper implements Mapper<String, Category> {
+public final class CategoryMapper implements Mapper<String, Category> {
 
   private static final ImmutableMap<String, Category> MAPPING =
     ImmutableMap.<String, Category>builder()

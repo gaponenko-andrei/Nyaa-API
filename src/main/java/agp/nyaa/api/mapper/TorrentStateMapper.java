@@ -7,7 +7,7 @@ import lombok.NonNull;
 import static agp.nyaa.api.model.TorrentState.*;
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class TorrentStateMapper implements Mapper<String, TorrentState> {
+public final class TorrentStateMapper implements Mapper<String, TorrentState> {
 
   private static final ImmutableMap<String, TorrentState> MAPPING =
     ImmutableMap.<String, TorrentState>builder()
