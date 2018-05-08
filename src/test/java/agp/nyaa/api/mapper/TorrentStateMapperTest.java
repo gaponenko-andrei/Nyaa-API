@@ -3,7 +3,7 @@ package agp.nyaa.api.mapper;
 import agp.nyaa.api.TestCases;
 import agp.nyaa.api.model.TorrentState;
 import com.google.common.collect.ImmutableMap;
-import lombok.val;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -11,46 +11,76 @@ import java.util.Iterator;
 
 import static agp.nyaa.api.model.TorrentState.*;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertThrows;
 
 public class TorrentStateMapperTest {
 
   private static final ImmutableMap<String, TorrentState> MAPPING =
-          ImmutableMap.<String, TorrentState>builder()
-                  .put("default", NORMAL)
-                  .put("danger", REMAKE)
-                  .put("success", TRUSTED)
-                  .build();
+    ImmutableMap.<String, TorrentState>builder()
+      .put("default", NORMAL)
+      .put("danger", REMAKE)
+      .put("success", TRUSTED)
+      .build();
 
-  private final TorrentStateMapper<String, TorrentState> mapper = TorrentStateMapper.fromCssClass();
+  private TorrentStateMapper mapper;
+  private String cssClass;
+  private TorrentState mappingResult;
 
+  @BeforeMethod
+  public void setUp() {
+    mapper = new TorrentStateMapper();
+  }
 
-  @Test(dataProvider = "cssClassesProvider")
-  public void toTorrentStateMapping(final String cssClass) {
+  @Test(dataProvider = "cssClassTestCasesProvider")
+  public void mapping(final String cssClass) {
+
+    /* Arrange */
+    givenCssClassIs(cssClass);
 
     /* Act */
-    val mappingResult = mapper.map(cssClass);
+    mapCssClass();
 
     /* Assert */
-    assertEquals(mappingResult, getTorrentStateBy(cssClass));
+    assertExpectedResult();
   }
 
-  @Test
-  public void toTorrentStateMapperThrowsOnNullArgument() {
-    assertThrows(NullPointerException.class, () -> mapper.map(null));
+  @Test(expectedExceptions = NullPointerException.class)
+  public void throwsOnNullCssClass() {
+
+    /* Arrange */
+    givenCssClassIs(null);
+
+    /* Act */
+    mapCssClass();
   }
 
-  @Test
-  public void toTorrentStateMapperThrowsOnUnknownArgument() {
-    assertThrows(IllegalArgumentException.class, () -> mapper.map("unknown_css_class"));
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnUnknownCssClass() {
+
+    /* Arrange */
+    givenCssClassIs("unknown");
+
+    /* Act */
+    mapCssClass();
   }
 
-  @DataProvider(name = "cssClassesProvider")
-  private static Iterator<Object[]> getTestCssClasses() {
+  private void givenCssClassIs(final String cssClass) {
+    this.cssClass = cssClass;
+  }
+
+  private void mapCssClass() {
+    this.mappingResult = mapper.map(cssClass);
+  }
+
+  private void assertExpectedResult() {
+    assertEquals(mappingResult, getExpectedStateBy(cssClass));
+  }
+
+  @DataProvider(name = "cssClassTestCasesProvider")
+  private static Iterator<Object[]> getCssClassTestCases() {
     return TestCases.from(MAPPING.keySet());
   }
 
-  private static TorrentState getTorrentStateBy(final String cssClass) {
+  private static TorrentState getExpectedStateBy(final String cssClass) {
     return MAPPING.get(cssClass);
   }
 }
