@@ -2,11 +2,12 @@ package agp.nyaa.api.mapper;
 
 import agp.nyaa.api.model.DataSize;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class DataSizeUnitMapper implements Mapper<String, DataSize.Unit> {
+public final class DataSizeUnitMapper implements SupportedValuesAwareMapper<String, DataSize.Unit> {
 
   private static final ImmutableMap<String, DataSize.Unit> MAPPING =
     ImmutableMap.<String, DataSize.Unit>builder()
@@ -19,11 +20,16 @@ public final class DataSizeUnitMapper implements Mapper<String, DataSize.Unit> {
 
   @Override
   public DataSize.Unit apply(@NonNull final String siteValue) {
-    checkArgument(isKnown(siteValue), "Unknown 'siteValue': %s.", siteValue);
+    checkArgument(isSupported(siteValue), "Unsupported 'siteValue': %s.", siteValue);
     return MAPPING.get(siteValue);
   }
 
-  private static boolean isKnown(final String siteValue) {
-    return MAPPING.containsKey(siteValue);
+  @Override
+  public ImmutableSet<String> supportedValues() {
+    return MAPPING.keySet();
+  }
+
+  private boolean isSupported(final String siteValue) {
+    return supportedValues().contains(siteValue);
   }
 }

@@ -2,12 +2,13 @@ package agp.nyaa.api.mapper;
 
 import agp.nyaa.api.model.TorrentState;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 
 import static agp.nyaa.api.model.TorrentState.*;
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class TorrentStateMapper implements Mapper<String, TorrentState> {
+public final class TorrentStateMapper implements SupportedValuesAwareMapper<String, TorrentState> {
 
   private static final ImmutableMap<String, TorrentState> MAPPING =
     ImmutableMap.<String, TorrentState>builder()
@@ -18,11 +19,16 @@ public final class TorrentStateMapper implements Mapper<String, TorrentState> {
 
   @Override
   public TorrentState apply(@NonNull final String cssClass) {
-    checkArgument(isKnown(cssClass), "Unknown 'cssClass': %s.");
+    checkArgument(isSupported(cssClass), "Unsupported 'cssClass': %s.", cssClass);
     return MAPPING.get(cssClass);
   }
 
-  private static boolean isKnown(final String cssClass) {
-    return MAPPING.containsKey(cssClass);
+  @Override
+  public ImmutableSet<String> supportedValues() {
+    return MAPPING.keySet();
+  }
+
+  private boolean isSupported(final String cssClass) {
+    return supportedValues().contains(cssClass);
   }
 }

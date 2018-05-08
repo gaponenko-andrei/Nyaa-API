@@ -2,11 +2,12 @@ package agp.nyaa.api.mapper;
 
 import agp.nyaa.api.model.Category;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class CategoryMapper implements Mapper<String, Category> {
+public final class CategoryMapper implements SupportedValuesAwareMapper<String, Category> {
 
   private static final ImmutableMap<String, Category> MAPPING =
     ImmutableMap.<String, Category>builder()
@@ -18,11 +19,16 @@ public final class CategoryMapper implements Mapper<String, Category> {
 
   @Override
   public Category apply(@NonNull final String href) {
-    checkArgument(isKnown(href), "Unknown 'href': %s.");
+    checkArgument(isSupported(href), "Unsupported 'href': %s.", href);
     return MAPPING.get(href);
   }
 
-  private static boolean isKnown(final String href) {
-    return MAPPING.containsKey(href);
+  @Override
+  public ImmutableSet<String> supportedValues() {
+    return MAPPING.keySet();
+  }
+
+  private boolean isSupported(final String href) {
+    return supportedValues().contains(href);
   }
 }
