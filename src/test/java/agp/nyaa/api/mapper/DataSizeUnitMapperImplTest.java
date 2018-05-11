@@ -1,6 +1,6 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.TestCases;
+import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.DataSize;
 import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.BeforeMethod;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 import static org.testng.Assert.assertEquals;
 
-public class DataSizeUnitMapperTest {
+public class DataSizeUnitMapperImplTest {
 
   private static final ImmutableMap<String, DataSize.Unit> MAPPING =
     ImmutableMap.<String, DataSize.Unit>builder()
@@ -22,13 +22,13 @@ public class DataSizeUnitMapperTest {
       .put("TiB", DataSize.Unit.TERABYTE)
       .build();
 
-  private DataSizeUnitMapper mapper;
+  private DataSizeUnitMapper.Impl mapper;
   private String unit;
   private DataSize.Unit mappingResult;
 
   @BeforeMethod
   public void setUp() {
-    mapper = new DataSizeUnitMapper();
+    mapper = new DataSizeUnitMapper.Impl();
   }
 
   @Test(dataProvider = "unitTestCasesProvider")
@@ -62,6 +62,11 @@ public class DataSizeUnitMapperTest {
 
     /* Act */
     mapUnit();
+  }
+
+  @Test
+  public void supportedValues() {
+    assertEquals(mapper.supportedValues(), MAPPING.keySet());
   }
 
   private void givenUnitIs(final String unit) {

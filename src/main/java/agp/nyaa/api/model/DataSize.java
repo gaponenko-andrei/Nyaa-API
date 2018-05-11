@@ -2,8 +2,10 @@ package agp.nyaa.api.model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.experimental.Accessors;
 
 @Value
+@Accessors(fluent = true)
 public class DataSize {
 
   private int value;
