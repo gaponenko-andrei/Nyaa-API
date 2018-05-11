@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import java.util.Iterator;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class CategoryMapperTest {
 
@@ -61,6 +62,11 @@ public class CategoryMapperTest {
 
     /* Act */
     mapCategoryHref();
+  }
+
+  @Test
+  public void supportedValues() {
+    assertEquals(mapper.supportedValues(), MAPPING.keySet());
   }
 
   private void givenCategoryHrefIs(final String categoryHref) {

@@ -1,6 +1,5 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.TestCases;
 import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.TorrentState;
 import com.google.common.collect.ImmutableMap;
@@ -62,6 +61,11 @@ public class TorrentStateMapperTest {
 
     /* Act */
     mapCssClass();
+  }
+
+  @Test
+  public void supportedValues() {
+    assertEquals(mapper.supportedValues(), MAPPING.keySet());
   }
 
   private void givenCssClassIs(final String cssClass) {
