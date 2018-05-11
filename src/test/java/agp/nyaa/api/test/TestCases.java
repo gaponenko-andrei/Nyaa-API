@@ -1,8 +1,7 @@
-package agp.nyaa.api;
+package agp.nyaa.api.test;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,6 +9,10 @@ import java.util.Iterator;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestCases {
+
+  public static <T> Iterator<Object[]> forEach(final T... args) {
+    return TestCases.from(Arrays.asList(args));
+  }
 
   public static Iterator<Object[]> from(final Collection<?> testCases) {
     return testCases.stream().map(a -> new Object[]{a}).iterator();

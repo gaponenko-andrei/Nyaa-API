@@ -1,6 +1,6 @@
 package agp.nyaa.api.util;
 
-import agp.nyaa.api.TestCases;
+import agp.nyaa.api.test.TestCases;
 import com.google.common.base.Throwables;
 import lombok.val;
 import org.slf4j.Logger;

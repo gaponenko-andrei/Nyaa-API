@@ -1,6 +1,7 @@
 package agp.nyaa.api.mapper;
 
 import agp.nyaa.api.TestCases;
+import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.TorrentState;
 import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.BeforeMethod;
