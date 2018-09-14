@@ -1,9 +1,8 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.TorrentState;
+import agp.nyaa.api.test.TestCases;
 import com.google.common.collect.ImmutableMap;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -21,63 +20,32 @@ public class TorrentStateMapperTest {
       .put("success", TRUSTED)
       .build();
 
-  private TorrentStateMapper mapper;
-  private String cssClass;
-  private TorrentState mappingResult;
+  private TorrentStateMapper mapper = new TorrentStateMapper();
 
-  @BeforeMethod
-  public void setUp() {
-    mapper = new TorrentStateMapper();
-  }
 
   @Test(dataProvider = "cssClassTestCasesProvider")
   public void mapping(final String cssClass) {
 
-    /* Arrange */
-    givenCssClassIs(cssClass);
-
     /* Act */
-    mapCssClass();
+    final TorrentState actualMappingResult = mapper.map(cssClass);
 
     /* Assert */
-    assertExpectedResult();
+    assertEquals(actualMappingResult, getExpectedStateBy(cssClass));
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void throwsOnNullCssClass() {
-
-    /* Arrange */
-    givenCssClassIs(null);
-
-    /* Act */
-    mapCssClass();
+    mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnUnknownCssClass() {
-
-    /* Arrange */
-    givenCssClassIs("unknown");
-
-    /* Act */
-    mapCssClass();
+    mapper.map("unknown");
   }
 
   @Test
   public void supportedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
-  }
-
-  private void givenCssClassIs(final String cssClass) {
-    this.cssClass = cssClass;
-  }
-
-  private void mapCssClass() {
-    this.mappingResult = mapper.map(cssClass);
-  }
-
-  private void assertExpectedResult() {
-    assertEquals(mappingResult, getExpectedStateBy(cssClass));
   }
 
   @DataProvider(name = "cssClassTestCasesProvider")

@@ -1,16 +1,14 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.Category;
+import agp.nyaa.api.test.TestCases;
 import com.google.common.collect.ImmutableMap;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 public class CategoryMapperTest {
 
@@ -22,63 +20,32 @@ public class CategoryMapperTest {
       .put("/?c=1_4", Category.Anime.NonTranslated.getInstance())
       .build();
 
-  private CategoryMapper mapper;
-  private String categoryHref;
-  private Category mappingResult;
+  private CategoryMapper mapper = new CategoryMapper();
 
-  @BeforeMethod
-  public void setUp() {
-    mapper = new CategoryMapper();
-  }
 
   @Test(dataProvider = "categoryHrefTestCasesProvider")
   public void mapping(final String categoryHref) {
 
-    /* Arrange */
-    givenCategoryHrefIs(categoryHref);
-
     /* Act */
-    mapCategoryHref();
+    final Category actualMappingResult = mapper.map(categoryHref);
 
     /* Assert */
-    assertExpectedResult();
+    assertEquals(actualMappingResult, getExpectedCategoryBy(categoryHref));
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void throwsOnNullCategoryHref() {
-
-    /* Arrange */
-    givenCategoryHrefIs(null);
-
-    /* Act */
-    mapCategoryHref();
+    mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnUnknownCategoryHref() {
-
-    /* Arrange */
-    givenCategoryHrefIs("unknown");
-
-    /* Act */
-    mapCategoryHref();
+    mapper.map("unknown");
   }
 
   @Test
   public void supportedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
-  }
-
-  private void givenCategoryHrefIs(final String categoryHref) {
-    this.categoryHref = categoryHref;
-  }
-
-  private void mapCategoryHref() {
-    this.mappingResult = mapper.map(categoryHref);
-  }
-
-  private void assertExpectedResult() {
-    assertEquals(mappingResult, getExpectedCategoryBy(categoryHref));
   }
 
   @DataProvider(name = "categoryHrefTestCasesProvider")
