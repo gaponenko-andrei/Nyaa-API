@@ -23,6 +23,10 @@ public final class DataSizeMapper implements Mapper<String, DataSize> {
   private final Supplier<Pattern> dataSizePattern = memoize(this::newDataSizePattern);
 
 
+  public static DataSizeMapper using(@NonNull final DataSizeUnitMapper dataSizeUnitMapper) {
+    return new DataSizeMapper(dataSizeUnitMapper);
+  }
+
   public DataSizeMapper(@NonNull final DataSizeUnitMapper dataSizeUnitMapper) {
     validate(dataSizeUnitMapper);
     this.unitMapper = dataSizeUnitMapper;

@@ -18,6 +18,10 @@ public abstract class DataSize {
   public abstract Unit unit();
 
 
+  public static DataSize of(final Integer value, final Unit unit) {
+    return DataSize.of(value.floatValue(), unit);
+  }
+
   public static DataSize of(final Float value, final Unit unit) {
     validate(value);
     return ImmutableDataSize.of(value, unit);

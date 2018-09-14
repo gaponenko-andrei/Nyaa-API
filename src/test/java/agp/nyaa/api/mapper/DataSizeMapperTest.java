@@ -5,203 +5,103 @@ import agp.nyaa.api.model.DataSize.Unit;
 import agp.nyaa.api.test.TestDataSizeUnitMapper;
 import com.google.common.collect.ImmutableMap;
 import lombok.val;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import static agp.nyaa.api.model.DataSize.Unit.BYTE;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
 
 public class DataSizeMapperTest {
 
-  private DataSizeMapper mapper;
-  private String dataSizeString;
-  private DataSize mappingResult;
-
-  @AfterMethod
-  public void tearDown() {
-    mapper = null;
-    dataSizeString = null;
-    mappingResult = null;
-  }
-
-  @Test(dataProvider = "validDataSizeTestCasesProvider")
-  public void mapping(final String dataSizeString,
-                      final DataSize expectedDataSize,
-                      final DataSizeUnitMapper unitMapper) {
-    /* Arrange */
-    givenDataSizeStringIs(dataSizeString);
-    givenDataSizeMapperWith(unitMapper);
-
-    /* Act */
-    mapDataSize();
-
-    /* Assert */
-    assertMappingResultIs(expectedDataSize);
-  }
+  private final DataSizeUnitMapper testUnitMapper =
+    new TestDataSizeUnitMapper().from("TestUnit").to(Unit.BYTE);
 
   @Test
   public void mappingCallsDataSizeUnitMapper() {
 
     /* Arrange */
-    val unitMapper = TestDataSizeUnitMapper.from("Random Units").to(BYTE);
-    givenDataSizeMapperWith(spy(unitMapper));
-    givenDataSizeStringIs("100 Random Units");
+    val mapper = DataSizeMapper.using(spy(testUnitMapper));
 
     /* Act */
-    mapDataSize();
+    mapper.map("100 TestUnit");
 
     /* Assert */
-    assertUnitMapperWasCalled();
+    verify(mapper.getUnitMapper()).map("TestUnit");
   }
 
-  //
-  // Negative scenarios
-  //
+  @Test
+  public void mappingOfIntegerDataSizeString() {
+    testUnitStringMappingExpectedResult("1 TestUnit", DataSize.of(1, BYTE));
+  }
+
+  @Test
+  public void mappingOfFloatDataSizeStringWithZeroFraction() {
+    testUnitStringMappingExpectedResult("1.0 TestUnit", DataSize.of(1.0f, BYTE));
+  }
+
+  @Test
+  public void mappingOfFloatDataSizeStringWithNonZeroFraction() {
+    testUnitStringMappingExpectedResult("20.20 TestUnit", DataSize.of(20.20f, BYTE));
+  }
+
+  @Test
+  public void mappingOfIntegerDataSizeStringWithAdditionalSpaces() {
+    testUnitStringMappingExpectedResult("  300   TestUnit  ", DataSize.of(300, BYTE));
+  }
+
+  @Test
+  public void mappingOfFloatDataSizeStringWithAdditionalSpaces() {
+    testUnitStringMappingExpectedResult("  300.300   TestUnit  ", DataSize.of(300.300f, BYTE));
+  }
+
+  private void testUnitStringMappingExpectedResult(final String inputString,
+                                                   final DataSize expectedResult) {
+
+    /* Arrange */
+    val mapper = DataSizeMapper.using(testUnitMapper);
+
+    /* Act */
+    final DataSize actualMappingResult = mapper.map(inputString);
+
+    /* Assert */
+    assertEquals(actualMappingResult, expectedResult);
+  }
+
+  /* Negative scenarios */
 
   @Test(expectedExceptions = NullPointerException.class)
-  public void constructorThrowsOnNullUnitMapper() {
-    new DataSizeMapper(null);
+  public void throwsOnNullUnitMapper() {
+    DataSizeMapper.using((DataSizeUnitMapper) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructorThrowsOnUnitMapperWithoutSupportedUnits() {
-    new DataSizeMapper(DataSizeUnitMapper.from(ImmutableMap.of()));
+  public void throwsOnUnitMapperWithoutSupportedUnits() {
+    DataSizeMapper.using(DataSizeUnitMapper.from(ImmutableMap.of(/* no supported units */)));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnDataSizeWithUnsupportedUnit() {
-
-    /* Arrange */
-    val unitMapper = TestDataSizeUnitMapper.from("Byte").to(BYTE);
-    givenDataSizeMapperWith(unitMapper);
-    givenDataSizeStringIs("100 Kilobyte");
-
-    /* Act */
-    mapDataSize();
+  public void throwsOnDataSizeStringWithUnsupportedUnit() {
+    DataSizeMapper.using(testUnitMapper).map("100 UnsupportedUnits");
   }
 
-  @Test(expectedExceptions = IllegalArgumentException.class,
-        dataProvider = "invalidDataSizeTestCasesProvider")
-  public void throwsOnInvalidDataSize(final String dataSizeString,
-                                      final DataSizeUnitMapper unitMapper) {
-    /* Arrange */
-    givenDataSizeMapperWith(unitMapper);
-    givenDataSizeStringIs(dataSizeString);
-
-    /* Act */
-    mapDataSize();
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnIntegerDataSizeStringWithZeroUnits() {
+    DataSizeMapper.using(testUnitMapper).map("0 TestUnit");
   }
 
-  //
-  // Additional methods
-  //
-
-  private void givenDataSizeStringIs(final String dataSizeString) {
-    this.dataSizeString = dataSizeString;
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnFloatDataSizeStringWithZeroUnits() {
+    DataSizeMapper.using(testUnitMapper).map("0.0 TestUnit");
   }
 
-  private void givenDataSizeMapperWith(final DataSizeUnitMapper dataSizeUnitMapper) {
-    this.mapper = new DataSizeMapper(dataSizeUnitMapper);
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnNegativeIntegerDataSize() {
+    DataSizeMapper.using(testUnitMapper).map("-10 TestUnit");
   }
 
-  private void mapDataSize() {
-    this.mappingResult = mapper.map(dataSizeString);
-  }
-
-  private void assertUnitMapperWasCalled() {
-    verify(mapper.getUnitMapper()).map(anyString());
-  }
-
-  private void assertMappingResultIs(final DataSize dataSize) {
-    assertEquals(mappingResult, dataSize);
-  }
-
-  //
-  // Data Providers
-  //
-
-  @DataProvider(name = "invalidDataSizeTestCasesProvider")
-  private static Iterator<Object[]> getIllegalArgumentTestCases() {
-    final List<Object[]> testCases = new ArrayList<>();
-
-    val unitMapper = DataSizeUnitMapper.from(
-      ImmutableMap.<String, Unit>builder()
-        .put("Unit1", Unit.BYTE)
-        .put("Unit2", Unit.KILOBYTE)
-        .put("Unit3", Unit.MEGABYTE)
-        .put("Unit4", Unit.GIGABYTE)
-        .build());
-
-    String dataSizeString;
-
-    // Test case for mapping integer zero size value
-    dataSizeString = "0 Unit1";
-    testCases.add(new Object[] {dataSizeString, unitMapper});
-
-    // Test case for mapping real number zero size value
-    dataSizeString = "0.0 Unit2";
-    testCases.add(new Object[] {dataSizeString, unitMapper});
-
-    // Test case for mapping negative size value
-    dataSizeString = "-300 Unit3";
-    testCases.add(new Object[] {dataSizeString, unitMapper});
-
-    // Test case for mapping size value with illegal chars
-    dataSizeString = Float.MAX_VALUE + " Unit4";
-    testCases.add(new Object[] {dataSizeString, unitMapper});
-
-    // Test case for mapping data size string without value
-    dataSizeString = "Unit4";
-    testCases.add(new Object[] {dataSizeString, unitMapper});
-
-    return testCases.iterator();
-  }
-
-  @DataProvider(name = "validDataSizeTestCasesProvider")
-  private static Iterator<Object[]> getValidDataSizeTestCases() {
-    final List<Object[]> testCases = new ArrayList<>();
-
-    val unitMapper = DataSizeUnitMapper.from(
-      ImmutableMap.<String, Unit>builder()
-        .put("Unit1", Unit.BYTE)
-        .put("Unit2", Unit.KILOBYTE)
-        .put("Unit3", Unit.MEGABYTE)
-        .put("Unit4", Unit.GIGABYTE)
-        .build());
-
-    String dataSizeString;
-    DataSize expectedDataSize;
-
-    // Test case for mapping integer size value of Unit1 → BYTE
-    dataSizeString = "1 Unit1";
-    expectedDataSize = DataSize.of(1f, Unit.BYTE);
-    testCases.add(new Object[] {dataSizeString, expectedDataSize, unitMapper});
-
-    // Test case for mapping real number size value of Unit2 → KILOBYTE
-    dataSizeString = "20.020 Unit2";
-    expectedDataSize = DataSize.of(20.020f, Unit.KILOBYTE);
-    testCases.add(new Object[] {dataSizeString, expectedDataSize, unitMapper});
-
-    // Test case for mapping integer size value of Unit3 → MEGABYTE
-    // with some additional spaces present in the string
-    dataSizeString = "  300   Unit3  ";
-    expectedDataSize = DataSize.of(300f, Unit.MEGABYTE);
-    testCases.add(new Object[] {dataSizeString, expectedDataSize, unitMapper});
-
-    // Test case for mapping real number size value of Unit4 → GIGABYTE
-    // with some additional spaces present in the string
-    dataSizeString = "  300.300   Unit4  ";
-    expectedDataSize = DataSize.of(300.300f, Unit.GIGABYTE);
-    testCases.add(new Object[] {dataSizeString, expectedDataSize, unitMapper});
-
-    return testCases.iterator();
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnNonDecimalDataSizeString() {
+    DataSizeMapper.using(testUnitMapper).map("0x1 TestUnit");
   }
 }
