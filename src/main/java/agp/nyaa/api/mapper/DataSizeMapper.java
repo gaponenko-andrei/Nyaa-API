@@ -33,7 +33,7 @@ public final class DataSizeMapper implements Mapper<String, DataSize> {
     validate(dataSize);
     val dataSizeValue = extractSizeValueOf(dataSize);
     val dataSizeUnit = extractUnitValueOf(dataSize);
-    return new DataSize(dataSizeValue, dataSizeUnit);
+    return DataSize.of(dataSizeValue, dataSizeUnit);
   }
 
   private void validate(final DataSizeUnitMapper dataSizeUnitMapper) {
@@ -58,9 +58,9 @@ public final class DataSizeMapper implements Mapper<String, DataSize> {
     return dataSize.matches(dataSizePattern.get().pattern());
   }
 
-  private Integer extractSizeValueOf(final String dataSize) {
+  private Float extractSizeValueOf(final String dataSize) {
     val stringValue = substringSizeOf(dataSize);
-    return Integer.valueOf(stringValue);
+    return Float.valueOf(stringValue);
   }
 
   private DataSize.Unit extractUnitValueOf(final String dataSize) {
@@ -91,7 +91,7 @@ public final class DataSizeMapper implements Mapper<String, DataSize> {
   }
 
   private Pattern newDataSizePattern() {
-    val values = "([1-9][0-9]*)";
+    val values = "([1-9][0-9]*[/.0-9]*)";
     val spaces = "\\s*";
     val units = newSupportedUnitsGroupRegex();
     val dataSizeRegex = spaces + values + spaces + units + spaces;
