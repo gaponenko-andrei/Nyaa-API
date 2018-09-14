@@ -1,11 +1,27 @@
 package agp.nyaa.api.model;
 
-import lombok.Value;
+import org.immutables.value.Value;
 
-@Value
-public class TorrentPreview {
+import java.net.URI;
 
+import static org.immutables.value.Value.Immutable;
+import static org.immutables.value.Value.Style.ImplementationVisibility.PACKAGE;
 
-    private String field;
+@Immutable
+@Value.Style(visibility = PACKAGE, overshadowImplementation = true)
+public abstract class TorrentPreview {
 
+  public abstract Long id();
+  public abstract TorrentState state();
+  public abstract Category category();
+  public abstract String title();
+  public abstract URI downloadLink();
+  public abstract URI magnetLink();
+  public abstract DataSize dataSize();
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder extends ImmutableTorrentPreview.Builder {}
 }
