@@ -14,10 +14,10 @@ public class CategoryMapperTest {
 
   private static final ImmutableMap<String, Category> MAPPING =
     ImmutableMap.<String, Category>builder()
-      .put("/?c=1_1", Category.Anime.MusicVideo.getInstance())
-      .put("/?c=1_2", Category.Anime.EnglishTranslated.getInstance())
-      .put("/?c=1_3", Category.Anime.NonEnglishTranslated.getInstance())
-      .put("/?c=1_4", Category.Anime.NonTranslated.getInstance())
+      .put("/?c=1_1", Category.Anime.MusicVideo.instance())
+      .put("/?c=1_2", Category.Anime.EnglishTranslated.instance())
+      .put("/?c=1_3", Category.Anime.NonEnglishTranslated.instance())
+      .put("/?c=1_4", Category.Anime.NonTranslated.instance())
       .build();
 
   private CategoryMapper mapper = new CategoryMapper();

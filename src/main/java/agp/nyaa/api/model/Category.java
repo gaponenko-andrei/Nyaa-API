@@ -18,7 +18,7 @@ public abstract class Category {
 
     private static final Anime INSTANCE = new Anime();
 
-    public static Anime getInstance() {
+    public static Anime instance() {
       return INSTANCE;
     }
 
@@ -34,7 +34,7 @@ public abstract class Category {
 
       private static final MusicVideo INSTANCE = new MusicVideo();
 
-      public static MusicVideo getInstance() {
+      public static MusicVideo instance() {
         return INSTANCE;
       }
 
@@ -47,7 +47,7 @@ public abstract class Category {
 
       private static final EnglishTranslated INSTANCE = new EnglishTranslated();
 
-      public static EnglishTranslated getInstance() {
+      public static EnglishTranslated instance() {
         return INSTANCE;
       }
 
@@ -60,7 +60,7 @@ public abstract class Category {
 
       private static final NonEnglishTranslated INSTANCE = new NonEnglishTranslated();
 
-      public static NonEnglishTranslated getInstance() {
+      public static NonEnglishTranslated instance() {
         return INSTANCE;
       }
 
@@ -73,7 +73,7 @@ public abstract class Category {
 
       private static final NonTranslated INSTANCE = new NonTranslated();
 
-      public static NonTranslated getInstance() {
+      public static NonTranslated instance() {
         return INSTANCE;
       }
 
