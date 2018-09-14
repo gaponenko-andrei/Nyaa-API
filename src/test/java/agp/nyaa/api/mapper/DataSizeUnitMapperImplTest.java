@@ -1,9 +1,8 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.test.TestCases;
 import agp.nyaa.api.model.DataSize;
+import agp.nyaa.api.test.TestCases;
 import com.google.common.collect.ImmutableMap;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -22,63 +21,32 @@ public class DataSizeUnitMapperImplTest {
       .put("TiB", DataSize.Unit.TERABYTE)
       .build();
 
-  private DataSizeUnitMapper.Impl mapper;
-  private String unit;
-  private DataSize.Unit mappingResult;
+  private DataSizeUnitMapper mapper = DataSizeUnitMapper.impl();
 
-  @BeforeMethod
-  public void setUp() {
-    mapper = new DataSizeUnitMapper.Impl();
-  }
 
   @Test(dataProvider = "unitTestCasesProvider")
-  public void mapping(final String unit) {
-
-    /* Arrange */
-    givenUnitIs(unit);
+  public void mapping(final String mappingInput) {
 
     /* Act */
-    mapUnit();
+    final DataSize.Unit actualMappingResult = mapper.map(mappingInput);
 
     /* Assert */
-    assertExpectedResult();
+    assertEquals(actualMappingResult, getExpectedResultBy(mappingInput));
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void throwsOnNullArgument() {
-
-    /* Arrange */
-    givenUnitIs(null);
-
-    /* Act */
-    mapUnit();
+    mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnUnknownArgument() {
-
-    /* Arrange */
-    givenUnitIs("unknown");
-
-    /* Act */
-    mapUnit();
+    mapper.map("unknown");
   }
 
   @Test
   public void supportedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
-  }
-
-  private void givenUnitIs(final String unit) {
-    this.unit = unit;
-  }
-
-  private void mapUnit() {
-    mappingResult = mapper.map(unit);
-  }
-
-  private void assertExpectedResult() {
-    assertEquals(mappingResult, getExpectedResultBy(unit));
   }
 
   @DataProvider(name = "unitTestCasesProvider")

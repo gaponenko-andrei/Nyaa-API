@@ -3,56 +3,38 @@ package agp.nyaa.api.test;
 import agp.nyaa.api.mapper.DataSizeUnitMapper;
 import agp.nyaa.api.model.DataSize;
 import com.google.common.collect.ImmutableSet;
-import lombok.NonNull;
-import lombok.val;
-import org.mockito.Mockito;
-
-import static org.mockito.Mockito.mock;
 
 public interface TestDataSizeUnitMapper extends DataSizeUnitMapper {
 
-  static TestDataSizeUnitMapper to(@NonNull final DataSize.Unit unit) {
-    return new TestDataSizeUnitMapper() {
-
-      @Override
-      public ImmutableSet<String> supportedValues() {
-        return ImmutableSet.of(unit.name());
-      }
-
-      @Override
-      public DataSize.Unit apply(@NonNull final String unitName) {
-        if (unit.name().equals(unitName)) {
-          return unit;
-        } else {
-          throw new IllegalArgumentException();
-        }
-      }
-    };
+  static TestDataSizeUnitMapper.Impl from(final String unitString) {
+    return new TestDataSizeUnitMapper.Impl().from(unitString);
   }
 
-  class ToRandomUnit implements DataSizeUnitMapper {
+  class Impl implements TestDataSizeUnitMapper {
+
+    private String unitString;
+    private DataSize.Unit unit;
+
+    public TestDataSizeUnitMapper.Impl from(final String unitString) {
+      this.unitString = unitString;
+      return this;
+    }
+
+    public TestDataSizeUnitMapper.Impl to(final DataSize.Unit unit) {
+      this.unit = unit;
+      return this;
+    }
 
     @Override
     public ImmutableSet<String> supportedValues() {
-      return ImmutableSet.of("Random");
+      return (unitString == null)
+               ? ImmutableSet.of()
+               : ImmutableSet.of(unitString);
     }
 
     @Override
-    public DataSize.Unit apply(String s) {
-      return DataSize.Unit.BYTE;
-    }
-  }
-
-  class WithoutSupportedUnits implements TestDataSizeUnitMapper {
-
-    @Override
-    public ImmutableSet<String> supportedValues() {
-      return ImmutableSet.of();
-    }
-
-    @Override
-    public DataSize.Unit apply(String s) {
-      return null;
+    public DataSize.Unit apply(final String unitString) {
+      return unit;
     }
   }
 }
