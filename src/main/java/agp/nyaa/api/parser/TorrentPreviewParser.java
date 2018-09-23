@@ -74,8 +74,7 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
   }
 
   private static Long parseIdOf(final Element torrentPreviewElement) {
-    val column = 1;
-    val idColumn = torrentPreviewElement.select("td").get(column);
+    val idColumn = getColumn(torrentPreviewElement, 1);
     val idString = idColumn.select("a").attr("href").replace("/view/", "");
     return Long.valueOf(idString);
   }
@@ -86,29 +85,25 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
   }
 
   private static Category parseCategoryOf(final Element torrentPreviewElement) {
-    val column = 0;
-    val categoryColumn = torrentPreviewElement.select("td").get(column);
+    val categoryColumn = getColumn(torrentPreviewElement, 0);
     val categoryLink = categoryColumn.selectFirst("a");
     return new CategoryMapper().map(categoryLink.attr("href"));
   }
 
   private static String parseTitleOf(final Element torrentPreviewElement) {
-    val column = 1;
-    val titleColumn = torrentPreviewElement.select("td").get(column);
+    val titleColumn = getColumn(torrentPreviewElement, 1);
     val titleLink = titleColumn.selectFirst("a");
     return titleLink.attr("title");
   }
 
   private static URI parseDownloadLinkOf(final Element torrentPreviewElement) {
-    val column = 2;
-    val downloadLinksColumn = torrentPreviewElement.select("td").get(column);
+    val downloadLinksColumn = getColumn(torrentPreviewElement, 2);
     val torrentDownloadHref = downloadLinksColumn.selectFirst("a").attr("href");
     return new StringToUriMapper().map(torrentDownloadHref);
   }
 
   private static URI parseMagnetLinkOf(final Element torrentPreviewElement) {
-    val column = 2;
-    val downloadLinksColumn = torrentPreviewElement.select("td").get(column);
+    val downloadLinksColumn = getColumn(torrentPreviewElement, 2);
     val torrentDownloadHref = downloadLinksColumn.select("a").get(1).attr("href");
     return new StringToUriMapper().map(torrentDownloadHref);
   }
@@ -121,9 +116,8 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
 
   private static Instant parseUploadDateOf(final Element torrentPreviewElement) {
     val uploadDateColumn = getColumn(torrentPreviewElement, 4);
-    val uploadDateString = uploadDateColumn.text();
     val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    val localDateTime = LocalDateTime.parse(uploadDateString, dateTimePattern);
+    val localDateTime = LocalDateTime.parse(uploadDateColumn.text(), dateTimePattern);
     return ZonedDateTime.of(localDateTime, ZoneId.of("UTC")).toInstant();
   }
 
