@@ -28,6 +28,7 @@ public final class TorrentStateMapper implements SupportedValuesAwareMapper<Stri
     return MAPPING.keySet();
   }
 
+  // todo сделать default?
   private boolean isSupported(final String cssClass) {
     return supportedValues().contains(cssClass);
   }

@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+// TODO проверять отсутствие атрибутов
+
 public final class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
 
   private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewParser.class);

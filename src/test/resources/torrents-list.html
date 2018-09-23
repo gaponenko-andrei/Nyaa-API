@@ -37,8 +37,11 @@
   </tr>
   </thead>
   <tbody>
+
+  <!-- todo make all invalid elements based on valid one -->
+
   <!-- Valid torrent preview element -->
-  <tr class="default">
+  <tr class="default" data-test-case-id="valid-preview-element">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -50,9 +53,9 @@
     </td>
     <td class="text-center" style="white-space: nowrap;">
       <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
-      <a
-              href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-              class="fa fa-fw fa-magnet"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
     </td>
     <td class="text-center">614.1 MiB</td>
     <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
@@ -60,8 +63,104 @@
     <td class="text-center" style="color: red;">39</td>
     <td class="text-center">0</td>
   </tr>
+
+  <!-- With invalid id -->
+  <tr class="default" data-test-case-id="with-invalid-id">
+    <td style="padding:0 4px;">
+      <a href="/?c=1_2" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
+      </a>
+    </td>
+    <td colspan="2">
+      <a href="/view/invalid_id" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
+    </td>
+    <td class="text-center" style="white-space: nowrap;">
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
+    </td>
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
+    <td class="text-center" style="color: green;">1</td>
+    <td class="text-center" style="color: red;">39</td>
+    <td class="text-center">0</td>
+  </tr>
+
+  <!-- With invalid state -->
+  <tr class="invalid_state" data-test-case-id="with-invalid-state">
+    <td style="padding:0 4px;">
+      <a href="/?c=1_2" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
+      </a>
+    </td>
+    <td colspan="2">
+      <a href="/view/1032497" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
+    </td>
+    <td class="text-center" style="white-space: nowrap;">
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
+    </td>
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
+    <td class="text-center" style="color: green;">1</td>
+    <td class="text-center" style="color: red;">39</td>
+    <td class="text-center">0</td>
+  </tr>
+
+  <!-- With invalid category -->
+  <tr class="default" data-test-case-id="with-invalid-category">
+    <td style="padding:0 4px;">
+      <a href="invalid_category" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
+      </a>
+    </td>
+    <td colspan="2">
+      <a href="/view/1032497" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
+    </td>
+    <td class="text-center" style="white-space: nowrap;">
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
+    </td>
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
+    <td class="text-center" style="color: green;">1</td>
+    <td class="text-center" style="color: red;">39</td>
+    <td class="text-center">0</td>
+  </tr>
+
+  <!-- With absent title attribute  -->
+  <tr class="default" data-test-case-id="with-invalid-title">
+    <td style="padding:0 4px;">
+      <a href="/?c=1_2" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
+      </a>
+    </td>
+    <td colspan="2">
+      <a href="/view/1032497">[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv</a>
+    </td>
+    <td class="text-center" style="white-space: nowrap;">
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
+    </td>
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
+    <td class="text-center" style="color: green;">1</td>
+    <td class="text-center" style="color: red;">39</td>
+    <td class="text-center">0</td>
+  </tr>
+
   <!-- With invalid torrent download link -->
-  <tr class="default">
+  <tr class="default" data-test-case-id="with-invalid-torrent-link">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -74,7 +173,7 @@
     <td class="text-center" style="white-space: nowrap;">
       <a href="\\\\some_invalid_link\\\\"><i class="fa fa-fw fa-download"></i></a>
       <a href="magnet:?xt=urn:btih:M2ONGZYJPNIMFFVRHIWTOX76ZUKANMT7&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B1080p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
+              class="fa fa-fw fa-magnet"></i></a>
     </td>
     <td class="text-center">1.4 GiB</td>
     <td class="text-center" data-timestamp="1525191012">2018-05-01 16:10</td>
@@ -83,8 +182,9 @@
     <td class="text-center" style="color: red;">60</td>
     <td class="text-center">5</td>
   </tr>
+
   <!-- With invalid magnet link -->
-  <tr class="default">
+  <tr class="default" data-test-case-id="with-invalid-magnet-link">
     <td style="padding:0 4px;">
       <a href="/?c=1_3" title="Anime - Non-English-translated">
         <img src="/static/img/icons/nyaa/1_3.png" alt="Anime - Non-English-translated">
@@ -105,8 +205,9 @@
     <td class="text-center" style="color: red;">0</td>
     <td class="text-center">0</td>
   </tr>
+
   <!-- With invalid upload date -->
-  <tr class="success">
+  <tr class="success" data-test-case-id="with-invalid-upload-date">
     <td style="padding:0 4px;">
       <a href="/?c=1_3" title="Anime - Non-English-translated">
         <img src="/static/img/icons/nyaa/1_3.png" alt="Anime - Non-English-translated">
@@ -129,138 +230,6 @@
     <td class="text-center" style="color: red;">10</td>
     <td class="text-center">0</td>
   </tr>
-  <tr class="default">
-    <td style="padding:0 4px;">
-      <a href="/?c=1_4" title="Anime - Raw">
-        <img src="/static/img/icons/nyaa/1_4.png" alt="Anime - Raw">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032493"
-         title="[Ohys-Raws] Rokuhoudou Yotsuiro Biyori - 04 (AT-X 1280x720 x264 AAC).mp4">[Ohys-Raws]
-        Rokuhoudou Yotsuiro Biyori - 04 (AT-X 1280x720 x264 AAC).mp4</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032493.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:S63E5CIBUAAMSL3CPVIJZI3XMGIXC2YY&amp;dn=%5BOhys-Raws%5D+Rokuhoudou+Yotsuiro+Biyori+-+04+%28AT-X+1280x720+x264+AAC%29.mp4&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">345.4 MiB</td>
-    <td class="text-center" data-timestamp="1525190543">2018-05-01 16:02</td>
 
-    <td class="text-center" style="color: green;">23</td>
-    <td class="text-center" style="color: red;">76</td>
-    <td class="text-center">35</td>
-  </tr>
-  <tr class="default">
-    <td style="padding:0 4px;">
-      <a href="/?c=1_2" title="Anime - English-translated">
-        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032492"
-         title="[Anime Land] Batman Ninja (Dual Audio) (BDRip 720p Hi10P QAAC AC3) [0DAAC9E7].mkv">[Anime
-        Land] Batman Ninja (Dual Audio) (BDRip 720p Hi10P QAAC AC3) [0DAAC9E7].mkv</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032492.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:EFJFYO6I3LWZOOT5EZE7KQ545LX6ZXLH&amp;dn=%5BAnime+Land%5D+Batman+Ninja+%28Dual+Audio%29+%28BDRip+720p+Hi10P+QAAC+AC3%29+%5B0DAAC9E7%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">3.9 GiB</td>
-    <td class="text-center" data-timestamp="1525190316">2018-05-01 15:58</td>
-    <td class="text-center" style="color: green;">2</td>
-    <td class="text-center" style="color: red;">36</td>
-    <td class="text-center">1</td>
-  </tr>
-  <tr class="default">
-    <td style="padding:0 4px;">
-      <a href="/?c=1_4" title="Anime - Raw">
-        <img src="/static/img/icons/nyaa/1_4.png" alt="Anime - Raw">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032491"
-         title="[Anime Land] Captain Tsubasa (2018) 05 (TVA 720p Hi10P AAC) RAW [14A9F762].mp4">[Anime
-        Land] Captain Tsubasa (2018) 05 (TVA 720p Hi10P AAC) RAW [14A9F762].mp4</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032491.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:IRMMQSKRHH6VTNTHDOT2TZ2OWAOP6HBZ&amp;dn=%5BAnime+Land%5D+Captain+Tsubasa+%282018%29+05+%28TVA+720p+Hi10P+AAC%29+RAW+%5B14A9F762%5D.mp4&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">486.7 MiB</td>
-    <td class="text-center" data-timestamp="1525190179">2018-05-01 15:56</td>
-
-    <td class="text-center" style="color: green;">4</td>
-    <td class="text-center" style="color: red;">13</td>
-    <td class="text-center">4</td>
-  </tr>
-  <tr class="default">
-    <td style="padding:0 4px;">
-      <a href="/?c=1_2" title="Anime - English-translated">
-        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032490" title="[GANGO] Sei Juushi Bismarck 26 [5F352F53].mkv">[GANGO] Sei
-        Juushi Bismarck 26 [5F352F53].mkv</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032490.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:5LMZJTCQFLFR6DQNGWKMAS4XFSRTDI6H&amp;dn=%5BGANGO%5D+Sei+Juushi+Bismarck+26+%5B5F352F53%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">414.4 MiB</td>
-    <td class="text-center" data-timestamp="1525190117">2018-05-01 15:55</td>
-
-    <td class="text-center" style="color: green;">1</td>
-    <td class="text-center" style="color: red;">10</td>
-    <td class="text-center">0</td>
-  </tr>
-  <tr class="success">
-    <td style="padding:0 4px;">
-      <a href="/?c=5_1" title="Pictures - Graphics">
-        <img src="/static/img/icons/nyaa/5_1.png" alt="Pictures - Graphics">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032489" title="[ゆいれその隠れ家 (ゆいれそ)] こたます! (アイドルマスター) [DL版]">[ゆいれその隠れ家 (ゆいれそ)]
-        こたます! (アイドルマスター) [DL版]</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032489.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:LSDO75AAC4R36XHUKBFQKBEZSC6S3TMT&amp;dn=%5B%E3%82%86%E3%81%84%E3%82%8C%E3%81%9D%E3%81%AE%E9%9A%A0%E3%82%8C%E5%AE%B6+%28%E3%82%86%E3%81%84%E3%82%8C%E3%81%9D%29%5D+%E3%81%93%E3%81%9F%E3%81%BE%E3%81%99%21+%28%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%83%9E%E3%82%B9%E3%82%BF%E3%83%BC%29+%5BDL%E7%89%88%5D&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">15.1 MiB</td>
-    <td class="text-center" data-timestamp="1525190106">2018-05-01 15:55</td>
-
-    <td class="text-center" style="color: green;">1</td>
-    <td class="text-center" style="color: red;">2</td>
-    <td class="text-center">1</td>
-  </tr>
-  <tr class="success">
-    <td style="padding:0 4px;">
-      <a href="/?c=1_3" title="Anime - Non-English-translated">
-        <img src="/static/img/icons/nyaa/1_3.png" alt="Anime - Non-English-translated">
-      </a>
-    </td>
-    <td colspan="2">
-      <a href="/view/1032488" title="[PuyaSubs!] Tokyo Ghoul Re - 05 [1080p][B2ABBFF3].mkv">[PuyaSubs!]
-        Tokyo Ghoul Re - 05 [1080p][B2ABBFF3].mkv</a>
-    </td>
-    <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032488.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:TUYNP27VACGTN2HBBD3DU5XYVGO7TFVB&amp;dn=%5BPuyaSubs%21%5D+Tokyo+Ghoul+Re+-+05+%5B1080p%5D%5BB2ABBFF3%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
-    </td>
-    <td class="text-center">438.5 MiB</td>
-    <td class="text-center" data-timestamp="1525190036">2018-05-01 15:53</td>
-    <td class="text-center" style="color: green;">71</td>
-    <td class="text-center" style="color: red;">92</td>
-    <td class="text-center">109</td>
-  </tr>
   </tbody>
 </table>
