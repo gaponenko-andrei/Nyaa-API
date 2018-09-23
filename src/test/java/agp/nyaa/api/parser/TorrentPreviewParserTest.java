@@ -3,7 +3,6 @@ package agp.nyaa.api.parser;
 import agp.nyaa.api.exception.parse.TorrentPreviewParseException;
 import agp.nyaa.api.model.TorrentPreview;
 import org.jsoup.nodes.Element;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -14,14 +13,10 @@ import static org.testng.Assert.assertNotNull;
 
 public class TorrentPreviewParserTest {
 
-  private TorrentPreviewParser parser;
+  private TorrentPreviewParser parser = new TorrentPreviewParser();
   private Element torrentPreviewElement;
   private TorrentPreview parsingResult;
 
-  @BeforeMethod
-  public void setUp() {
-    parser = new TorrentPreviewParser();
-  }
 
   @Test
   public void parsing() throws IOException {
@@ -76,19 +71,27 @@ public class TorrentPreviewParserTest {
     parseElement();
   }
 
-  private void givenValidTorrentPreviewElement() throws IOException {
+  private void givenValidTorrentPreviewElement() {
     torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(0);
   }
 
-  private void givenElementWithInvalidDownloadUri() throws IOException {
+  private void givenElementWithInvalidDownloadUri() {
     torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(1);
   }
 
-  private void givenElementWithInvalidMagnetUri() throws IOException {
+  private void givenElementWithInvalidMagnetUri() {
     torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(2);
   }
 
-  private void givenNonTorrentPreviewElement() throws IOException {
+  private void givenElementWithInvalidUploadDate() {
+    torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(3);
+  }
+
+  private Element getTorrentPreviewListElementByIndex(final int index) {
+    return TORRENTS_LIST.asDocument().select("tbody tr").get(index);
+  }
+
+  private void givenNonTorrentPreviewElement() {
     torrentPreviewElement = EMPTY_TORRENTS_LIST.asDocument();
   }
 

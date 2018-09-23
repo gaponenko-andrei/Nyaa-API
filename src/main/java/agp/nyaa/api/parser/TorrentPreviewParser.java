@@ -10,6 +10,8 @@ import lombok.val;
 import org.jsoup.nodes.Element;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -60,6 +62,11 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     val torrentDataSize = parseDataSizeOf(torrentPreviewElement);
     torrentPreviewBuilder.dataSize(torrentDataSize);
 
+    // parse upload date
+    val uploadDate = parseUploadDateOf(torrentPreviewElement);
+    torrentPreviewBuilder.uploadDate(uploadDate);
+
+
     return torrentPreviewBuilder.build();
   }
 
@@ -107,6 +114,12 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     val dataSizeColumn = getColumn(torrentPreviewElement, 3);
     val dataSize = dataSizeColumn.text();
     return new DataSizeMapper(DataSizeUnitMapper.impl()).map(dataSize);
+  }
+
+  private static LocalDateTime parseUploadDateOf(final Element torrentPreviewElement) {
+    val uploadDateColumn = getColumn(torrentPreviewElement, 4);
+    val uploadDateString = uploadDateColumn.text();
+    return LocalDateTime.parse(uploadDateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {

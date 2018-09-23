@@ -4,7 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.testng.TestException;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +22,15 @@ public enum HtmlResource {
     this.path = path;
   }
 
-  public String asHtmlString() throws IOException {
-    return Files.asCharSource(new File(path), Charsets.UTF_8).read();
+  public String asHtmlString() {
+    try {
+      return Files.asCharSource(new File(path), Charsets.UTF_8).read();
+    } catch (IOException e) {
+      throw new TestException(e);
+    }
   }
 
-  public Document asDocument() throws IOException {
+  public Document asDocument() {
     return Jsoup.parse(this.asHtmlString(), NYAA_SITE_BASE_URL);
   }
 }
