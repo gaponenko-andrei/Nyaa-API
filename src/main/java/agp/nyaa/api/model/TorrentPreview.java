@@ -3,6 +3,7 @@ package agp.nyaa.api.model;
 import org.immutables.value.Value;
 
 import java.net.URI;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.immutables.value.Value.Immutable;
@@ -19,7 +20,7 @@ public abstract class TorrentPreview {
   public abstract URI downloadLink();
   public abstract URI magnetLink();
   public abstract DataSize dataSize();
-  public abstract LocalDateTime uploadDate();
+  public abstract Instant uploadDate();
 
   public static Builder builder() {
     return new Builder();

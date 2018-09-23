@@ -10,7 +10,10 @@ import lombok.val;
 import org.jsoup.nodes.Element;
 
 import java.net.URI;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -116,10 +119,12 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     return new DataSizeMapper(DataSizeUnitMapper.impl()).map(dataSize);
   }
 
-  private static LocalDateTime parseUploadDateOf(final Element torrentPreviewElement) {
+  private static Instant parseUploadDateOf(final Element torrentPreviewElement) {
     val uploadDateColumn = getColumn(torrentPreviewElement, 4);
     val uploadDateString = uploadDateColumn.text();
-    return LocalDateTime.parse(uploadDateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    val localDateTime = LocalDateTime.parse(uploadDateString, dateTimePattern);
+    return ZonedDateTime.of(localDateTime, ZoneId.of("UTC")).toInstant();
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {
