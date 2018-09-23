@@ -1,5 +1,6 @@
 package agp.nyaa.api.model;
 
+import lombok.NonNull;
 import org.immutables.value.Value;
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Style;
@@ -18,11 +19,11 @@ public abstract class DataSize {
   public abstract Unit unit();
 
 
-  public static DataSize of(final Integer value, final Unit unit) {
+  public static DataSize of(@NonNull final Integer value, @NonNull final Unit unit) {
     return DataSize.of(value.floatValue(), unit);
   }
 
-  public static DataSize of(final Float value, final Unit unit) {
+  public static DataSize of(@NonNull final Float value, @NonNull final Unit unit) {
     validate(value);
     return ImmutableDataSize.of(value, unit);
   }
@@ -32,7 +33,7 @@ public abstract class DataSize {
   }
 
   private static boolean isValid(final Float value) {
-    return value > 0;
+    return value.compareTo(0f) > 0;
   }
 
   public enum Unit {
