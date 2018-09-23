@@ -14,92 +14,62 @@ import static org.testng.Assert.assertNotNull;
 public class TorrentPreviewParserTest {
 
   private TorrentPreviewParser parser = new TorrentPreviewParser();
-  private Element torrentPreviewElement;
-  private TorrentPreview parsingResult;
-
 
   @Test
   public void parsing() throws IOException {
-
-    /* Arrange */
-    givenValidTorrentPreviewElement();
-
-    /* Act */
-    parseElement();
-
-    /* Assert */
-    assertNotNull(parsingResult);
-  }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnNonTorrentPreviewElement() throws IOException {
-
-    /* Arrange */
-    givenNonTorrentPreviewElement();
-
-    /* Act */
-    parseElement();
+    assertNotNull(parse(newValidTorrentPreviewElement()));
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void throwsOnNullElementArgument() {
+    parse(null);
+  }
 
-    /* Arrange */
-    givenNullTorrentPreviewElement();
-
-    /* Act */
-    parseElement();
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void throwsOnNonTorrentPreviewElement() throws IOException {
+    parse(newNonTorrentPreviewElement());
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
-  public void throwsOnElementWithInvalidTorrentDownloadUri() throws IOException {
-
-    /* Arrange */
-    givenElementWithInvalidDownloadUri();
-
-    /* Act */
-    parseElement();
+  public void throwsOnElementWithInvalidTorrentDownloadUri() {
+    parse(newElementWithInvalidDownloadUri());
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
-  public void throwsOnElementWithInvalidTorrentMagnetUri() throws IOException {
-
-    /* Arrange */
-    givenElementWithInvalidMagnetUri();
-
-    /* Act */
-    parseElement();
+  public void throwsOnElementWithInvalidTorrentMagnetUri() {
+    parse(newElementWithInvalidMagnetUri());
   }
 
-  private void givenValidTorrentPreviewElement() {
-    torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(0);
+  @Test(expectedExceptions = TorrentPreviewParseException.class)
+  public void throwsOnElementWithInvalidUploadDate() {
+    parse(newElementWithInvalidUploadDate());
   }
 
-  private void givenElementWithInvalidDownloadUri() {
-    torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(1);
+  private Element newValidTorrentPreviewElement() {
+    return getTorrentPreviewListElementByIndex(0);
   }
 
-  private void givenElementWithInvalidMagnetUri() {
-    torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(2);
+  private Element newElementWithInvalidDownloadUri() {
+    return getTorrentPreviewListElementByIndex(1);
   }
 
-  private void givenElementWithInvalidUploadDate() {
-    torrentPreviewElement = TORRENTS_LIST.asDocument().select("tbody tr").get(3);
+  private Element newElementWithInvalidMagnetUri() {
+    return getTorrentPreviewListElementByIndex(2);
+  }
+
+  private Element newElementWithInvalidUploadDate() {
+    return getTorrentPreviewListElementByIndex(3);
   }
 
   private Element getTorrentPreviewListElementByIndex(final int index) {
     return TORRENTS_LIST.asDocument().select("tbody tr").get(index);
   }
 
-  private void givenNonTorrentPreviewElement() {
-    torrentPreviewElement = EMPTY_TORRENTS_LIST.asDocument();
+  private Element newNonTorrentPreviewElement() {
+    return EMPTY_TORRENTS_LIST.asDocument();
   }
 
-  private void givenNullTorrentPreviewElement() {
-    torrentPreviewElement = null;
-  }
-
-  private void parseElement() {
-    parsingResult = parser.parse(torrentPreviewElement);
+  private TorrentPreview parse(final Element torrentPreviewElement) {
+    return parser.parse(torrentPreviewElement);
   }
 }
