@@ -38,8 +38,6 @@
   </thead>
   <tbody>
 
-  <!-- todo make all invalid elements based on valid one -->
-
   <!-- Valid torrent preview element -->
   <tr class="default" data-test-case-id="valid-preview-element">
     <td style="padding:0 4px;">
@@ -72,7 +70,8 @@
       </a>
     </td>
     <td colspan="2">
-      <a href="/view/invalid_id" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+      <a href="/view/invalid_id" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws]
+        Tokyo
         Ghoul-re - 05 [720p].mkv</a>
     </td>
     <td class="text-center" style="white-space: nowrap;">
@@ -167,67 +166,65 @@
       </a>
     </td>
     <td colspan="2">
-      <a href="/view/1032496" title="[Erai-raws] Tokyo Ghoul-re - 05 [1080p].mkv">[Erai-raws] Tokyo
-        Ghoul-re - 05 [1080p].mkv</a>
+      <a href="/view/1032497" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
     </td>
     <td class="text-center" style="white-space: nowrap;">
       <a href="\\\\some_invalid_link\\\\"><i class="fa fa-fw fa-download"></i></a>
-      <a href="magnet:?xt=urn:btih:M2ONGZYJPNIMFFVRHIWTOX76ZUKANMT7&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B1080p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-              class="fa fa-fw fa-magnet"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
     </td>
-    <td class="text-center">1.4 GiB</td>
-    <td class="text-center" data-timestamp="1525191012">2018-05-01 16:10</td>
-
-    <td class="text-center" style="color: green;">10</td>
-    <td class="text-center" style="color: red;">60</td>
-    <td class="text-center">5</td>
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
+    <td class="text-center" style="color: green;">1</td>
+    <td class="text-center" style="color: red;">39</td>
+    <td class="text-center">0</td>
   </tr>
 
   <!-- With invalid magnet link -->
   <tr class="default" data-test-case-id="with-invalid-magnet-link">
     <td style="padding:0 4px;">
-      <a href="/?c=1_3" title="Anime - Non-English-translated">
-        <img src="/static/img/icons/nyaa/1_3.png" alt="Anime - Non-English-translated">
+      <a href="/?c=1_2" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
       </a>
     </td>
     <td colspan="2">
-      <a href="/view/1032495" title="[M-F] Pocket Monsters (Pokémon) The Origin 04 Vostfr.mp4">[M-F]
-        Pocket Monsters (Pokémon) The Origin 04 Vostfr.mp4</a>
+      <a href="/view/1032497" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
     </td>
     <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032495.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="\\\\some_invalid_link\\\\"><i class="fa fa-fw fa-magnet"></i></a>
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="\\\\some_invalid_link\\\\"><i class="fa fa-fw fa-magnet"></i></a>
     </td>
-    <td class="text-center">301.2 MiB</td>
-    <td class="text-center" data-timestamp="1525190628">2018-05-01 16:03</td>
-
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">2018-05-01 16:10</td>
     <td class="text-center" style="color: green;">1</td>
-    <td class="text-center" style="color: red;">0</td>
+    <td class="text-center" style="color: red;">39</td>
     <td class="text-center">0</td>
   </tr>
 
   <!-- With invalid upload date -->
-  <tr class="success" data-test-case-id="with-invalid-upload-date">
+  <tr class="default" data-test-case-id="with-invalid-upload-date">
     <td style="padding:0 4px;">
-      <a href="/?c=1_3" title="Anime - Non-English-translated">
-        <img src="/static/img/icons/nyaa/1_3.png" alt="Anime - Non-English-translated">
+      <a href="/?c=1_2" title="Anime - English-translated">
+        <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
       </a>
     </td>
     <td colspan="2">
-      <a href="/view/1032494"
-         title="[PuyaSubs!] Souten no Ken Re - Genesis - 05 [720p][CD02727A].mkv">[PuyaSubs!] Souten
-        no Ken Re - Genesis - 05 [720p][CD02727A].mkv</a>
+      <a href="/view/1032497" title="[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv">[Erai-raws] Tokyo
+        Ghoul-re - 05 [720p].mkv</a>
     </td>
     <td class="text-center" style="white-space: nowrap;">
-      <a href="/download/1032494.torrent"><i class="fa fa-fw fa-download"></i></a> <a
-            href="magnet:?xt=urn:btih:4ALHSFVMBAE55HQ5MMIO2GO5MUI76HOA&amp;dn=%5BPuyaSubs%21%5D+Souten+no+Ken+Re+-+Genesis+-+05+%5B720p%5D%5BCD02727A%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
-            class="fa fa-fw fa-magnet"></i></a>
+      <a href="/download/1032497.torrent"><i class="fa fa-fw fa-download"></i></a>
+      <a href="magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&amp;dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05+%5B720p%5D.mkv&amp;tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce"><i
+              class="fa fa-fw fa-magnet"></i>
+      </a>
     </td>
-    <td class="text-center">300.2 MiB</td>
-    <td class="text-center" data-timestamp="1525190586">INVALID_UPLOAD_DATE</td>
-
+    <td class="text-center">614.1 MiB</td>
+    <td class="text-center" data-timestamp="1525191021">INVALID_UPLOAD_DATE</td>
     <td class="text-center" style="color: green;">1</td>
-    <td class="text-center" style="color: red;">10</td>
+    <td class="text-center" style="color: red;">39</td>
     <td class="text-center">0</td>
   </tr>
 
