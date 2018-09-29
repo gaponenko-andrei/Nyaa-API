@@ -1,5 +1,6 @@
 package agp.nyaa.api.parser;
 
+import agp.nyaa.api.exception.parse.AbsentAttributeException;
 import agp.nyaa.api.exception.parse.ParseException;
 import agp.nyaa.api.exception.parse.TorrentPreviewParseException;
 import agp.nyaa.api.mapper.*;
@@ -9,6 +10,8 @@ import lombok.NonNull;
 import lombok.val;
 import org.jsoup.nodes.Element;
 
+import javax.management.AttributeNotFoundException;
+import javax.print.AttributeException;
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -77,54 +80,77 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
 
   private static Long parseIdOf(final Element torrentPreviewElement) {
     val idColumn = getColumn(torrentPreviewElement, 1);
-    val idString = idColumn.select("a").attr("href").replace("/view/", "");
+    val idSourceElement = idColumn.selectFirst("a");
+    val hrefValue = getAttributeValue(idSourceElement, "href");
+    val idString = hrefValue.replace("/view/", "");
     return Long.valueOf(idString);
   }
 
   private static TorrentState parseStateOf(final Element torrentPreviewElement) {
-    val torrentCssCategory = torrentPreviewElement.attr("class");
+    val torrentCssCategory = getAttributeValue(torrentPreviewElement, "class");
     return new TorrentStateMapper().map(torrentCssCategory);
   }
 
   private static Category parseCategoryOf(final Element torrentPreviewElement) {
     val categoryColumn = getColumn(torrentPreviewElement, 0);
     val categoryLink = categoryColumn.selectFirst("a");
-    return new CategoryMapper().map(categoryLink.attr("href"));
+    val categoryString = getAttributeValue(categoryLink, "href");
+    return new CategoryMapper().map(categoryString);
   }
 
   private static String parseTitleOf(final Element torrentPreviewElement) {
     val titleColumn = getColumn(torrentPreviewElement, 1);
     val titleLink = titleColumn.selectFirst("a");
-    return titleLink.attr("title");
+    return getAttributeValue(titleLink, "title");
   }
 
   private static URI parseDownloadLinkOf(final Element torrentPreviewElement) {
     val downloadLinksColumn = getColumn(torrentPreviewElement, 2);
-    val torrentDownloadHref = downloadLinksColumn.selectFirst("a").attr("href");
-    return new StringToUriMapper().map(torrentDownloadHref);
+    val downloadLink = downloadLinksColumn.selectFirst("a");
+    val torrentDownloadHref = getAttributeValue(downloadLink, "href");
+    return StringToUriMapper.applicationTo(torrentDownloadHref);
   }
 
   private static URI parseMagnetLinkOf(final Element torrentPreviewElement) {
     val downloadLinksColumn = getColumn(torrentPreviewElement, 2);
-    val torrentDownloadHref = downloadLinksColumn.select("a").get(1).attr("href");
-    return new StringToUriMapper().map(torrentDownloadHref);
+    val magnetLink = downloadLinksColumn.select("a").get(1);
+    val torrentMagnetHref = getAttributeValue(magnetLink, "href");
+    return StringToUriMapper.applicationTo(torrentMagnetHref);
   }
 
   private static DataSize parseDataSizeOf(final Element torrentPreviewElement) {
     val dataSizeColumn = getColumn(torrentPreviewElement, 3);
-    val dataSize = dataSizeColumn.text();
-    return new DataSizeMapper(DataSizeUnitMapper.impl()).map(dataSize);
+    val dataSize = getTextOf(dataSizeColumn);
+    return DataSizeMapper.using(DataSizeUnitMapper.impl()).map(dataSize);
   }
 
   private static Instant parseUploadDateOf(final Element torrentPreviewElement) {
     val uploadDateColumn = getColumn(torrentPreviewElement, 4);
+    val uploadDateString = getTextOf(uploadDateColumn);
     val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    val localDateTime = LocalDateTime.parse(uploadDateColumn.text(), dateTimePattern);
+    val localDateTime = LocalDateTime.parse(uploadDateString, dateTimePattern);
     return ZonedDateTime.of(localDateTime, ZoneId.of("UTC")).toInstant();
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {
     return torrentPreviewElement.select("td").get(columnIndex);
+  }
+
+  private static String getAttributeValue(final Element attributeOwner, final String attribute) {
+    if (attributeOwner.hasAttr(attribute)) {
+      return attributeOwner.attr(attribute);
+    } else {
+      throw new AbsentAttributeException(String.format(
+        "Attribute '%s' not found.", attribute));
+    }
+  }
+
+  private static String getTextOf(final Element element) {
+    if (element.hasText()) {
+      return element.text();
+    } else {
+      throw new ParseException("Element has no text.");
+    }
   }
 
   private static ParseException newDetailedLoggedException(final Exception failureCause,

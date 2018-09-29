@@ -11,6 +11,10 @@ import static java.lang.String.format;
 
 public final class StringToUriMapper implements Mapper<String, URI> {
 
+  public static URI applicationTo(@NonNull final String uriString) {
+    return new StringToUriMapper().apply(uriString);
+  }
+
   @Override
   public URI apply(@NonNull final String uriString) {
     try {
