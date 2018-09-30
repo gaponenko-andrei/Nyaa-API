@@ -17,6 +17,11 @@ public final class TorrentStateMapper implements SupportedValuesAwareMapper<Stri
       .put("success", TRUSTED)
       .build();
 
+
+  public static TorrentState applicationTo(@NonNull final String cssClass) {
+    return new TorrentStateMapper().apply(cssClass);
+  }
+
   @Override
   public TorrentState apply(@NonNull final String cssClass) {
     checkArgument(isSupported(cssClass), "Unsupported 'cssClass': %s.", cssClass);

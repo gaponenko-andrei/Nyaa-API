@@ -1,4 +1,4 @@
-package agp.nyaa.api.parser;
+package agp.nyaa.api.parsing;
 
 import agp.nyaa.api.exception.parse.TorrentPreviewParseException;
 import agp.nyaa.api.mapper.StringToUriMapper;

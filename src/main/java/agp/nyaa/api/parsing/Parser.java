@@ -1,4 +1,4 @@
-package agp.nyaa.api.parser;
+package agp.nyaa.api.parsing;
 
 import org.jsoup.nodes.Element;
 

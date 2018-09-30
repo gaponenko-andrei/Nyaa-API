@@ -17,6 +17,11 @@ public final class CategoryMapper implements SupportedValuesAwareMapper<String, 
       .put("/?c=1_4", Category.Anime.NonTranslated.instance())
       .build();
 
+
+  public static Category applicationTo(@NonNull final String href) {
+    return new CategoryMapper().apply(href);
+  }
+
   @Override
   public Category apply(@NonNull final String href) {
     checkArgument(isSupported(href), "Unsupported 'href': %s.", href);
