@@ -20,7 +20,8 @@ public abstract class TorrentPreview {
   public abstract URI downloadLink();
   public abstract URI magnetLink();
   public abstract DataSize dataSize();
-  public abstract Instant uploadDate();
+  public abstract Instant uploadInstant();
+  public abstract Integer seedersCount();
 
   public static Builder builder() {
     return new Builder();

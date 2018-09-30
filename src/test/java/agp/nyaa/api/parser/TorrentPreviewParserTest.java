@@ -10,6 +10,8 @@ import org.jsoup.nodes.Element;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import static agp.nyaa.api.HtmlResource.EMPTY_TORRENTS_LIST;
@@ -203,28 +205,62 @@ public class TorrentPreviewParserTest {
   /* upload date parsing */
 
   @Test
-  public void uploadDateParsing() {
+  public void uploadInstantParsing() {
+
+    /* Arrange */
+    val expectedDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    val expectedLocalDateTime = LocalDateTime.parse("2018-05-01 16:10", expectedDateFormatter);
+    val expectedInstant = expectedLocalDateTime.toInstant(ZoneOffset.UTC);
+
+    /* Act */
     val result = parse(newValidTorrentPreviewElement());
-    val expectedResult = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").parse("2018-05-01 16:10");
-    assertEquals(result.uploadDate(), expectedResult);
+
+    /* Assert */
+    assertEquals(result.uploadInstant(), expectedInstant);
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
-  public void throwsOnElementWithAbsentUploadDate() {
-    parse(newElementWithAbsentUploadDate());
+  public void throwsOnElementWithAbsentUploadInstant() {
+    parse(newElementWithAbsentUploadInstant());
   }
 
-  private Element newElementWithAbsentUploadDate() {
-    return getTorrentPreviewListElementByTestCaseId("with-absent-upload-date");
+  private Element newElementWithAbsentUploadInstant() {
+    return getTorrentPreviewListElementByTestCaseId("with-absent-upload-instant");
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
-  public void throwsOnElementWithInvalidUploadDate() {
-    parse(newElementWithInvalidUploadDate());
+  public void throwsOnElementWithInvalidUploadInstant() {
+    parse(newElementWithInvalidUploadInstant());
   }
 
-  private Element newElementWithInvalidUploadDate() {
-    return getTorrentPreviewListElementByTestCaseId("with-invalid-upload-date");
+  private Element newElementWithInvalidUploadInstant() {
+    return getTorrentPreviewListElementByTestCaseId("with-invalid-upload-instant");
+  }
+
+  /* seeders count parsing */
+
+  @Test
+  public void seedersCountParsing() {
+    val result = parse(newValidTorrentPreviewElement());
+    assertEquals(result.seedersCount(), Integer.valueOf(1));
+  }
+
+  @Test(expectedExceptions = TorrentPreviewParseException.class)
+  public void throwsOnElementWithAbsentSeedersCount() {
+    parse(newElementWithAbsentSeedersCount());
+  }
+
+  private Element newElementWithAbsentSeedersCount() {
+    return getTorrentPreviewListElementByTestCaseId("with-absent-seeders-count");
+  }
+
+  @Test(expectedExceptions = TorrentPreviewParseException.class)
+  public void throwsOnElementWithInvalidSeedersCount() {
+    parse(newElementWithInvalidSeedersCount());
+  }
+
+  private Element newElementWithInvalidSeedersCount() {
+    return getTorrentPreviewListElementByTestCaseId("with-invalid-seeders-count");
   }
 
   /* utility methods */

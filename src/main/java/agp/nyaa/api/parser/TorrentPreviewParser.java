@@ -10,18 +10,11 @@ import lombok.NonNull;
 import lombok.val;
 import org.jsoup.nodes.Element;
 
-import javax.management.AttributeNotFoundException;
-import javax.print.AttributeException;
 import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Preconditions.checkArgument;
-
-// TODO проверять отсутствие атрибутов
 
 public final class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
 
@@ -71,8 +64,12 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     torrentPreviewBuilder.dataSize(torrentDataSize);
 
     // parse upload date
-    val uploadDate = parseUploadDateOf(torrentPreviewElement);
-    torrentPreviewBuilder.uploadDate(uploadDate);
+    val uploadInstant = parseUploadInstantOf(torrentPreviewElement);
+    torrentPreviewBuilder.uploadInstant(uploadInstant);
+
+    // parse seeders count
+    val seedersCount = parseSeedersCountOf(torrentPreviewElement);
+    torrentPreviewBuilder.seedersCount(seedersCount);
 
 
     return torrentPreviewBuilder.build();
@@ -124,12 +121,18 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     return DataSizeMapper.using(DataSizeUnitMapper.impl()).map(dataSize);
   }
 
-  private static Instant parseUploadDateOf(final Element torrentPreviewElement) {
-    val uploadDateColumn = getColumn(torrentPreviewElement, 4);
-    val uploadDateString = getTextOf(uploadDateColumn);
+  private static Instant parseUploadInstantOf(final Element torrentPreviewElement) {
+    val uploadInstantColumn = getColumn(torrentPreviewElement, 4);
+    val uploadInstantString = getTextOf(uploadInstantColumn);
     val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    val localDateTime = LocalDateTime.parse(uploadDateString, dateTimePattern);
-    return ZonedDateTime.of(localDateTime, ZoneId.of("UTC")).toInstant();
+    val localDateTime = LocalDateTime.parse(uploadInstantString, dateTimePattern);
+    return localDateTime.toInstant(ZoneOffset.UTC);
+  }
+
+  private static Integer parseSeedersCountOf(final Element torrentPreviewElement) {
+    val seedersCountColumn = getColumn(torrentPreviewElement, 5);
+    val seedersCountString = getTextOf(seedersCountColumn);
+    return Integer.valueOf(seedersCountString);
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {
