@@ -6,6 +6,7 @@ import agp.nyaa.api.exception.parse.TorrentPreviewParseException;
 import agp.nyaa.api.mapper.*;
 import agp.nyaa.api.model.*;
 import agp.nyaa.api.util.NyaaLogWriter;
+import com.google.common.primitives.UnsignedInteger;
 import lombok.NonNull;
 import lombok.val;
 import org.jsoup.nodes.Element;
@@ -74,7 +75,7 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     // parse leechers count
     val leechersCount = parseLeechersCountOf(torrentPreviewElement);
     torrentPreviewBuilder.leechersCount(leechersCount);
-
+    
     return torrentPreviewBuilder.build();
   }
 
@@ -132,14 +133,16 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     return localDateTime.toInstant(ZoneOffset.UTC);
   }
 
-  private static Integer parseSeedersCountOf(final Element torrentPreviewElement) {
+  private static UnsignedInteger parseSeedersCountOf(final Element torrentPreviewElement) {
     val seedersCountColumn = getColumn(torrentPreviewElement, 5);
     val seedersCountString = getTextOf(seedersCountColumn);
-    return Integer.valueOf(seedersCountString);
-  private static Integer parseLeechersCountOf(final Element torrentPreviewElement) {
+    return UnsignedInteger.valueOf(seedersCountString);
+  }
+
+  private static UnsignedInteger parseLeechersCountOf(final Element torrentPreviewElement) {
     val leechersCountColumn = getColumn(torrentPreviewElement, 6);
     val leechersCountString = getTextOf(leechersCountColumn);
-    return Integer.valueOf(leechersCountString);
+    return UnsignedInteger.valueOf(leechersCountString);
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {

@@ -5,7 +5,6 @@ import org.immutables.value.Value;
 
 import java.net.URI;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 import static org.immutables.value.Value.Immutable;
 import static org.immutables.value.Value.Style.ImplementationVisibility.PACKAGE;
@@ -22,8 +21,8 @@ public abstract class TorrentPreview {
   public abstract URI magnetLink();
   public abstract DataSize dataSize();
   public abstract Instant uploadInstant();
-  public abstract UnsignedInteger seedersCount(); // todo UnsignedInteger
-  public abstract Integer leechersCount(); // todo UnsignedInteger
+  public abstract UnsignedInteger seedersCount();
+  public abstract UnsignedInteger leechersCount();
 
   public static Builder builder() {
     return new Builder();

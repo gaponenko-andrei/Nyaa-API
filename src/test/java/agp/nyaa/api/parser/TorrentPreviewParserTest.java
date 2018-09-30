@@ -5,6 +5,7 @@ import agp.nyaa.api.mapper.StringToUriMapper;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
+import com.google.common.primitives.UnsignedInteger;
 import lombok.val;
 import org.jsoup.nodes.Element;
 import org.testng.annotations.Test;
@@ -242,7 +243,7 @@ public class TorrentPreviewParserTest {
   @Test
   public void seedersCountParsing() {
     val result = parse(newValidTorrentPreviewElement());
-    assertEquals(result.seedersCount(), Integer.valueOf(1));
+    assertEquals(result.seedersCount(), UnsignedInteger.valueOf(1));
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
@@ -268,7 +269,7 @@ public class TorrentPreviewParserTest {
   @Test
   public void leechersCountParsing() {
     val result = parse(newValidTorrentPreviewElement());
-    assertEquals(result.leechersCount(), Integer.valueOf(39));
+    assertEquals(result.leechersCount(), UnsignedInteger.valueOf(39));
   }
 
   @Test(expectedExceptions = TorrentPreviewParseException.class)
@@ -288,6 +289,7 @@ public class TorrentPreviewParserTest {
   private Element newElementWithInvalidLeechersCount() {
     return getTorrentPreviewListElementByTestCaseId("with-invalid-leechers-count");
   }
+
   /* utility methods */
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
