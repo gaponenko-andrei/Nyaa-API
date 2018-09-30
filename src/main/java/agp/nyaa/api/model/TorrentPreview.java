@@ -1,5 +1,6 @@
 package agp.nyaa.api.model;
 
+import com.google.common.primitives.UnsignedInteger;
 import org.immutables.value.Value;
 
 import java.net.URI;
@@ -21,7 +22,8 @@ public abstract class TorrentPreview {
   public abstract URI magnetLink();
   public abstract DataSize dataSize();
   public abstract Instant uploadInstant();
-  public abstract Integer seedersCount();
+  public abstract UnsignedInteger seedersCount(); // todo UnsignedInteger
+  public abstract Integer leechersCount(); // todo UnsignedInteger
 
   public static Builder builder() {
     return new Builder();

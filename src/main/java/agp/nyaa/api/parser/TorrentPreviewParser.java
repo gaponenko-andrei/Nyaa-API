@@ -71,6 +71,9 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     val seedersCount = parseSeedersCountOf(torrentPreviewElement);
     torrentPreviewBuilder.seedersCount(seedersCount);
 
+    // parse leechers count
+    val leechersCount = parseLeechersCountOf(torrentPreviewElement);
+    torrentPreviewBuilder.leechersCount(leechersCount);
 
     return torrentPreviewBuilder.build();
   }
@@ -133,6 +136,10 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     val seedersCountColumn = getColumn(torrentPreviewElement, 5);
     val seedersCountString = getTextOf(seedersCountColumn);
     return Integer.valueOf(seedersCountString);
+  private static Integer parseLeechersCountOf(final Element torrentPreviewElement) {
+    val leechersCountColumn = getColumn(torrentPreviewElement, 6);
+    val leechersCountString = getTextOf(leechersCountColumn);
+    return Integer.valueOf(leechersCountString);
   }
 
   private static Element getColumn(final Element torrentPreviewElement, final int columnIndex) {

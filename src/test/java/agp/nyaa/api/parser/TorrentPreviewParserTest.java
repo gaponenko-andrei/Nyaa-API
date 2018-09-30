@@ -263,6 +263,31 @@ public class TorrentPreviewParserTest {
     return getTorrentPreviewListElementByTestCaseId("with-invalid-seeders-count");
   }
 
+  /* leechers count parsing */
+
+  @Test
+  public void leechersCountParsing() {
+    val result = parse(newValidTorrentPreviewElement());
+    assertEquals(result.leechersCount(), Integer.valueOf(39));
+  }
+
+  @Test(expectedExceptions = TorrentPreviewParseException.class)
+  public void throwsOnElementWithAbsentLeechersCount() {
+    parse(newElementWithAbsentLeechersCount());
+  }
+
+  private Element newElementWithAbsentLeechersCount() {
+    return getTorrentPreviewListElementByTestCaseId("with-absent-leechers-count");
+  }
+
+  @Test(expectedExceptions = TorrentPreviewParseException.class)
+  public void throwsOnElementWithInvalidLeechersCount() {
+    parse(newElementWithInvalidLeechersCount());
+  }
+
+  private Element newElementWithInvalidLeechersCount() {
+    return getTorrentPreviewListElementByTestCaseId("with-invalid-leechers-count");
+  }
   /* utility methods */
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
