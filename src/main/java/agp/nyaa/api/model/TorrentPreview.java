@@ -23,6 +23,7 @@ public abstract class TorrentPreview {
   public abstract Instant uploadInstant();
   public abstract UnsignedInteger seedersCount();
   public abstract UnsignedInteger leechersCount();
+  public abstract UnsignedInteger downloadsCount();
 
   public static Builder builder() {
     return new Builder();

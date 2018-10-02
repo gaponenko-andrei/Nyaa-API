@@ -7,3 +7,6 @@
     - TDD?
     - Data Source abstraction. It should make things easier in the long run and will allow
       to create stubs for testing purposes - some test data for different kinds of requests.
+        - Abstract base class
+        - Local Data Source in 'test' directory
+        - Remote Data Source in 'main' directory

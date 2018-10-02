@@ -37,48 +37,52 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
     }
   }
 
-  private TorrentPreview tryParse(final Tr torrentPreviewElement) {
+  private TorrentPreview tryParse(final Tr torrentPreviewTr) {
     val torrentPreviewBuilder = TorrentPreview.builder();
 
     // parse and set id
-    val torrentId = parseIdOf(torrentPreviewElement);
+    val torrentId = parseIdOf(torrentPreviewTr);
     torrentPreviewBuilder.id(torrentId);
 
     // parse and set state
-    val torrentState = parseStateOf(torrentPreviewElement);
+    val torrentState = parseStateOf(torrentPreviewTr);
     torrentPreviewBuilder.state(torrentState);
 
     // parse and set category
-    val torrentCategory = parseCategoryOf(torrentPreviewElement);
+    val torrentCategory = parseCategoryOf(torrentPreviewTr);
     torrentPreviewBuilder.category(torrentCategory);
 
     // parse and set title
-    val torrentTitle = parseTitleOf(torrentPreviewElement);
+    val torrentTitle = parseTitleOf(torrentPreviewTr);
     torrentPreviewBuilder.title(torrentTitle);
 
     // parse and set torrent download link
-    val torrentDownloadLink = parseDownloadLinkOf(torrentPreviewElement);
+    val torrentDownloadLink = parseDownloadLinkOf(torrentPreviewTr);
     torrentPreviewBuilder.downloadLink(torrentDownloadLink);
 
     // parse and set torrent magnet link
-    val torrentMagnetLink = parseMagnetLinkOf(torrentPreviewElement);
+    val torrentMagnetLink = parseMagnetLinkOf(torrentPreviewTr);
     torrentPreviewBuilder.magnetLink(torrentMagnetLink);
 
     // parse and set torrent data size
-    val torrentDataSize = parseDataSizeOf(torrentPreviewElement);
+    val torrentDataSize = parseDataSizeOf(torrentPreviewTr);
     torrentPreviewBuilder.dataSize(torrentDataSize);
 
     // parse and set upload date
-    val uploadInstant = parseUploadInstantOf(torrentPreviewElement);
+    val uploadInstant = parseUploadInstantOf(torrentPreviewTr);
     torrentPreviewBuilder.uploadInstant(uploadInstant);
 
     // parse and set seeders count
-    val seedersCount = parseSeedersCountOf(torrentPreviewElement);
+    val seedersCount = parseSeedersCountOf(torrentPreviewTr);
     torrentPreviewBuilder.seedersCount(seedersCount);
 
     // parse and set leechers count
-    val leechersCount = parseLeechersCountOf(torrentPreviewElement);
+    val leechersCount = parseLeechersCountOf(torrentPreviewTr);
     torrentPreviewBuilder.leechersCount(leechersCount);
+
+    // parse and set downloads count
+    val downloadsCount = parseDownloadsCountOf(torrentPreviewTr);
+    torrentPreviewBuilder.downloadsCount(downloadsCount);
 
     return torrentPreviewBuilder.build();
   }
@@ -131,6 +135,11 @@ public final class TorrentPreviewParser implements Parser<Element, TorrentPrevie
   private static UnsignedInteger parseLeechersCountOf(final Tr torrentPreviewTr) {
     val leechersCountString = torrentPreviewTr.td(6).text();
     return UnsignedInteger.valueOf(leechersCountString);
+  }
+
+  private static UnsignedInteger parseDownloadsCountOf(final Tr torrentPreviewTr) {
+    val downloadsCountString = torrentPreviewTr.td(7).text();
+    return UnsignedInteger.valueOf(downloadsCountString);
   }
 
   private static ParseException newDetailedLoggedException(final Exception failureCause,
