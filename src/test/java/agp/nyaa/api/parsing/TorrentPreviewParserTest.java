@@ -25,7 +25,7 @@ public class TorrentPreviewParserTest {
   private TorrentPreviewParser parser = new TorrentPreviewParser();
 
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnNullElementArgument() {
     parse(null);
   }

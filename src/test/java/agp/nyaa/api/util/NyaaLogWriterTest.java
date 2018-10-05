@@ -126,7 +126,7 @@ public class NyaaLogWriterTest {
 
   @Test(
     dataProvider = "traceEnabledTestCasesProvider",
-    expectedExceptions = NullPointerException.class)
+    expectedExceptions = IllegalArgumentException.class)
   public void loggingExceptionThrowsOnNullException(final boolean traceEnabledValue) {
 
     /* Arrange */

@@ -6,17 +6,17 @@ import static org.testng.Assert.assertEquals;
 
 public class DataSizeTest {
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructionThrowsOnNullIntegerValue() {
     DataSize.of((Integer) null, DataSize.Unit.BYTE);
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructionThrowsOnNullFloatValue() {
     DataSize.of((Float) null, DataSize.Unit.BYTE);
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructionThrowsOnNullUnitValue() {
     DataSize.of(1, null);
   }

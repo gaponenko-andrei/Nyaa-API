@@ -34,7 +34,7 @@ public class DataSizeUnitMapperImplTest {
     assertEquals(actualMappingResult, getExpectedResultBy(mappingInput));
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnNullArgument() {
     mapper.map(null);
   }

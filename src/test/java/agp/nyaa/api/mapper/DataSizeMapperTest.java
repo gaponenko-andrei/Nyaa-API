@@ -70,7 +70,7 @@ public class DataSizeMapperTest {
 
   /* Negative scenarios */
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnNullUnitMapper() {
     DataSizeMapper.using((DataSizeUnitMapper) null);
   }

@@ -33,7 +33,7 @@ public class TorrentStateMapperTest {
     assertEquals(actualMappingResult, getExpectedStateBy(cssClass));
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnNullCssClass() {
     mapper.map(null);
   }

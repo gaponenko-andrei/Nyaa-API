@@ -29,7 +29,7 @@ public class StringToUriMapperTest {
     mapper.map("\\some_invalid_link\\");
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void mapperThrowsOnNullUriString() {
     mapper.map(null);
   }

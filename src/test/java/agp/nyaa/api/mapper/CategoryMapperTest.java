@@ -33,7 +33,7 @@ public class CategoryMapperTest {
     assertEquals(actualMappingResult, getExpectedCategoryBy(categoryHref));
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void throwsOnNullCategoryHref() {
     mapper.map(null);
   }
