@@ -5,6 +5,7 @@ import agp.nyaa.api.mapper.StringToUriMapper;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
+import agp.nyaa.api.test.TestTorrentsList;
 import com.google.common.primitives.UnsignedInteger;
 import lombok.val;
 import org.jsoup.nodes.Element;
@@ -15,8 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-import static agp.nyaa.api.HtmlResource.EMPTY_TORRENTS_LIST;
-import static agp.nyaa.api.HtmlResource.TORRENTS_LIST;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -36,7 +35,7 @@ public class TorrentPreviewParserTest {
   }
 
   private Element newNonTorrentPreviewElement() {
-    return EMPTY_TORRENTS_LIST.asDocument();
+    return TestTorrentsList.nonEmpty().get();
   }
 
   @Test
@@ -319,8 +318,8 @@ public class TorrentPreviewParserTest {
   /* utility methods */
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
-    val selector = String.format("tbody tr[data-test-case-id='%s']", testCaseId);
-    return TORRENTS_LIST.asDocument().select(selector).first();
+    val selector = String.format("[data-test-case-id='%s']", testCaseId);
+    return TestTorrentsList.nonEmpty().getTorrentPreviewElements().select(selector).first();
   }
 
   private TorrentPreview parse(final Element torrentPreviewElement) {

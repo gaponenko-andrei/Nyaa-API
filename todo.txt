@@ -1,4 +1,4 @@
-1. TorrentPreview parsing.
+1. TorrentPreviewList parsing.
 2. Searching functionality: creating request, getting response.
     Things to thing about:
     - Rq/Rs entities.
