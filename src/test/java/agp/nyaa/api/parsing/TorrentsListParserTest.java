@@ -2,6 +2,7 @@ package agp.nyaa.api.parsing;
 
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.test.TestTorrentsList;
+import lombok.val;
 import org.jsoup.nodes.Element;
 import org.testng.annotations.Test;
 
@@ -24,17 +25,32 @@ public class TorrentsListParserTest {
   }
 
   private Element newNonTorrentsListElement() {
-    return TestTorrentsList.nonEmpty().getTorrentPreviewElements().first();
+    val torrentsList = TestTorrentsList.fromResource("torrents-list-parser-test.html");
+    return torrentsList.getTorrentPreviewElements().first();
   }
 
   @Test
-  public void parsingEmptyTorrentsListElementThrowsNoExceptions() {
+  public void emptyTorrentsListParsingThrowsNoExceptions() {
     parse(newEmptyTorrentsListElement());
   }
 
   private Element newEmptyTorrentsListElement() {
     return TestTorrentsList.empty().get();
   }
+
+  // todo finish
+//  @Test
+//  public void nonEmptyTorrentsListParsing() {
+//
+//    /* Arrange */
+//    val nonEmptyTorrentsList = TestTorrentsList.fromResource("torrent-preview-parser-test.html").get();
+//
+//    /* Act */
+//    val result = parse(nonEmptyTorrentsList);
+//
+//    /* Assert */
+//
+//  }
 
   private Set<TorrentPreview> parse(final Element torrentListElement) {
     return parser.parse(torrentListElement);

@@ -35,7 +35,7 @@ public class TorrentPreviewParserTest {
   }
 
   private Element newNonTorrentPreviewElement() {
-    return TestTorrentsList.nonEmpty().get();
+    return TestTorrentsList.empty().get();
   }
 
   @Test
@@ -318,8 +318,9 @@ public class TorrentPreviewParserTest {
   /* utility methods */
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
+    val torrentsList = TestTorrentsList.fromResource("torrent-preview-parser-test.html");
     val selector = String.format("[data-test-case-id='%s']", testCaseId);
-    return TestTorrentsList.nonEmpty().getTorrentPreviewElements().select(selector).first();
+    return torrentsList.getTorrentPreviewElements().select(selector).first();
   }
 
   private TorrentPreview parse(final Element torrentPreviewElement) {

@@ -1,9 +1,10 @@
 package agp.nyaa.api.test;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Verify;
 import com.google.common.io.Files;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,26 +16,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static agp.nyaa.api.Constants.NYAA_SITE_BASE_URL;
+import static com.google.common.base.Verify.*;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestTorrentsList {
 
-  /* known test resources */
-  private static final Path NON_EMPTY = Paths.get("./src/test/resources/torrents-list.html");
-  private static final Path EMPTY = Paths.get("./src/test/resources/empty-torrents-list.html");
-
-  /**
-   * Path to related resource.
-   */
-  private final Path sourcePath;
+  private final Element listElement;
 
 
   public static TestTorrentsList empty() {
-    return new TestTorrentsList(EMPTY);
+    return TestTorrentsList.fromResource("empty-torrents-list.html");
   }
 
-  public static TestTorrentsList nonEmpty() {
-    return new TestTorrentsList(NON_EMPTY);
+  public static TestTorrentsList fromResource(@NonNull final String resourceName) {
+    val resourcePath = Paths.get("./src/test/resources/").resolve(resourceName);
+    return new TestTorrentsList(resourcePath);
   }
 
   public Elements getTorrentPreviewElements() {
@@ -42,16 +37,27 @@ public class TestTorrentsList {
   }
 
   public Element get() {
-    return this.asDocument().select("table.torrent-list").first();
+    return listElement;
   }
 
-  private Document asDocument() {
-    return Jsoup.parse(this.asHtmlString(), NYAA_SITE_BASE_URL);
+  private TestTorrentsList(final Path resourcePath) {
+    val listDocument = parseDocumentFrom(resourcePath);
+
+    val listTables = listDocument.select("table.torrent-list");
+    verify(listTables.size() == 1);
+
+    val firstListTable = listTables.first();
+    this.listElement = verifyNotNull(firstListTable);
   }
 
-  private String asHtmlString() {
+  private static Document parseDocumentFrom(final Path resourcePath) {
+    val htmlString = readHtmlStringFrom(resourcePath);
+    return Jsoup.parse(htmlString, NYAA_SITE_BASE_URL);
+  }
+
+  private static String readHtmlStringFrom(final Path resourcePath) {
     try {
-      return Files.asCharSource(sourcePath.toFile(), Charsets.UTF_8).read();
+      return Files.asCharSource(resourcePath.toFile(), Charsets.UTF_8).read();
     } catch (IOException e) {
       throw new TestException(e);
     }
