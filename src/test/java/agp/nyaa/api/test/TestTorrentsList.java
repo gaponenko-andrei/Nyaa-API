@@ -1,7 +1,6 @@
 package agp.nyaa.api.test;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Verify;
 import com.google.common.io.Files;
 import lombok.NonNull;
 import lombok.val;
@@ -16,7 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static agp.nyaa.api.Constants.NYAA_SITE_BASE_URL;
-import static com.google.common.base.Verify.*;
+import static com.google.common.base.Verify.verify;
+import static com.google.common.base.Verify.verifyNotNull;
 
 public class TestTorrentsList {
 
@@ -32,7 +32,7 @@ public class TestTorrentsList {
     return new TestTorrentsList(resourcePath);
   }
 
-  public Elements getTorrentPreviewElements() {
+  public Elements selectTorrentPreviewTrs() {
     return this.get().select("tbody tr");
   }
 

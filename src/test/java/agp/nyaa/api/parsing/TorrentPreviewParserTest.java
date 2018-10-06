@@ -320,7 +320,7 @@ public class TorrentPreviewParserTest {
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
     val torrentsList = TestTorrentsList.fromResource("torrent-preview-parser-test.html");
     val selector = String.format("[data-test-case-id='%s']", testCaseId);
-    return torrentsList.getTorrentPreviewElements().select(selector).first();
+    return torrentsList.selectTorrentPreviewTrs().select(selector).first();
   }
 
   private TorrentPreview parse(final Element torrentPreviewElement) {

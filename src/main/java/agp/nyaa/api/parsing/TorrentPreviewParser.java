@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
+public class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
 
   private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewParser.class);
 

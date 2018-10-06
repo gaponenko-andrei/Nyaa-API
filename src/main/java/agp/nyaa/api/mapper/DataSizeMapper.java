@@ -27,7 +27,7 @@ public final class DataSizeMapper implements Mapper<String, DataSize> {
     return new DataSizeMapper(dataSizeUnitMapper);
   }
 
-  public DataSizeMapper(@NonNull final DataSizeUnitMapper dataSizeUnitMapper) {
+  private DataSizeMapper(@NonNull final DataSizeUnitMapper dataSizeUnitMapper) {
     validate(dataSizeUnitMapper);
     this.unitMapper = dataSizeUnitMapper;
   }
