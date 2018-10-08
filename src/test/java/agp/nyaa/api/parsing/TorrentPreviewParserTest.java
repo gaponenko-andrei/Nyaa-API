@@ -5,6 +5,8 @@ import agp.nyaa.api.mapper.StringToUriMapper;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
+import agp.nyaa.api.test.TestDocumentSource;
+import agp.nyaa.api.test.TestResources;
 import agp.nyaa.api.test.TestTorrentsList;
 import com.google.common.primitives.UnsignedInteger;
 import lombok.val;
@@ -21,7 +23,10 @@ import static org.testng.Assert.assertNotNull;
 
 public class TorrentPreviewParserTest {
 
-  private TorrentPreviewParser parser = new TorrentPreviewParser();
+  private final TestDocumentSource documentSource = new TestDocumentSource();
+  private final TestTorrentsList nonEmptyTorrentsList = newNonEmptyTorrentsList();
+  private final TestTorrentsList emptyTorrentsList = newEmptyTorrentsList();
+  private final TorrentPreviewParser parser = new TorrentPreviewParser();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -35,7 +40,7 @@ public class TorrentPreviewParserTest {
   }
 
   private Element newNonTorrentPreviewElement() {
-    return TestTorrentsList.empty().get();
+    return emptyTorrentsList.get();
   }
 
   @Test
@@ -315,12 +320,25 @@ public class TorrentPreviewParserTest {
     return getTorrentPreviewListElementByTestCaseId("with-invalid-downloads-count");
   }
 
-  /* utility methods */
+  /* Utility Methods */
+
+  private TestTorrentsList newEmptyTorrentsList() {
+    return newTestTorrentsListFrom("empty-torrents-list.html");
+  }
+
+  private TestTorrentsList newNonEmptyTorrentsList() {
+    return newTestTorrentsListFrom("torrent-preview-parser-test.html");
+  }
+
+  private TestTorrentsList newTestTorrentsListFrom(final String fileName) {
+    val listDocumentPath = TestResources.get(fileName);
+    val listDocument = documentSource.getDocumentBy(listDocumentPath);
+    return TestTorrentsList.of(listDocument);
+  }
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
-    val torrentsList = TestTorrentsList.fromResource("torrent-preview-parser-test.html");
     val selector = String.format("[data-test-case-id='%s']", testCaseId);
-    return torrentsList.selectTorrentPreviewTrs().select(selector).first();
+    return nonEmptyTorrentsList.selectTorrentPreviewTrs().select(selector).first();
   }
 
   private TorrentPreview parse(final Element torrentPreviewElement) {

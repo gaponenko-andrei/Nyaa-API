@@ -1,6 +1,8 @@
 package agp.nyaa.api.parsing;
 
 import agp.nyaa.api.model.TorrentPreview;
+import agp.nyaa.api.test.TestDocumentSource;
+import agp.nyaa.api.test.TestResources;
 import agp.nyaa.api.test.TestTorrentPreviewParser;
 import agp.nyaa.api.test.TestTorrentsList;
 import com.google.common.collect.ImmutableSet;
@@ -16,8 +18,9 @@ import static org.testng.Assert.assertEquals;
 
 public class TorrentsListParserTest {
 
-  private final TestTorrentsList nonEmptyTorrentsList =
-    TestTorrentsList.fromResource("torrents-list-parser-test.html");
+  private final TestDocumentSource documentSource = new TestDocumentSource();
+  private final TestTorrentsList nonEmptyTorrentsList = newNonEmptyTorrentsList();
+  private final TestTorrentsList emptyTorrentsList = newEmptyTorrentsList();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -39,11 +42,11 @@ public class TorrentsListParserTest {
     return nonEmptyTorrentsList.selectTorrentPreviewTrs().first();
   }
 
-  /* test to verify expected number of calls using torrent preview parser spy */
+  /* Test to verify expected number of calls using torrent preview parser spy */
 
   @Test
   public void emptyTorrentsListParsing() {
-    testCountOfParsedElementsIsExpected(TestTorrentsList.empty(), 0);
+    testCountOfParsedElementsIsExpected(emptyTorrentsList, 0);
   }
 
   @Test
@@ -64,7 +67,7 @@ public class TorrentsListParserTest {
     verifyExpectedCallsCountForTorrentPreviewParser(parser, expectedCountOfParsedElements);
   }
 
-  /* tests to assert expected results when default torrent preview parser is used */
+  /* Tests to assert expected results when default torrent preview parser is used */
 
   @Test
   public void nonEmptyTorrentsListParsingUsingDefaultTorrentPreviewParser() {
@@ -79,7 +82,21 @@ public class TorrentsListParserTest {
     assertEquals(result.ids(), ImmutableSet.of(1060623L, 1060486L, 1060485L, 1060483L));
   }
 
-  /* test utility methods */
+  /* Test Utility Methods */
+
+  private TestTorrentsList newEmptyTorrentsList() {
+    return newTestTorrentsListFrom("empty-torrents-list.html");
+  }
+
+  private TestTorrentsList newNonEmptyTorrentsList() {
+    return newTestTorrentsListFrom("torrents-list-parser-test.html");
+  }
+
+  private TestTorrentsList newTestTorrentsListFrom(final String fileName) {
+    val listDocumentPath = TestResources.get(fileName);
+    val listDocument = documentSource.getDocumentBy(listDocumentPath);
+    return TestTorrentsList.of(listDocument);
+  }
 
   private Parser<Element, TorrentPreview> newTorrentPreviewParserSpy() {
     return spy(new TestTorrentPreviewParser());
