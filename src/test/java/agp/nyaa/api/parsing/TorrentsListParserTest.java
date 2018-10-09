@@ -1,10 +1,11 @@
 package agp.nyaa.api.parsing;
 
 import agp.nyaa.api.model.TorrentPreview;
+import agp.nyaa.api.source.ElementSource;
+import agp.nyaa.api.source.TorrentsListSource;
 import agp.nyaa.api.test.TestDocumentSource;
 import agp.nyaa.api.test.TestResources;
 import agp.nyaa.api.test.TestTorrentPreviewParser;
-import agp.nyaa.api.test.TestTorrentsList;
 import com.google.common.collect.ImmutableSet;
 import lombok.val;
 import org.jsoup.nodes.Element;
@@ -18,9 +19,9 @@ import static org.testng.Assert.assertEquals;
 
 public class TorrentsListParserTest {
 
-  private final TestDocumentSource documentSource = new TestDocumentSource();
-  private final TestTorrentsList nonEmptyTorrentsList = newNonEmptyTorrentsList();
-  private final TestTorrentsList emptyTorrentsList = newEmptyTorrentsList();
+  private final ElementSource torrentsListSource = TorrentsListSource.filtering(new TestDocumentSource());
+  private final Element nonEmptyTorrentsList = newNonEmptyTorrentsList();
+  private final Element emptyTorrentsList = newEmptyTorrentsList();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -39,7 +40,7 @@ public class TorrentsListParserTest {
   }
 
   private Element newNonTorrentsListElement() {
-    return nonEmptyTorrentsList.selectTorrentPreviewTrs().first();
+    return nonEmptyTorrentsList.select("tr").first();
   }
 
   /* Test to verify expected number of calls using torrent preview parser spy */
@@ -54,14 +55,14 @@ public class TorrentsListParserTest {
     testCountOfParsedElementsIsExpected(nonEmptyTorrentsList, 4);
   }
 
-  private void testCountOfParsedElementsIsExpected(final TestTorrentsList testTorrentList,
+  private void testCountOfParsedElementsIsExpected(final Element testTorrentList,
                                                    final int expectedCountOfParsedElements) {
 
     /* Arrange */
     val parser = TorrentsListParser.using(newTorrentPreviewParserSpy());
 
      /* Act */
-    parser.parse(testTorrentList.get());
+    parser.parse(testTorrentList);
 
     /* Assert */
     verifyExpectedCallsCountForTorrentPreviewParser(parser, expectedCountOfParsedElements);
@@ -76,7 +77,7 @@ public class TorrentsListParserTest {
     val parser = TorrentsListParser.using(new TorrentPreviewParser());
 
     /* Act */
-    val result = parser.parse(nonEmptyTorrentsList.get());
+    val result = parser.parse(nonEmptyTorrentsList);
 
     /* Assert */
     assertEquals(result.ids(), ImmutableSet.of(1060623L, 1060486L, 1060485L, 1060483L));
@@ -84,18 +85,17 @@ public class TorrentsListParserTest {
 
   /* Test Utility Methods */
 
-  private TestTorrentsList newEmptyTorrentsList() {
+  private Element newEmptyTorrentsList() {
     return newTestTorrentsListFrom("empty-torrents-list.html");
   }
 
-  private TestTorrentsList newNonEmptyTorrentsList() {
+  private Element newNonEmptyTorrentsList() {
     return newTestTorrentsListFrom("torrents-list-parser-test.html");
   }
 
-  private TestTorrentsList newTestTorrentsListFrom(final String fileName) {
+  private Element newTestTorrentsListFrom(final String fileName) {
     val listDocumentPath = TestResources.get(fileName);
-    val listDocument = documentSource.getDocumentBy(listDocumentPath);
-    return TestTorrentsList.of(listDocument);
+    return torrentsListSource.getElementBy(listDocumentPath);
   }
 
   private Parser<Element, TorrentPreview> newTorrentPreviewParserSpy() {
