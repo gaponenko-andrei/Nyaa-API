@@ -21,6 +21,7 @@
     <logback.version>1.2.3</logback.version>
     <surefire.version>2.21.0</surefire.version>
     <testng.version>6.9.10</testng.version>
+    <apache.commons.version>3.8.1</apache.commons.version>
   </properties>
 
   <build>
@@ -62,6 +63,11 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${apache.commons.version}</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

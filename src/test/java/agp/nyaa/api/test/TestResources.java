@@ -24,12 +24,11 @@ public class TestResources {
     }
   }
 
-  public static URI root() {
-    return RESOURCES_DIRECTORY.toUri();
+  public static Path root() {
+    return RESOURCES_DIRECTORY;
   }
 
-  public static URI getUri(@NonNull final String fileName) {
-    return RESOURCES_DIRECTORY.resolve(fileName).toUri();
+  public static Path get(@NonNull final String fileName) {
+    return RESOURCES_DIRECTORY.resolve(fileName);
   }
-
 }
