@@ -4,7 +4,6 @@ import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.source.ElementSource;
 import agp.nyaa.api.source.TorrentsListSource;
 import agp.nyaa.api.test.TestDocumentSource;
-import agp.nyaa.api.test.TestResources;
 import agp.nyaa.api.test.TestTorrentPreviewParser;
 import com.google.common.collect.ImmutableSet;
 import lombok.val;
@@ -86,16 +85,11 @@ public class TorrentsListParserTest {
   /* Test Utility Methods */
 
   private Element newEmptyTorrentsList() {
-    return newTestTorrentsListFrom("empty-torrents-list.html");
+    return torrentsListSource.get("empty-torrents-list.html");
   }
 
   private Element newNonEmptyTorrentsList() {
-    return newTestTorrentsListFrom("torrents-list-parser-test.html");
-  }
-
-  private Element newTestTorrentsListFrom(final String fileName) {
-    val listDocumentPath = TestResources.get(fileName);
-    return torrentsListSource.getElementBy(listDocumentPath);
+    return torrentsListSource.get("torrents-list-parser-test.html");
   }
 
   private Parser<Element, TorrentPreview> newTorrentPreviewParserSpy() {

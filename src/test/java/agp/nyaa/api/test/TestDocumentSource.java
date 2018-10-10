@@ -9,18 +9,21 @@ import org.jsoup.nodes.Document;
 import org.testng.TestException;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static agp.nyaa.api.Constants.NYAA_SITE_BASE_URL;
 import static com.google.common.base.Charsets.UTF_8;
 
-public class TestDocumentSource implements ElementSource<Document> {
+public class TestDocumentSource extends ElementSource<Document> {
+
+  public TestDocumentSource() {
+    super(TestResources.root());
+  }
 
   @Override
-  public Document getElementBy(@NonNull final URI uri) {
-    val resourcePath = Paths.get(uri);
+  public Document get(@NonNull final String relativePath) {
+    val resourcePath = Paths.get(baseUri()).resolve(relativePath);
     val htmlString = readHtmlStringFrom(resourcePath);
     return Jsoup.parse(htmlString, NYAA_SITE_BASE_URL);
   }

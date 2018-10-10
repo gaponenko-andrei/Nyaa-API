@@ -24,7 +24,12 @@ public class TestResources {
     }
   }
 
-  public static URI get(@NonNull final String fileName) {
+  public static URI root() {
+    return RESOURCES_DIRECTORY.toUri();
+  }
+
+  public static URI getUri(@NonNull final String fileName) {
     return RESOURCES_DIRECTORY.resolve(fileName).toUri();
   }
+
 }

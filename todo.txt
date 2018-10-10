@@ -5,3 +5,10 @@
     - Search api interface.
     - TDD?
     - Remote Data Source in 'main' directory
+        - base url' list - https://nyaa.si mainly blocked by internet providers,
+          so we need to have a list of backup base urls to access the site.
+
+            - create a simple .config (text) file and take
+              those base url and populate data source with them
+
+            - caching functionality - if base url works, then we use continue to use it

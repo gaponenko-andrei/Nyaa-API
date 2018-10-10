@@ -18,6 +18,7 @@ public final class TorrentsListParser implements Parser<Element, TorrentPreviewS
   @NonNull
   private final Parser<Element, TorrentPreview> torrentPreviewParser;
 
+
   @Override
   public TorrentPreviewSet apply(@NonNull final Element torrentsListElement) {
     checkArgument(torrentsListElement.is("table.torrent-list"),

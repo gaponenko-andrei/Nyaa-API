@@ -8,7 +8,6 @@ import agp.nyaa.api.model.TorrentState;
 import agp.nyaa.api.source.ElementSource;
 import agp.nyaa.api.source.TorrentsListSource;
 import agp.nyaa.api.test.TestDocumentSource;
-import agp.nyaa.api.test.TestResources;
 import com.google.common.primitives.UnsignedInteger;
 import lombok.val;
 import org.jsoup.nodes.Element;
@@ -320,16 +319,11 @@ public class TorrentPreviewParserTest {
   /* Utility Methods */
 
   private Element newEmptyTorrentsList() {
-    return newTorrentListElementFrom("empty-torrents-list.html");
+    return torrentListSource.get("empty-torrents-list.html");
   }
 
   private Element newNonEmptyTorrentsList() {
-    return newTorrentListElementFrom("torrent-preview-parser-test.html");
-  }
-
-  private Element newTorrentListElementFrom(final String fileName) {
-    val listDocumentPath = TestResources.get(fileName);
-    return torrentListSource.getElementBy(listDocumentPath);
+    return torrentListSource.get("torrent-preview-parser-test.html");
   }
 
   private Element getTorrentPreviewListElementByTestCaseId(final String testCaseId) {
