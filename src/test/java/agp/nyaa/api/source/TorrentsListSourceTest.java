@@ -13,12 +13,12 @@ import static org.testng.Assert.assertTrue;
 public class TorrentsListSourceTest {
 
   private final TorrentsListSource torrentsListSource =
-    TorrentsListSource.filtering(new TestDocumentSource());
+    TorrentsListSource.basedOn(new TestDocumentSource());
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void constructionThrowsOnNullDocumentSource() {
-    TorrentsListSource.filtering((ElementSource<Document>) null);
+    TorrentsListSource.basedOn((ElementSource<Document>) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)

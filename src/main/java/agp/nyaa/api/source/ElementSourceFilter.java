@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.jsoup.nodes.Element;
 
-import java.nio.file.Path;
+import java.net.URI;
 
 @RequiredArgsConstructor
 abstract class ElementSourceFilter<T extends Element, U extends Element> implements ElementSource<U> {
@@ -14,8 +14,8 @@ abstract class ElementSourceFilter<T extends Element, U extends Element> impleme
   private final ElementSource<T> elementSource;
 
   @Override
-  public final U getElementBy(@NonNull final Path path) {
-    val element = elementSource.getElementBy(path);
+  public final U getElementBy(@NonNull final URI uri) {
+    val element = elementSource.getElementBy(uri);
     return filter(element);
   }
 

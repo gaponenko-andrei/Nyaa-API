@@ -1,11 +1,10 @@
 package agp.nyaa.api;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class Constants {
 
-  public static final String NYAA_SITE_BASE_URL = "http://nyaa.si/";
+  public static final String NYAA_SITE_BASE_URL = "https://nyaa.si/";
 
 }

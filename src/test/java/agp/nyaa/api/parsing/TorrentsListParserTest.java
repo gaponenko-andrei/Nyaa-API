@@ -19,7 +19,7 @@ import static org.testng.Assert.assertEquals;
 
 public class TorrentsListParserTest {
 
-  private final ElementSource torrentsListSource = TorrentsListSource.filtering(new TestDocumentSource());
+  private final ElementSource torrentsListSource = TorrentsListSource.basedOn(new TestDocumentSource());
   private final Element nonEmptyTorrentsList = newNonEmptyTorrentsList();
   private final Element emptyTorrentsList = newEmptyTorrentsList();
 

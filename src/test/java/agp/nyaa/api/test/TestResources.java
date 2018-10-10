@@ -3,6 +3,7 @@ package agp.nyaa.api.test;
 import lombok.NonNull;
 import org.testng.TestNGException;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -23,7 +24,7 @@ public class TestResources {
     }
   }
 
-  public static Path get(@NonNull final String fileName) {
-    return RESOURCES_DIRECTORY.resolve(fileName);
+  public static URI get(@NonNull final String fileName) {
+    return RESOURCES_DIRECTORY.resolve(fileName).toUri();
   }
 }

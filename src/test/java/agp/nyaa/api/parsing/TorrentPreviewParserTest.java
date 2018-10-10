@@ -24,7 +24,7 @@ import static org.testng.Assert.assertNotNull;
 
 public class TorrentPreviewParserTest {
 
-  private final ElementSource torrentListSource = TorrentsListSource.filtering(new TestDocumentSource());
+  private final ElementSource torrentListSource = TorrentsListSource.basedOn(new TestDocumentSource());
   private final Element nonEmptyTorrentsList = newNonEmptyTorrentsList();
   private final Element emptyTorrentsList = newEmptyTorrentsList();
   private final TorrentPreviewParser parser = new TorrentPreviewParser();

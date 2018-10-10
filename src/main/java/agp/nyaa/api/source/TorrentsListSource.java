@@ -7,10 +7,9 @@ import org.jsoup.nodes.Element;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-
 public final class TorrentsListSource extends ElementSourceFilter<Document, Element> {
 
-  public static TorrentsListSource filtering(@NonNull final ElementSource<Document> elementSource) {
+  public static TorrentsListSource basedOn(@NonNull final ElementSource<Document> elementSource) {
     return new TorrentsListSource(elementSource);
   }
 
