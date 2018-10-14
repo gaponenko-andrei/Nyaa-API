@@ -1,45 +1,7 @@
 <table class="table table-bordered table-hover table-striped torrent-list">
-  <thead>
-  <tr>
-    <th class="hdr-category text-center" style="width:80px;">
-      <div>Category</div>
-    </th>
-    <th class="hdr-name" style="width:auto;">
-      <div>Name</div>
-    </th>
-    <th class="hdr-comments sorting text-center" title="Comments" style="width:50px;">
-      <a href="/?s=comments&amp;o=desc"></a>
-      <i class="fa fa-comments-o"></i>
-    </th>
-    <th class="hdr-link text-center" style="width:70px;">
-      <div>Link</div>
-    </th>
-    <th class="hdr-size sorting text-center" style="width:100px;">
-      <a href="/?s=size&amp;o=desc"></a>
-      <div>Size</div>
-    </th>
-    <th class="hdr-date sorting_desc text-center" title="In UTC" style="width:140px;">
-      <a href="/?s=id&amp;o=asc"></a>
-      <div>Date</div>
-    </th>
-    <th class="hdr-seeders sorting text-center" title="Seeders" style="width:50px;">
-      <a href="/?s=seeders&amp;o=desc"></a>
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    </th>
-    <th class="hdr-leechers sorting text-center" title="Leechers" style="width:50px;">
-      <a href="/?s=leechers&amp;o=desc"></a>
-      <i class="fa fa-arrow-down" aria-hidden="true"></i>
-    </th>
-    <th class="hdr-downloads sorting text-center" title="Completed downloads" style="width:50px;">
-      <a href="/?s=downloads&amp;o=desc"></a>
-      <i class="fa fa-check" aria-hidden="true"></i>
-    </th>
-  </tr>
-  </thead>
-  <tbody>
 
   <!-- Valid torrent preview element -->
-  <tr class="default" data-test-case-id="valid-preview-element">
+  <tr class="default" data-sample-id="valid">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -64,7 +26,7 @@
 
 
   <!-- With absent id -->
-  <tr class="default" data-test-case-id="with-absent-id">
+  <tr class="default" data-sample-id="with-absent-id">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -89,7 +51,7 @@
   </tr>
 
   <!-- With invalid id -->
-  <tr class="default" data-test-case-id="with-invalid-id">
+  <tr class="default" data-sample-id="with-invalid-id">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -115,7 +77,7 @@
 
 
   <!-- With absent state -->
-  <tr data-test-case-id="with-absent-state">
+  <tr data-sample-id="with-absent-state">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -139,7 +101,7 @@
   </tr>
 
   <!-- With unknown state -->
-  <tr class="unknown-state" data-test-case-id="with-unknown-state">
+  <tr class="unknown-state" data-sample-id="with-unknown-state">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -164,7 +126,7 @@
 
 
   <!-- With absent category -->
-  <tr class="default" data-test-case-id="with-absent-category">
+  <tr class="default" data-sample-id="with-absent-category">
     <td style="padding:0 4px;">
       <a title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -188,7 +150,7 @@
   </tr>
 
   <!-- With invalid category -->
-  <tr class="default" data-test-case-id="with-unknown-category">
+  <tr class="default" data-sample-id="with-unknown-category">
     <td style="padding:0 4px;">
       <a href="unknown-category" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -213,7 +175,7 @@
 
 
   <!-- With absent torrent download uri -->
-  <tr class="default" data-test-case-id="with-absent-torrent-download-uri">
+  <tr class="default" data-sample-id="with-absent-torrent-download-uri">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -237,7 +199,7 @@
   </tr>
 
   <!-- With invalid torrent download uri -->
-  <tr class="default" data-test-case-id="with-invalid-torrent-download-uri">
+  <tr class="default" data-sample-id="with-invalid-torrent-download-uri">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -262,7 +224,7 @@
 
 
   <!-- With absent magnet link -->
-  <tr class="default" data-test-case-id="with-absent-magnet-uri">
+  <tr class="default" data-sample-id="with-absent-magnet-uri">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -284,7 +246,7 @@
   </tr>
 
   <!-- With invalid magnet link -->
-  <tr class="default" data-test-case-id="with-invalid-magnet-uri">
+  <tr class="default" data-sample-id="with-invalid-magnet-uri">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -307,7 +269,7 @@
 
 
   <!-- With absent upload instant -->
-  <tr class="default" data-test-case-id="with-absent-upload-instant">
+  <tr class="default" data-sample-id="with-absent-upload-instant">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -331,7 +293,7 @@
   </tr>
 
   <!-- With invalid upload instant -->
-  <tr class="default" data-test-case-id="with-invalid-upload-instant">
+  <tr class="default" data-sample-id="with-invalid-upload-instant">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -356,7 +318,7 @@
 
 
   <!-- With absent seeders count -->
-  <tr class="default" data-test-case-id="with-absent-seeders-count">
+  <tr class="default" data-sample-id="with-absent-seeders-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -380,7 +342,7 @@
   </tr>
 
   <!-- With invalid seeders count -->
-  <tr class="default" data-test-case-id="with-invalid-seeders-count">
+  <tr class="default" data-sample-id="with-invalid-seeders-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -405,7 +367,7 @@
 
 
   <!-- With absent leechers count -->
-  <tr class="default" data-test-case-id="with-absent-leechers-count">
+  <tr class="default" data-sample-id="with-absent-leechers-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -429,7 +391,7 @@
   </tr>
 
   <!-- With invalid leechers count -->
-  <tr class="default" data-test-case-id="with-invalid-leechers-count">
+  <tr class="default" data-sample-id="with-invalid-leechers-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -454,7 +416,7 @@
 
 
   <!-- With absent downloads count -->
-  <tr class="default" data-test-case-id="with-absent-downloads-count">
+  <tr class="default" data-sample-id="with-absent-downloads-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -478,7 +440,7 @@
   </tr>
 
   <!-- With invalid downloads count -->
-  <tr class="default" data-test-case-id="with-invalid-downloads-count">
+  <tr class="default" data-sample-id="with-invalid-downloads-count">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">
@@ -503,7 +465,7 @@
 
 
   <!-- With absent title attribute  -->
-  <tr class="default" data-test-case-id="with-absent-title">
+  <tr class="default" data-sample-id="with-absent-title">
     <td style="padding:0 4px;">
       <a href="/?c=1_2" title="Anime - English-translated">
         <img src="/static/img/icons/nyaa/1_2.png" alt="Anime - English-translated">

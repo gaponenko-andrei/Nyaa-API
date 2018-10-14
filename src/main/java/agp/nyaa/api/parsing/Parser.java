@@ -1,11 +1,11 @@
 package agp.nyaa.api.parsing;
 
-import org.jsoup.nodes.Element;
-
 import java.util.function.Function;
 
+import agp.nyaa.api.element.ImmutableElement;
+
 @FunctionalInterface
-public interface Parser<T extends Element, U> extends Function<T, U> {
+public interface Parser<T extends ImmutableElement, U> extends Function<T, U> {
   default U parse(T element) {
     return this.apply(element);
   }

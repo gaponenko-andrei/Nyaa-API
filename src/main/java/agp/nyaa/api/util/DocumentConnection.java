@@ -23,17 +23,17 @@ public abstract class DocumentConnection {
 
   // alias
   public GetRs toNewGetRs() {
-    return executeGetRq();
+    return sendGetRq();
   }
 
-  public GetRs executeGetRq() {
+  public GetRs sendGetRq() {
     val stopwatch = Stopwatch.createStarted();
-    val responseBuilder = innerExecuteGetRq();
+    val responseBuilder = innerSendGetRq();
     val timeTaken = stopwatch.stop().elapsed();
     return responseBuilder.timeTaken(timeTaken).build();
   }
 
-  private GetRs.Builder innerExecuteGetRq() {
+  private GetRs.Builder innerSendGetRq() {
     val connection = HttpConnection.connect(url());
     try {
       val document = connection.get();

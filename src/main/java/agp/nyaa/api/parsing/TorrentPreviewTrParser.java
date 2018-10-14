@@ -1,39 +1,40 @@
 package agp.nyaa.api.parsing;
 
-import agp.nyaa.api.exception.parse.ParseException;
-import agp.nyaa.api.exception.parse.TorrentPreviewParseException;
-import agp.nyaa.api.mapper.*;
-import agp.nyaa.api.model.Category;
-import agp.nyaa.api.model.DataSize;
-import agp.nyaa.api.model.TorrentPreview;
-import agp.nyaa.api.model.TorrentState;
-import agp.nyaa.api.util.NyaaLogWriter;
-import com.google.common.primitives.UnsignedInteger;
-import lombok.NonNull;
-import lombok.val;
-import org.jsoup.nodes.Element;
-
 import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.primitives.UnsignedInteger;
 
-public class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
+import agp.nyaa.api.element.Link;
+import agp.nyaa.api.element.Td;
+import agp.nyaa.api.element.Tr;
+import agp.nyaa.api.exception.parse.ParseException;
+import agp.nyaa.api.mapper.CategoryMapper;
+import agp.nyaa.api.mapper.DataSizeMapper;
+import agp.nyaa.api.mapper.DataSizeUnitMapper;
+import agp.nyaa.api.mapper.StringToUriMapper;
+import agp.nyaa.api.mapper.TorrentStateMapper;
+import agp.nyaa.api.model.Category;
+import agp.nyaa.api.model.DataSize;
+import agp.nyaa.api.model.TorrentPreview;
+import agp.nyaa.api.model.TorrentState;
+import agp.nyaa.api.util.NyaaLogWriter;
+import lombok.NonNull;
+import lombok.val;
 
-  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewParser.class);
+public class TorrentPreviewTrParser implements Parser<Tr, TorrentPreview> {
+
+  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewTrParser.class);
 
   @Override
-  public TorrentPreview apply(@NonNull final Element torrentPreviewElement) {
-    checkArgument(torrentPreviewElement.is("tr"),
-                  "Provided element is not a table row, thus it " +
-                    "cannot be parsed as a torrent preview element.");
+  public TorrentPreview apply(@NonNull final Tr torrentPreviewTr) {
     try {
-      return tryParse(Tr.of(torrentPreviewElement));
-    } catch (Exception ex) {
-      throw newDetailedLoggedException(ex, torrentPreviewElement);
+      return tryParse(torrentPreviewTr);
+    } catch (java.lang.Exception ex) {
+      throw newDetailedLoggedException(ex, torrentPreviewTr);
     }
   }
 
@@ -88,65 +89,91 @@ public class TorrentPreviewParser implements Parser<Element, TorrentPreview> {
   }
 
   private static Long parseIdOf(final Tr torrentPreviewTr) {
-    val idString = torrentPreviewTr.td(1).link(0).href().replace("/view/", "");
+    val idTd = td(torrentPreviewTr, 1);
+    val idLink = link(idTd, 0);
+    val idString = idLink.attr("href").replace("/view/", "");
     return Long.valueOf(idString);
   }
 
   private static TorrentState parseStateOf(final Tr torrentPreviewTr) {
-    val torrentCssCategory = torrentPreviewTr.cssClass();
-    return TorrentStateMapper.applicationTo(torrentCssCategory);
+    val torrentCategoryString = torrentPreviewTr.attr("class");
+    return TorrentStateMapper.applicationTo(torrentCategoryString);
   }
 
   private static Category parseCategoryOf(final Tr torrentPreviewTr) {
-    val categoryString = torrentPreviewTr.td(0).link(0).href();
-    return CategoryMapper.applicationTo(categoryString);
+    val categoryTd = td(torrentPreviewTr, 0);
+    val categoryLink = link(categoryTd, 0);
+    return CategoryMapper.applicationTo(categoryLink.attr("href"));
   }
 
   private static String parseTitleOf(final Tr torrentPreviewTr) {
-    return torrentPreviewTr.td(1).link(0).title();
+    val titleTd = td(torrentPreviewTr, 1);
+    val titleLink = link(titleTd, 0);
+    return titleLink.attr("title");
   }
 
   private static URI parseDownloadLinkOf(final Tr torrentPreviewTr) {
-    val torrentDownloadHref = torrentPreviewTr.td(2).link(0).href();
-    return StringToUriMapper.applicationTo(torrentDownloadHref);
+    val downloadTd = td(torrentPreviewTr, 2);
+    val downloadLink = link(downloadTd, 0);
+    return StringToUriMapper.applicationTo(downloadLink.attr("href"));
   }
 
   private static URI parseMagnetLinkOf(final Tr torrentPreviewTr) {
-    val torrentMagnetHref = torrentPreviewTr.td(2).link(1).href();
-    return StringToUriMapper.applicationTo(torrentMagnetHref);
+    val magnetTd = td(torrentPreviewTr, 2);
+    val magnetLink = link(magnetTd, 1);
+    return StringToUriMapper.applicationTo(magnetLink.attr("href"));
   }
 
   private static DataSize parseDataSizeOf(final Tr torrentPreviewTr) {
-    val dataSize = torrentPreviewTr.td(3).text();
-    return DataSizeMapper.using(DataSizeUnitMapper.impl()).map(dataSize);
+    val dataSizeTd = td(torrentPreviewTr, 3);
+    return DataSizeMapper.using(DataSizeUnitMapper.impl()).map(dataSizeTd.text());
   }
 
   private static Instant parseUploadInstantOf(final Tr torrentPreviewTr) {
-    val uploadInstantString = torrentPreviewTr.td(4).text();
+    val uploadInstantTd = td(torrentPreviewTr, 4);
     val dateTimePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    return LocalDateTime.parse(uploadInstantString, dateTimePattern).toInstant(ZoneOffset.UTC);
+    return LocalDateTime.parse(uploadInstantTd.text(), dateTimePattern).toInstant(ZoneOffset.UTC);
   }
 
   private static UnsignedInteger parseSeedersCountOf(final Tr torrentPreviewTr) {
-    val seedersCountString = torrentPreviewTr.td(5).text();
-    return UnsignedInteger.valueOf(seedersCountString);
+    val seedersCountTd = td(torrentPreviewTr, 5);
+    return UnsignedInteger.valueOf(seedersCountTd.text());
   }
 
   private static UnsignedInteger parseLeechersCountOf(final Tr torrentPreviewTr) {
-    val leechersCountString = torrentPreviewTr.td(6).text();
-    return UnsignedInteger.valueOf(leechersCountString);
+    val leechersCountTd = td(torrentPreviewTr, 6);
+    return UnsignedInteger.valueOf(leechersCountTd.text());
   }
 
   private static UnsignedInteger parseDownloadsCountOf(final Tr torrentPreviewTr) {
-    val downloadsCountString = torrentPreviewTr.td(7).text();
-    return UnsignedInteger.valueOf(downloadsCountString);
+    val downloadsCountTd = td(torrentPreviewTr, 7);
+    return UnsignedInteger.valueOf(downloadsCountTd.text());
   }
 
-  private static ParseException newDetailedLoggedException(final Exception failureCause,
-                                                           final Element torrentPreviewElement) {
+  private static Td td(final Tr torrentPreviewTr, int index) {
+    return torrentPreviewTr.select("td", Td::new).get(index);
+  }
 
-    val detailedException = new TorrentPreviewParseException(torrentPreviewElement, failureCause);
+  private static Link link(final Td torrentPreviewTd, int index) {
+    return torrentPreviewTd.select("a", Link::new).get(index);
+  }
+
+  private static Exception newDetailedLoggedException(final java.lang.Exception cause,
+                                                      final Tr torrentPreviewTr) {
+
+    val detailedException = new Exception(torrentPreviewTr, cause);
     LOGGER.log(detailedException);
     return detailedException;
+  }
+
+  static class Exception extends ParseException {
+
+    Exception(final Tr torrentPreviewTr, final Throwable cause) {
+      super(newMessageFor(torrentPreviewTr), cause);
+    }
+
+    private static String newMessageFor(final Tr invalidTr) {
+      return "Failed to parse torrent preview <tr>: " + System.lineSeparator() + invalidTr;
+    }
   }
 }

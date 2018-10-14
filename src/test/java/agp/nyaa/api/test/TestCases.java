@@ -10,6 +10,10 @@ import java.util.Iterator;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestCases {
 
+  public static Iterator<Object[]> forEach(final Object... testCases) {
+    return TestCases.from(Arrays.asList(testCases));
+  }
+
   public static Iterator<Object[]> from(final Collection<?> testCases) {
     return testCases.stream().map(a -> new Object[]{a}).iterator();
   }

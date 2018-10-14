@@ -1,15 +1,15 @@
 package agp.nyaa.api.test;
 
+import java.net.URI;
+import java.time.Instant;
+
+import com.google.common.primitives.UnsignedInteger;
+
+import agp.nyaa.api.mapper.StringToUriMapper;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.DataSize;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
-import com.google.common.primitives.UnsignedInteger;
-import org.testng.TestException;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Instant;
 
 public final class TestTorrentPreview extends TorrentPreview {
 
@@ -35,20 +35,12 @@ public final class TestTorrentPreview extends TorrentPreview {
 
   @Override
   public URI downloadLink() {
-    try {
-      return new URI("http://nyaa.si/test/download-link/");
-    } catch (URISyntaxException e) {
-      throw new TestException("Unreachable");
-    }
+    return StringToUriMapper.applicationTo("http://nyaa.si/test/download-link/");
   }
 
   @Override
   public URI magnetLink() {
-    try {
-      return new URI("http://nyaa.si/test/magnet-link/");
-    } catch (URISyntaxException e) {
-      throw new TestException("Unreachable");
-    }
+    return StringToUriMapper.applicationTo("http://nyaa.si/test/magnet-link/");
   }
 
   @Override
