@@ -1,14 +1,16 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.model.Category;
-import agp.nyaa.api.test.TestCases;
-import com.google.common.collect.ImmutableMap;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 import java.util.Iterator;
 
-import static org.testng.Assert.assertEquals;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.google.common.collect.ImmutableMap;
+
+import agp.nyaa.api.model.Category;
+import agp.nyaa.api.test.TestCases;
 
 public class CategoryMapperTest {
 
@@ -23,29 +25,29 @@ public class CategoryMapperTest {
   private CategoryMapper mapper = new CategoryMapper();
 
 
-  @Test(dataProvider = "categoryHrefTestCasesProvider")
-  public void mapping(final String categoryHref) {
-
-    /* Act */
-    final Category actualMappingResult = mapper.map(categoryHref);
-
-    /* Assert */
-    assertEquals(actualMappingResult, getExpectedCategoryBy(categoryHref));
-  }
-
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnNullCategoryHref() {
+  public void mapperShouldThrowOnNulls() {
     mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnUnknownCategoryHref() {
-    mapper.map("unknown");
+  public void mapperShouldThrowOnUnsupportedCategoryHrefs() {
+    mapper.map("unsupported");
   }
 
   @Test
-  public void supportedValues() {
+  public void supportedValuesShouldMatchTestedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
+  }
+
+  @Test(dataProvider = "categoryHrefTestCasesProvider")
+  public void mappingSupportedCategoryHrefShouldProduceExpectedResult(final String categoryHref) {
+
+    // Given
+    final Category actualMappingResult = mapper.map(categoryHref);
+
+    // Expect
+    assertEquals(actualMappingResult, getExpectedCategoryBy(categoryHref));
   }
 
   @DataProvider(name = "categoryHrefTestCasesProvider")

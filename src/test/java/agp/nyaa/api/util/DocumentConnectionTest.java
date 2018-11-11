@@ -7,13 +7,10 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Comparator;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static agp.nyaa.api.util.DocumentConnection.GetRs.bySuccessFirst;
 import static agp.nyaa.api.util.DocumentConnection.GetRs.byTimeTaken;
-import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
 
 public class DocumentConnectionTest {
@@ -34,10 +31,10 @@ public class DocumentConnectionTest {
   }
 
   private DocumentConnection urlStringToDocumentConnection(final String documentUri) {
-    return new DocumentConnection.Builder().url(documentUri).filter(torrentsListDocument()).build();
+    return new DocumentConnection.Builder().url(documentUri).filter(torrentListDocument()).build();
   }
 
-  private Predicate<Document> torrentsListDocument() {
+  private Predicate<Document> torrentListDocument() {
     return document -> document.select("table.torrent-list").size() == 1;
   }
 }

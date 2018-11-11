@@ -1,6 +1,4 @@
-next: Transition to BDD
------------------------------------------
-- UnverifiedNyaaMirror
-- NyaaMirrorVerifier (take logic from NyaaHomepageDocument)
+next: UnverifiedNyaaMirror & NyaaMirrorVerifier
+----------------------------------------------
 - VerifiedNyaaMirror
 - @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)

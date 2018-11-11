@@ -24,29 +24,29 @@ public class DataSizeUnitMapperImplTest {
   private DataSizeUnitMapper mapper = DataSizeUnitMapper.impl();
 
 
-  @Test(dataProvider = "unitTestCasesProvider")
-  public void mapping(final String mappingInput) {
-
-    /* Act */
-    final DataSize.Unit actualMappingResult = mapper.map(mappingInput);
-
-    /* Assert */
-    assertEquals(actualMappingResult, getExpectedResultBy(mappingInput));
-  }
-
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnNullArgument() {
+  public void mappingShouldThrowOnNulls() {
     mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnUnknownArgument() {
-    mapper.map("unknown");
+  public void mappingShouldThrowOnUnsupportedUnitStrings() {
+    mapper.map("unsupported");
   }
 
   @Test
-  public void supportedValues() {
+  public void supportedValuesShouldMatchTestedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
+  }
+
+  @Test(dataProvider = "unitTestCasesProvider")
+  public void mappingSupportedUnitStringShouldProduceExpectedResult(final String unitString) {
+
+    // Given
+    final DataSize.Unit actualMappingResult = mapper.map(unitString);
+
+    // Expect
+    assertEquals(actualMappingResult, getExpectedResultBy(unitString));
   }
 
   @DataProvider(name = "unitTestCasesProvider")

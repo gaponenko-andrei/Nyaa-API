@@ -23,29 +23,29 @@ public class TorrentStateMapperTest {
   private TorrentStateMapper mapper = new TorrentStateMapper();
 
 
-  @Test(dataProvider = "cssClassTestCasesProvider")
-  public void mapping(final String cssClass) {
-
-    /* Act */
-    final TorrentState actualMappingResult = mapper.map(cssClass);
-
-    /* Assert */
-    assertEquals(actualMappingResult, getExpectedStateBy(cssClass));
-  }
-
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnNullCssClass() {
+  public void mappingShouldThrowOnNulls() {
     mapper.map(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnUnknownCssClass() {
-    mapper.map("unknown");
+  public void mappingShouldThrowOnUnsupportedCssClasses() {
+    mapper.map("unsupported");
   }
 
   @Test
-  public void supportedValues() {
+  public void supportedValuesShouldMatchTestedValues() {
     assertEquals(mapper.supportedValues(), MAPPING.keySet());
+  }
+
+  @Test(dataProvider = "cssClassTestCasesProvider")
+  public void mappingSupportedCssClassShouldProduceExpectedResult(final String cssClass) {
+
+    // Given
+    final TorrentState actualMappingResult = mapper.map(cssClass);
+
+    // Expect
+    assertEquals(actualMappingResult, getExpectedStateBy(cssClass));
   }
 
   @DataProvider(name = "cssClassTestCasesProvider")

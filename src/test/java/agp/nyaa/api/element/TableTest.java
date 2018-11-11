@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class TableTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructionThrowsWhenSourceElementIsNotTable() {
+  public void constructorShouldThrowOnNonTableElements() {
     new Table(newNonTableElement());
   }
 
@@ -16,7 +16,7 @@ public class TableTest {
   }
 
   @Test
-  public void constructionThrowsNothingOnTableSourceElement() {
+  public void constructorShouldAcceptTableElements() {
     new Table(newTableElement());
   }
 

@@ -1,9 +1,7 @@
 package agp.nyaa.api.parsing;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -21,115 +19,108 @@ import agp.nyaa.api.model.TorrentState;
 import agp.nyaa.api.test.TestDocuments;
 import lombok.val;
 
-// todo refactoring
-
 public class TorrentPreviewTrParserTest {
 
   private TorrentPreviewTrParser parser = new TorrentPreviewTrParser();
   private ImmutableDocument trSamplesDoc = TestDocuments.get("torrent-preview-tr-samples.html");
-  private Tr validTorrentPreviewTr = newTorrentPreviewTrBySampleId("valid");
+  private Tr validTorrentPreviewTr = newTorrentPreviewTr("valid");
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void throwsOnNullElementArgument() {
+  public void parserShouldThrowOnNulls() {
     parse(null);
   }
 
-  @Test
-  public void parsingReturnsNonNullResult() throws IOException {
-    assertNotNull(parse(validTorrentPreviewTr));
-  }
-
-  /* id parsing */
+  /* id */
 
   @Test
-  public void idParsing() {
+  public void parsingShouldProduceExpectedId() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.id().longValue(), 1032497L);
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentId() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-id"));
+  public void parsingShouldThrowOnTrWithoutId() {
+    parse(newTorrentPreviewTr("with-absent-id"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidId() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-id"));
+  public void parsingShouldThrowOnTrWithInvalidId() {
+    parse(newTorrentPreviewTr("with-invalid-id"));
   }
 
-  /* state parsing */
+  /* state */
 
   @Test
-  public void stateParsing() {
+  public void parsingShouldProduceExpectedState() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.state(), TorrentState.NORMAL);
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentState() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-state"));
+  public void parsingShouldThrowOnTrWithoutState() {
+    parse(newTorrentPreviewTr("with-absent-state"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithUnknownState() {
-    parse(newTorrentPreviewTrBySampleId("with-unknown-state"));
+  public void parsingShouldThrowOnTrWithUnknownState() {
+    parse(newTorrentPreviewTr("with-unknown-state"));
   }
 
-  /* category parsing */
+  /* category */
 
   @Test
-  public void categoryParsing() {
+  public void parsingShouldProduceExpectedCategory() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.category(), Category.Anime.EnglishTranslated.instance());
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentCategory() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-category"));
+  public void parsingShouldThrowOnTrWithoutCategory() {
+    parse(newTorrentPreviewTr("with-absent-category"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithUnknownCategory() {
-    parse(newTorrentPreviewTrBySampleId("with-unknown-category"));
+  public void parsingShouldThrowOnTrWithUnknownCategory() {
+    parse(newTorrentPreviewTr("with-unknown-category"));
   }
 
-  /* title parsing */
+  /* title */
 
   @Test
-  public void titleParsing() {
+  public void parsingShouldProduceExpectedTitle() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.title(), "[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv");
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentTitle() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-title"));
+  public void parsingShouldThrowOnTrWithoutTitle() {
+    parse(newTorrentPreviewTr("with-absent-title"));
   }
 
-  /* torrent download uri parsing */
+  /* torrent download uri */
 
   @Test
-  public void torrentDownloadUriParsing() {
+  public void parsingShouldProduceExpectedTorrentDownloadLink() {
     val result = parse(validTorrentPreviewTr);
     val expectedResult = StringToUriMapper.applicationTo("/download/1032497.torrent");
     assertEquals(result.downloadLink(), expectedResult);
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentTorrentDownloadUri() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-torrent-download-uri"));
+  public void parsingShouldThrowOnTrWithoutTorrentDownloadLink() {
+    parse(newTorrentPreviewTr("with-absent-torrent-download-uri"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidTorrentDownloadUri() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-torrent-download-uri"));
+  public void parsingShouldThrowOnTrWithInvalidTorrentDownloadLink() {
+    parse(newTorrentPreviewTr("with-invalid-torrent-download-uri"));
   }
 
-  /* magnet uri parsing */
+  /* magnet uri */
 
   @Test
-  public void magnetUriParsing() {
+  public void parsingShouldProduceExpectedMagnetLink() {
     val result = parse(validTorrentPreviewTr);
     val expectedResult = StringToUriMapper.applicationTo(
       "magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05" +
@@ -142,19 +133,19 @@ public class TorrentPreviewTrParserTest {
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentMagnetUri() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-magnet-uri"));
+  public void parsingShouldThrowOnTrWithoutMagnetLink() {
+    parse(newTorrentPreviewTr("with-absent-magnet-uri"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidMagnetUri() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-magnet-uri"));
+  public void parsingShouldThrowOnTrWithInvalidMagnetLink() {
+    parse(newTorrentPreviewTr("with-invalid-magnet-uri"));
   }
 
-  /* upload date parsing */
+  /* upload instant */
 
   @Test
-  public void uploadInstantParsing() {
+  public void parsingShouldProduceExpectedUploadInstant() {
 
     /* Arrange */
     val expectedDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -169,72 +160,72 @@ public class TorrentPreviewTrParserTest {
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentUploadInstant() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-upload-instant"));
+  public void parsingShouldThrowOnTrWithoutUploadInstant() {
+    parse(newTorrentPreviewTr("with-absent-upload-instant"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidUploadInstant() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-upload-instant"));
+  public void parsingShouldThrowOnTrWithInvalidUploadInstant() {
+    parse(newTorrentPreviewTr("with-invalid-upload-instant"));
   }
 
-  /* seeders count parsing */
+  /* seeders count */
 
   @Test
-  public void seedersCountParsing() {
+  public void parsingShouldProduceExpectedSeedersCount() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.seedersCount(), UnsignedInteger.valueOf(1));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentSeedersCount() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-seeders-count"));
+  public void parsingShouldThrowOnTrWithoutSeedersCount() {
+    parse(newTorrentPreviewTr("with-absent-seeders-count"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidSeedersCount() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-seeders-count"));
+  public void parsingShouldThrowOnTrWithInvalidSeedersCount() {
+    parse(newTorrentPreviewTr("with-invalid-seeders-count"));
   }
 
-  /* leechers count parsing */
+  /* leechers count */
 
   @Test
-  public void leechersCountParsing() {
+  public void parsingShouldProduceExpectedLeechersCount() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.leechersCount(), UnsignedInteger.valueOf(39));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentLeechersCount() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-leechers-count"));
+  public void parsingShouldThrowOnTrWithoutLeechersCount() {
+    parse(newTorrentPreviewTr("with-absent-leechers-count"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidLeechersCount() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-leechers-count"));
+  public void parsingShouldThrowOnTrWithInvalidLeechersCount() {
+    parse(newTorrentPreviewTr("with-invalid-leechers-count"));
   }
 
-  /* downloads count parsing */
+  /* downloads count */
 
   @Test
-  public void downloadsCountParsing() {
+  public void parsingShouldProduceExpectedDownloadsCount() {
     val result = parse(validTorrentPreviewTr);
     assertEquals(result.downloadsCount(), UnsignedInteger.valueOf(0));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithAbsentDownloadsCount() {
-    parse(newTorrentPreviewTrBySampleId("with-absent-downloads-count"));
+  public void parsingShouldThrowOnTrWithoutDownloadsCount() {
+    parse(newTorrentPreviewTr("with-absent-downloads-count"));
   }
 
   @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
-  public void throwsOnElementWithInvalidDownloadsCount() {
-    parse(newTorrentPreviewTrBySampleId("with-invalid-downloads-count"));
+  public void parsingShouldThrowOnTrWithInvalidDownloadsCount() {
+    parse(newTorrentPreviewTr("with-invalid-downloads-count"));
   }
 
   /* Utility Methods */
 
-  private Tr newTorrentPreviewTrBySampleId(final String sampleId) {
+  private Tr newTorrentPreviewTr(final String sampleId) {
     val selector = String.format("tr[data-sample-id='%s']", sampleId);
     return trSamplesDoc.select(selector, Tr::new).get(0);
   }

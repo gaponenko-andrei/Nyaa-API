@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class TrTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructionThrowsWhenSourceElementIsNotTr() {
+  public void constructorShouldThrowOnNonTrElements() {
     new Tr(newNonTrElement());
   }
 
@@ -16,7 +16,7 @@ public class TrTest {
   }
 
   @Test
-  public void constructionThrowsNothingOnTrSourceElement() {
+  public void constructorShouldAcceptTrElements() {
     new Tr(newTrElement());
   }
 

@@ -16,22 +16,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "using")
-public final class TorrentsListTableParser implements Parser<Table, TorrentPreviewSet> {
+public final class TorrentListTableParser implements Parser<Table, TorrentPreviewSet> {
 
   @Getter
   @NonNull
   private final Parser<Tr, TorrentPreview> torrentPreviewParser;
 
   @Override
-  public TorrentPreviewSet apply(@NonNull final Table torrentsListTable) {
-    validate(torrentsListTable);
-    val torrentPreviewTrs = selectTorrentPreviewTrsFrom(torrentsListTable);
+  public TorrentPreviewSet apply(@NonNull final Table torrentListTable) {
+    validate(torrentListTable);
+    val torrentPreviewTrs = selectTorrentPreviewTrsFrom(torrentListTable);
     val torrentPreviewSet = parse(torrentPreviewTrs);
     return new TorrentPreviewSet(torrentPreviewSet);
   }
 
-  private List<Tr> selectTorrentPreviewTrsFrom(final Table torrentsListTable) {
-    return torrentsListTable.select("tbody tr", Tr::new);
+  private List<Tr> selectTorrentPreviewTrsFrom(final Table torrentListTable) {
+    return torrentListTable.select("tbody tr", Tr::new);
   }
 
   private Set<TorrentPreview> parse(final List<Tr> torrentPreviewTrs) {

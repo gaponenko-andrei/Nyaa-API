@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class TdTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructionThrowsWhenSourceElementIsNotTd() {
+  public void constructorShouldThrowOnNonTdElements() {
     new Td(newNonTdElement());
   }
 
@@ -16,7 +16,7 @@ public class TdTest {
   }
 
   @Test
-  public void constructionThrowsNothingOnTdSourceElement() {
+  public void constructorShouldAcceptTdElements() {
     new Td(newTdElement());
   }
 

@@ -20,7 +20,7 @@ import lombok.val;
 public class ImmutableElementTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructorShouldNotAcceptNullArgument() {
+  public void constructorShouldThrowOnNulls() {
     new ImmutableElement<>((Element) null);
   }
 
@@ -159,7 +159,7 @@ public class ImmutableElementTest {
   /* hasClass */
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void hasClassMethodShouldNotAcceptNullArguments() {
+  public void hasClassMethodShouldThrowOnNulls() {
 
     // Given
     val sourceElementWithCssClass = newTestElement().attr("class", "value");
@@ -194,7 +194,7 @@ public class ImmutableElementTest {
     assertFalse(result);
   }
 
-  /* Utility methods */
+  /* utils */
 
   private Element newTestElement() {
     return new Element("tag");

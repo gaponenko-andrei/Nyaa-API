@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class LinkTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructionThrowsWhenSourceElementIsNotLink() {
+  public void constructorShouldThrowOnNonLinkElements() {
     new Link(newNonLinkElement());
   }
 
@@ -16,7 +16,7 @@ public class LinkTest {
   }
 
   @Test
-  public void constructionThrowsNothingOnLinkSourceElement() {
+  public void constructorShouldAcceptLinkElements() {
     new Link(newLinkElement());
   }
 

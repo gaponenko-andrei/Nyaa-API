@@ -1,11 +1,14 @@
 package agp.nyaa.api.mapper;
 
-import agp.nyaa.api.model.DataSize;
+import static com.google.common.base.Preconditions.checkArgument;
+
+import java.util.Map;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import lombok.NonNull;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import agp.nyaa.api.model.DataSize;
+import lombok.NonNull;
 
 public interface DataSizeUnitMapper extends SupportedValuesAwareMapper<String, DataSize.Unit> {
 
@@ -20,8 +23,10 @@ public interface DataSizeUnitMapper extends SupportedValuesAwareMapper<String, D
         .build());
   }
 
-  static DataSizeUnitMapper from(@NonNull final ImmutableMap<String, DataSize.Unit> mapping) {
+  static DataSizeUnitMapper from(@NonNull final Map<String, DataSize.Unit> mappingSource) {
     return new DataSizeUnitMapper() {
+
+      private ImmutableMap<String, DataSize.Unit> mapping = ImmutableMap.copyOf(mappingSource);
 
       @Override
       public DataSize.Unit apply(@NonNull final String siteValue) {

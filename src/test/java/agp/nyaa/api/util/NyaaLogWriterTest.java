@@ -21,135 +21,126 @@ public class NyaaLogWriterTest {
 
   @BeforeMethod
   public void setUp() {
-    exception = null;
+    exception = new NullPointerException("test exception");
     wrappedLogger = mock(Logger.class);
     nyaaLogWriter = new NyaaLogWriter(wrappedLogger);
   }
 
   @Test
-  public void loggingExceptionCallsTraceWhenTraceIsEnabled() {
+  public void loggingExceptionWhenTraceEnabledShouldMakeSingleTraceCall() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(true);
+    // Given
+    givenTraceEnabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
+    // Then
     verifySingleTraceCall();
   }
 
   @Test
-  public void loggingExceptionCallsNothingButTraceWhenTraceIsEnabled() {
+  public void loggingExceptionWhenTraceEnabledShouldMakeNothingButTraceCall() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(true);
+    // Given
+    givenTraceEnabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
-    verifyNothingButTrace();
+    // Then
+    verifyNothingButTraceCall();
   }
 
   @Test
-  public void loggingExceptionWritesExceptionStackTraceWhenTraceIsEnabled() {
+  public void loggedExceptionStackShouldBeTracedWhenTraceEnabled() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(true);
+    // Given
+    givenTraceEnabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
+    // Then
     verifyExceptionStackWasTraced();
   }
 
   @Test
-  public void loggingExceptionDoesNotCallTraceWhenTraceIsDisabled() {
+  public void loggingExceptionWhenTraceDisabledShouldMakeZeroTraceCalls() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(false);
+    // Given
+    givenTraceDisabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
+    // Then
     verifyZeroTraceCalls();
   }
 
   @Test
-  public void loggingExceptionCallsErrorWhenTraceIsDisabled() {
+  public void loggingExceptionWhenTraceDisabledShouldMakeErrorCallInstead() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(false);
+    // Given
+    givenTraceDisabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
+    // Then
     verifySingleErrorCall();
   }
 
   @Test
-  public void loggingExceptionCallsNothingButErrorWhenTraceIsDisabled() {
+  public void loggingExceptionWhenTraceDisabledShouldMakeNothingButErrorCall() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(false);
+    // Given
+    givenTraceDisabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
-    verifyNothingButError();
+    // Then
+    verifyNothingButErrorCall();
   }
 
   @Test
-  public void loggingExceptionWritesExceptionMessageWhenTraceIsDisabled() {
+  public void loggedExceptionMessageShouldBeWrittenAsErrorWhenTraceDisabled() {
 
-    /* Arrange */
-    givenException();
-    givenTraceEnabledIs(false);
+    // Given
+    givenTraceDisabled();
 
-    /* Act */
-    logException();
+    // When
+    log(exception);
 
-    /* Assert */
+    // Then
     verifyExceptionMessageWasWrittenAsError();
   }
 
-  @Test(
-    dataProvider = "traceEnabledTestCasesProvider",
+  @Test(dataProvider = "traceEnabledTestCasesProvider",
     expectedExceptions = IllegalArgumentException.class)
-  public void loggingExceptionThrowsOnNullException(final boolean traceEnabledValue) {
+  public void loggingShouldThrowOnNulls(final boolean traceEnabledValue) {
 
-    /* Arrange */
-    givenNullException();
+    // Given
     givenTraceEnabledIs(traceEnabledValue);
 
-    /* Act */
-    logException();
+    // When
+    log(null);
   }
 
-  private void givenException() {
-    exception = new NullPointerException("test exception");
+  private void givenTraceEnabled() {
+    givenTraceEnabledIs(true);
   }
 
-  private void givenNullException() {
-    exception = null;
+  private void givenTraceDisabled() {
+    givenTraceEnabledIs(false);
   }
 
   private void givenTraceEnabledIs(final boolean traceIsEnabled) {
     when(wrappedLogger.isTraceEnabled()).thenReturn(traceIsEnabled);
   }
 
-  private void logException() {
+  private void log(Exception exception) {
     nyaaLogWriter.log(exception);
   }
 
@@ -157,7 +148,7 @@ public class NyaaLogWriterTest {
     verify(wrappedLogger, times(1)).trace(anyString());
   }
 
-  private void verifyNothingButTrace() {
+  private void verifyNothingButTraceCall() {
     verify(wrappedLogger).isTraceEnabled();
     verify(wrappedLogger).trace(anyString());
     verifyNoMoreInteractions(wrappedLogger);
@@ -176,7 +167,7 @@ public class NyaaLogWriterTest {
     verify(wrappedLogger, times(1)).error(anyString());
   }
 
-  private void verifyNothingButError() {
+  private void verifyNothingButErrorCall() {
     verify(wrappedLogger).isTraceEnabled();
     verify(wrappedLogger).error(anyString());
     verifyNoMoreInteractions(wrappedLogger);
