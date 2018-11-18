@@ -43,7 +43,7 @@ public class CategoryMapperTest {
   @Test(dataProvider = "categoryHrefTestCasesProvider")
   public void mappingSupportedCategoryHrefShouldProduceExpectedResult(final String categoryHref) {
 
-    // Given
+    // given
     final Category actualMappingResult = mapper.map(categoryHref);
 
     // Expect

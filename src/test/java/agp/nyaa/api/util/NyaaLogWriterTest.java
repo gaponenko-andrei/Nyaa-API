@@ -1,17 +1,17 @@
 package agp.nyaa.api.util;
 
-import agp.nyaa.api.test.TestCases;
-import com.google.common.base.Throwables;
-import lombok.val;
+import static com.google.common.base.Throwables.getStackTraceAsString;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Iterator;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import agp.nyaa.api.test.TestCases;
 
 public class NyaaLogWriterTest {
 
@@ -29,104 +29,145 @@ public class NyaaLogWriterTest {
   @Test
   public void loggingExceptionWhenTraceEnabledShouldMakeSingleTraceCall() {
 
-    // Given
+    // given
     givenTraceEnabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifySingleTraceCall();
+    // then
+    verify(wrappedLogger, times(1)).trace(anyString());
   }
 
   @Test
-  public void loggingExceptionWhenTraceEnabledShouldMakeNothingButTraceCall() {
+  public void loggingExceptionWhenTraceEnabledShouldMakeOnlyTraceCall() {
 
-    // Given
+    // given
     givenTraceEnabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifyNothingButTraceCall();
+    // then
+    verifyOnlyTraceCall();
   }
 
   @Test
   public void loggedExceptionStackShouldBeTracedWhenTraceEnabled() {
 
-    // Given
+    // given
     givenTraceEnabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifyExceptionStackWasTraced();
+    // then
+    verify(wrappedLogger).trace(getStackTraceAsString(exception));
   }
 
   @Test
   public void loggingExceptionWhenTraceDisabledShouldMakeZeroTraceCalls() {
 
-    // Given
+    // given
     givenTraceDisabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifyZeroTraceCalls();
+    // then
+    verify(wrappedLogger, times(0)).trace(anyString());
   }
 
   @Test
   public void loggingExceptionWhenTraceDisabledShouldMakeErrorCallInstead() {
 
-    // Given
+    // given
     givenTraceDisabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifySingleErrorCall();
+    // then
+    verify(wrappedLogger, times(1)).error(anyString());
   }
 
   @Test
-  public void loggingExceptionWhenTraceDisabledShouldMakeNothingButErrorCall() {
+  public void loggingExceptionWhenTraceDisabledShouldMakeOnlyErrorCall() {
 
-    // Given
+    // given
     givenTraceDisabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifyNothingButErrorCall();
+    // then
+    verifyOnlyErrorCall();
   }
 
   @Test
   public void loggedExceptionMessageShouldBeWrittenAsErrorWhenTraceDisabled() {
 
-    // Given
+    // given
     givenTraceDisabled();
 
-    // When
-    log(exception);
+    // when
+    nyaaLogWriter.log(exception);
 
-    // Then
-    verifyExceptionMessageWasWrittenAsError();
+    // then
+    verify(wrappedLogger).error(exception.getMessage());
   }
 
   @Test(dataProvider = "traceEnabledTestCasesProvider",
     expectedExceptions = IllegalArgumentException.class)
-  public void loggingShouldThrowOnNulls(final boolean traceEnabledValue) {
+  public void loggingShouldThrowOnNull(final boolean traceEnabledValue) {
 
-    // Given
+    // given
     givenTraceEnabledIs(traceEnabledValue);
 
-    // When
-    log(null);
+    // when
+    nyaaLogWriter.log(null);
   }
+
+  @Test
+  public void warnAboutShouldWriteExceptionStackTraceWhenTraceEnabled() {
+
+    // given
+    givenTraceEnabled();
+
+    // when
+    nyaaLogWriter.warnAbout(exception);
+
+    // then
+    verify(wrappedLogger).warn(getStackTraceAsString(exception));
+  }
+
+  @Test
+  public void warnAboutShouldWriteExceptionMessageWhenTraceDisabled() {
+
+    // given
+    givenTraceDisabled();
+
+    // when
+    nyaaLogWriter.warnAbout(exception);
+
+    // then
+    verify(wrappedLogger).warn(exception.getMessage());
+  }
+
+  @Test(dataProvider = "traceEnabledTestCasesProvider")
+  public void warnAboutShouldMakeOnlyWarnCall(final boolean traceEnabled) {
+
+    // given
+    givenTraceEnabledIs(traceEnabled);
+
+    // when
+    nyaaLogWriter.warnAbout(exception);
+
+    // then
+    verifyOnlyWarnCall();
+  }
+
+  /* utils */
 
   private void givenTraceEnabled() {
     givenTraceEnabledIs(true);
@@ -140,42 +181,22 @@ public class NyaaLogWriterTest {
     when(wrappedLogger.isTraceEnabled()).thenReturn(traceIsEnabled);
   }
 
-  private void log(Exception exception) {
-    nyaaLogWriter.log(exception);
-  }
-
-  private void verifySingleTraceCall() {
-    verify(wrappedLogger, times(1)).trace(anyString());
-  }
-
-  private void verifyNothingButTraceCall() {
+  private void verifyOnlyTraceCall() {
     verify(wrappedLogger).isTraceEnabled();
     verify(wrappedLogger).trace(anyString());
     verifyNoMoreInteractions(wrappedLogger);
   }
 
-  private void verifyZeroTraceCalls() {
-    verify(wrappedLogger, times(0)).trace(anyString());
-  }
-
-  private void verifyExceptionStackWasTraced() {
-    val exceptionStackTrace = Throwables.getStackTraceAsString(exception);
-    verify(wrappedLogger).trace(exceptionStackTrace);
-  }
-
-  private void verifySingleErrorCall() {
-    verify(wrappedLogger, times(1)).error(anyString());
-  }
-
-  private void verifyNothingButErrorCall() {
+  private void verifyOnlyErrorCall() {
     verify(wrappedLogger).isTraceEnabled();
     verify(wrappedLogger).error(anyString());
     verifyNoMoreInteractions(wrappedLogger);
   }
 
-  private void verifyExceptionMessageWasWrittenAsError() {
-    val message = exception.getMessage();
-    verify(wrappedLogger).error(message);
+  private void verifyOnlyWarnCall() {
+    verify(wrappedLogger).isTraceEnabled();
+    verify(wrappedLogger).warn(anyString());
+    verifyNoMoreInteractions(wrappedLogger);
   }
 
   @DataProvider(name = "traceEnabledTestCasesProvider")

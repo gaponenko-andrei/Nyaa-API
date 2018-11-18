@@ -42,6 +42,10 @@ public class ImmutableElement<T extends Element> {
     return delegate.toString();
   }
 
+  public final boolean has(@NonNull final String selector) {
+    return delegate.select(selector).size() > 0;
+  }
+
   public final boolean hasClass(@NonNull final String cssClass) {
     return delegate.hasClass(cssClass);
   }

@@ -32,9 +32,4 @@ public final class TorrentStateMapper implements SupportedValuesAwareMapper<Stri
   public ImmutableSet<String> supportedValues() {
     return MAPPING.keySet();
   }
-
-  // todo сделать default?
-  private boolean isSupported(final String cssClass) {
-    return supportedValues().contains(cssClass);
-  }
 }

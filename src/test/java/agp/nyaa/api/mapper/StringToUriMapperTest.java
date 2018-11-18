@@ -25,13 +25,13 @@ public class StringToUriMapperTest {
   @Test
   public void mappingValidUriStringShouldProduceExpectedResult() {
 
-    // Given
+    // given
     final String validUriString = "/download/1032497.torrent";
 
-    // When
+    // when
     final URI mappingResult = mapper.map(validUriString);
 
-    // Then
+    // then
     assertEquals(mappingResult.getPath(), validUriString);
   }
 }

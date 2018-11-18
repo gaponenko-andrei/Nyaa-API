@@ -1,4 +1,2 @@
-next: UnverifiedNyaaMirror & NyaaMirrorVerifier
-----------------------------------------------
-- VerifiedNyaaMirror
-- @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+next:
+-----------------------------------------------------------

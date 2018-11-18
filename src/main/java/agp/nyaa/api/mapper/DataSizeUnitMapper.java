@@ -38,10 +38,6 @@ public interface DataSizeUnitMapper extends SupportedValuesAwareMapper<String, D
       public ImmutableSet<String> supportedValues() {
         return mapping.keySet();
       }
-
-      private boolean isSupported(final String siteValue) {
-        return supportedValues().contains(siteValue);
-      }
     };
   }
 }

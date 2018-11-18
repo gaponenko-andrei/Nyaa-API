@@ -1,12 +1,13 @@
 package agp.nyaa.api.util;
 
-import com.google.common.base.Throwables;
+import static com.google.common.base.Throwables.getStackTraceAsString;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RequiredArgsConstructor(access = AccessLevel.MODULE)
 public final class NyaaLogWriter {
@@ -24,19 +25,17 @@ public final class NyaaLogWriter {
 
   public void log(@NonNull final Exception exception) {
     if (logger.isTraceEnabled()) {
-      logStackTraceOf(exception);
+      logger.trace(getStackTraceAsString(exception));
     } else {
-      logErrorMessageOf(exception);
+      logger.error(exception.getMessage());
     }
   }
 
-  private void logStackTraceOf(final Exception exception) {
-    val stackTraceMessage = Throwables.getStackTraceAsString(exception);
-    logger.trace(stackTraceMessage);
-  }
-
-  private void logErrorMessageOf(final Exception exception) {
-    val errorMessage = exception.getMessage();
-    logger.error(errorMessage);
+  public void warnAbout(@NonNull final Exception exception) {
+    if (logger.isTraceEnabled()) {
+      logger.warn(getStackTraceAsString(exception));
+    } else {
+      logger.warn(exception.getMessage());
+    }
   }
 }

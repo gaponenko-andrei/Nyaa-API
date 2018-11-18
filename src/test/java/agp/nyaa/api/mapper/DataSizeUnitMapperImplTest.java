@@ -42,7 +42,7 @@ public class DataSizeUnitMapperImplTest {
   @Test(dataProvider = "unitTestCasesProvider")
   public void mappingSupportedUnitStringShouldProduceExpectedResult(final String unitString) {
 
-    // Given
+    // given
     final DataSize.Unit actualMappingResult = mapper.map(unitString);
 
     // Expect

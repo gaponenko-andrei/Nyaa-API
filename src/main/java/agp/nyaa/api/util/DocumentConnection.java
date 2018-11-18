@@ -1,114 +1,77 @@
 package agp.nyaa.api.util;
 
-import com.google.common.base.Stopwatch;
-import lombok.val;
+import static agp.nyaa.api.util.Functions.*;
+import static lombok.AccessLevel.PRIVATE;
+import static org.immutables.value.Value.Style.ImplementationVisibility.PACKAGE;
+
+import java.net.URL;
+import java.time.Duration;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.immutables.value.Value;
 import org.jsoup.helper.HttpConnection;
-import org.jsoup.nodes.Document;
 
-import java.time.Duration;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.function.Predicate;
+import com.google.common.base.Stopwatch;
 
-import static org.immutables.value.Value.Style.ImplementationVisibility.PACKAGE;
+import agp.nyaa.api.element.ImmutableDocument;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import lombok.val;
 
-@Value.Immutable
-@Value.Style(visibility = PACKAGE, overshadowImplementation = true)
+@Value.Immutable(builder = false)
+@Value.Style(
+  of = "to",
+  visibility = PACKAGE,
+  overshadowImplementation = true
+)
 public abstract class DocumentConnection {
 
-  public abstract String url();
-  public abstract Optional<Predicate<Document>> filter();
+  @Value.Parameter
+  public abstract URL url();
 
-  // alias
-  public GetRs toNewGetRs() {
-    return sendGetRq();
+
+  public static DocumentConnection fromUrl(@NonNull final URL url) {
+    return DocumentConnection.to(url);
   }
 
-  public GetRs sendGetRq() {
+  public static DocumentConnection to(@NonNull final URL url) {
+    return ImmutableDocumentConnection.to(url);
+  }
+
+  public Try<GetRs> getRs() {
     val stopwatch = Stopwatch.createStarted();
-    val responseBuilder = innerSendGetRq();
-    val timeTaken = stopwatch.stop().elapsed();
-    return responseBuilder.timeTaken(timeTaken).build();
-  }
-
-  private GetRs.Builder innerSendGetRq() {
     val connection = HttpConnection.connect(url());
-    try {
-      val document = connection.get();
-      return newRsBuilderFor(document);
-    } catch (Exception exception) {
-      return newFailureRsBuilder(exception);
-    }
+
+    return Try
+      .call(connection::get)
+      .map(as(ImmutableDocument::new))
+      .map(document -> new GetRsImpl(stopwatch.elapsed(), document));
   }
 
-  private GetRs.Builder newRsBuilderFor(final Document document) {
-    return isValid(document) ? newSuccessRsBuilderFor(document) : newFailureRsBuilder();
+  public interface GetRs {
+    Duration timeTaken();
+    ImmutableDocument document();
   }
 
-  private boolean isValid(final Document document) {
-    return filter().map(filter -> filter.test(document)).orElse(true);
-  }
+  @Getter
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor(access = PRIVATE)
+  private final class GetRsImpl implements GetRs {
 
-  private GetRs.Builder newFailureRsBuilder(final Exception exception) {
-    return new GetRs.Builder().url(url()).failureMessage(exception.getMessage());
-  }
+    @NonNull
+    private final Duration timeTaken;
 
-  private GetRs.Builder newSuccessRsBuilderFor(final Document document) {
-    return new GetRs.Builder().url(url()).document(document);
-  }
-
-  private GetRs.Builder newFailureRsBuilder() {
-    return new GetRs.Builder().url(url()).failureMessage("Document doesn't match the filter");
-  }
-
-  static class Builder extends ImmutableDocumentConnection.Builder {}
-
-  @Value.Immutable
-  @Value.Style(visibility = PACKAGE, overshadowImplementation = true)
-  public static abstract class GetRs {
-
-    public abstract String url();
-    public abstract Duration timeTaken();
-    public abstract Optional<Document> document();
-    public abstract Optional<String> failureMessage();
-
-
-    /* orderings */
-
-    public static Comparator<GetRs> bySuccessFirst() {
-      return Comparator.comparing(GetRs::failure);
-    }
-
-    public static Comparator<GetRs> byTimeTaken() {
-      return Comparator.comparing(GetRs::timeTaken);
-    }
-
-    /* calculated fields */
-
-    public final Boolean success() {
-      return document().isPresent();
-    }
-
-    public final Boolean failure() {
-      return !success();
-    }
+    @NonNull
+    private final ImmutableDocument document;
 
     @Override
     public String toString() {
-      val toStringBuilder = new ToStringBuilder(this)
+      return new ToStringBuilder(this)
         .append("url", url())
-        .append(" success", success())
-        .append(" timeTaken", timeTaken());
-
-      if (this.failure() && failureMessage().isPresent()) {
-        toStringBuilder.append(" failureMessage", failureMessage().get());
-      }
-
-      return toStringBuilder.build();
+        .append(" timeTaken", timeTaken)
+        .build();
     }
-
-    static class Builder extends ImmutableGetRs.Builder { }
   }
 }

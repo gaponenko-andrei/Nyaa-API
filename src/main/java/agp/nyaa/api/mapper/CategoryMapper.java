@@ -32,8 +32,4 @@ public final class CategoryMapper implements SupportedValuesAwareMapper<String, 
   public ImmutableSet<String> supportedValues() {
     return MAPPING.keySet();
   }
-
-  private boolean isSupported(final String href) {
-    return supportedValues().contains(href);
-  }
 }

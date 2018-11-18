@@ -44,26 +44,26 @@ public class DataSizeMapperTest {
   private void testMappingProducesExpectedResult(final String inputString,
                                                  final DataSize expectedResult) {
 
-    // Given
+    // given
     val mapper = DataSizeMapper.using(testUnitMapper);
 
-    // When
+    // when
     final DataSize actualMappingResult = mapper.map(inputString);
 
-    // Then
+    // then
     assertEquals(actualMappingResult, expectedResult);
   }
 
   @Test
   public void dataSizeMapperShouldUseProvidedUnitMapper() {
 
-    // Given
+    // given
     val mapper = DataSizeMapper.using(spy(testUnitMapper));
 
-    // When
+    // when
     mapper.map("100 TestUnit");
 
-    // Then
+    // then
     verify(mapper.getUnitMapper()).map("TestUnit");
   }
 
@@ -77,11 +77,11 @@ public class DataSizeMapperTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void usingUnitMapperWithoutSupportedUnitsShouldThrow() {
 
-    // Given
+    // given
     val unitMapper = DataSizeUnitMapper.from(emptyMap());
     assertTrue(unitMapper.supportedValues().isEmpty());
 
-    // When
+    // when
     DataSizeMapper.using(unitMapper);
   }
 

@@ -36,13 +36,13 @@ public class TorrentListTableParserTest {
   @Test
   public void parserUsingDefaultTorrentPreviewParserShouldProduceExpectedResult() {
 
-    // Given
+    // given
     val parser = TorrentListTableParser.using(new TorrentPreviewTrParser());
 
-    // When
+    // when
     val result = parser.parse(nonEmptyTorrentListTable);
 
-    // Then
+    // then
     assertEquals(result.ids(), ImmutableSet.of(1060623L, 1060486L, 1060485L, 1060483L));
   }
 

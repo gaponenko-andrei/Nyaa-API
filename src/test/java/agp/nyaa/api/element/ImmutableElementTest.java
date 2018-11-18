@@ -20,20 +20,20 @@ import lombok.val;
 public class ImmutableElementTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructorShouldThrowOnNulls() {
+  public void constructorShouldThrowOnNull() {
     new ImmutableElement<>((Element) null);
   }
 
   @Test
   public void sourceElementShouldBeClonedDuringConstruction() {
 
-    // Given
+    // given
     val sourceElement = spy(newTestElement());
 
-    // When
+    // when
     new ImmutableElement<>(sourceElement);
 
-    // Then
+    // then
     verify(sourceElement).clone();
   }
 
@@ -41,13 +41,13 @@ public class ImmutableElementTest {
   public void sourceElementAndDelegateShouldNotHaveSameReference()
     throws NoSuchFieldException, IllegalAccessException {
 
-    // Given
+    // given
     val sourceElement = newTestElement();
 
-    // When
+    // when
     val delegate = getDelegateOf(new ImmutableElement<>(sourceElement));
 
-    // Then
+    // then
     assertNotSame(sourceElement, delegate);
   }
 
@@ -55,13 +55,13 @@ public class ImmutableElementTest {
   public void uriMethodShouldReturnBaseUriOfSourceElement(final String testUrl)
     throws URISyntaxException {
 
-    // Given
+    // given
     val sourceElement = newTestElementWithUri(testUrl);
 
-    // When
+    // when
     val actualUri = new ImmutableElement<>(sourceElement).uri();
 
-    // Then
+    // then
     assertEquals(actualUri, new URI(testUrl));
   }
 
@@ -77,54 +77,156 @@ public class ImmutableElementTest {
 
   /* attr */
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void attrMethodShouldThrowOnNull() {
+
+    // given
+    val sourceElementWithoutAttr = newTestElement();
+
+    // when
+    new ImmutableElement<>(sourceElementWithoutAttr).attr(null);
+  }
+
   @Test(expectedExceptions = NoSuchAttributeException.class)
   public void attrMethodShouldThrowWhenSourceElementDidntHaveRequestedAttribute() {
 
-    // Given
+    // given
     val sourceElementWithoutAttr = newTestElement();
 
-    // When
+    // when
     new ImmutableElement<>(sourceElementWithoutAttr).attr("class");
   }
 
   @Test
   public void attrMethodShouldReturnAttributeValueOfSourceElement() {
 
-    // Given
+    // given
     val sourceElementWithAttr = newTestElement().attr("class", "some-value");
 
-    // When
+    // when
     val attrValue = new ImmutableElement<>(sourceElementWithAttr).attr("class");
 
-    // Then
+    // then
     assertEquals(attrValue, "some-value");
+  }
+
+  /* hasClass */
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void hasClassMethodShouldThrowOnNull() {
+
+    // given
+    val sourceElementWithCssClass = newTestElement().attr("class", "value");
+
+    // when
+    new ImmutableElement<>(sourceElementWithCssClass).hasClass(null);
+  }
+
+  @Test
+  public void hasClassMethodShouldReturnTrueForElementWithSpecifiedCssClass() {
+
+    // given
+    val sourceElementWithCssClass = newTestElement().attr("class", "value");
+
+    // when
+    val result = new ImmutableElement<>(sourceElementWithCssClass).hasClass("value");
+
+    // then
+    assertTrue(result);
+  }
+
+  @Test
+  public void hasClassMethodShouldReturnFalseForElementWithoutSpecifiedCssClass() {
+
+    // given
+    val sourceElementWithCssClass = newTestElement().attr("class", "value");
+
+    // when
+    val result = new ImmutableElement<>(sourceElementWithCssClass).hasClass("absent");
+
+    // then
+    assertFalse(result);
+  }
+
+  /* has */
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void hasMethodShouldThrowOnNull() {
+
+    // given
+    val sourceElementWithChild = newTestElement().append("<div><i class='x'/></div>");
+
+    // when
+    new ImmutableElement<>(sourceElementWithChild).has(null);
+  }
+
+  @Test(description =
+    "Method 'has' should return 'true' for provided selector when " +
+      "source element actually has something matching this selector"
+  )
+  public void hasMethodShouldReturnTrueWhenExpected() {
+
+    // given
+    val sourceElementWithChild = newTestElement().append("<div><i class='x'/></div>");
+
+    // when
+    val result = new ImmutableElement<>(sourceElementWithChild).has("i.x");
+
+    // then
+    assertTrue(result);
+  }
+
+  @Test(description =
+    "Method 'has' should return 'false' for provided selector " +
+      "when source element has nothing matching this selector"
+  )
+  public void hasMethodShouldReturnFalseWhenExpected() {
+
+    // given
+    val sourceElementWithChild = newTestElement().append("<div><i class='x'/></div>");
+
+    // when
+    val result = new ImmutableElement<>(sourceElementWithChild).has("i.y");
+
+    // then
+    assertFalse(result);
   }
 
   /* hasAttr */
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void hasAttrMethodShouldThrowOnNull() {
+
+    // given
+    val sourceElementWithAttr = newTestElement().attr("class", "some-value");
+
+    // when
+    new ImmutableElement<>(sourceElementWithAttr).hasAttr(null);
+  }
+
   @Test
   public void hasAttrMethodShouldReturnTrueWhenSourceElementHadIt() {
 
-    // Given
+    // given
     val sourceElementWithAttr = newTestElement().attr("class", "some-value");
 
-    // When
+    // when
     val result = new ImmutableElement<>(sourceElementWithAttr).hasAttr("class");
 
-    // Then
+    // then
     assertTrue(result);
   }
 
   @Test
   public void hasAttrMethodShouldReturnFalseWhenSourceElementDidntHaveIt() {
 
-    // Given
+    // given
     val sourceElementWithoutAttr = newTestElement();
 
-    // When
+    // when
     val result = new ImmutableElement<>(sourceElementWithoutAttr).hasAttr("class");
 
-    // Then
+    // then
     assertFalse(result);
   }
 
@@ -133,65 +235,27 @@ public class ImmutableElementTest {
   @Test
   public void textMethodShouldReturnEmptyStringWhenSourceElementWasWithoutText() {
 
-    // Given
+    // given
     val sourceElementWithoutText = newTestElement();
 
-    // When
+    // when
     val actualText = new ImmutableElement<>(sourceElementWithoutText).text();
 
-    // Then
+    // then
     assertEquals(actualText, "");
   }
 
   @Test
   public void textMethodShouldReturnTextOfSourceElement() {
 
-    // Given
+    // given
     val sourceElementWithText = newTestElement().text("value");
 
-    // When
+    // when
     val actualText = new ImmutableElement<>(sourceElementWithText).text();
 
-    // Then
+    // then
     assertEquals(actualText, "value");
-  }
-
-  /* hasClass */
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void hasClassMethodShouldThrowOnNulls() {
-
-    // Given
-    val sourceElementWithCssClass = newTestElement().attr("class", "value");
-
-    // When
-    new ImmutableElement<>(sourceElementWithCssClass).hasClass(null);
-  }
-
-  @Test
-  public void hasClassMethodShouldReturnTrueForElementWithSpecifiedCssClass() {
-
-    // Given
-    val sourceElementWithCssClass = newTestElement().attr("class", "value");
-
-    // When
-    val result = new ImmutableElement<>(sourceElementWithCssClass).hasClass("value");
-
-    // Then
-    assertTrue(result);
-  }
-
-  @Test
-  public void hasClassMethodShouldReturnFalseForElementWithoutSpecifiedCssClass() {
-
-    // Given
-    val sourceElementWithCssClass = newTestElement().attr("class", "value");
-
-    // When
-    val result = new ImmutableElement<>(sourceElementWithCssClass).hasClass("absent");
-
-    // Then
-    assertFalse(result);
   }
 
   /* utils */

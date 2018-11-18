@@ -41,7 +41,7 @@ public class TorrentStateMapperTest {
   @Test(dataProvider = "cssClassTestCasesProvider")
   public void mappingSupportedCssClassShouldProduceExpectedResult(final String cssClass) {
 
-    // Given
+    // given
     final TorrentState actualMappingResult = mapper.map(cssClass);
 
     // Expect
