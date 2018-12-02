@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import agp.nyaa.api.model.Category;
 import com.google.common.collect.ImmutableMap;
@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class CategoryMapper implements SupportedValuesAwareMapper<String, Category> {
+public final class CategoryMapping implements SupportedValuesAwareMapping<String, Category> {
 
   private static final ImmutableMap<String, Category> MAPPING =
     ImmutableMap.<String, Category>builder()
@@ -19,7 +19,7 @@ public final class CategoryMapper implements SupportedValuesAwareMapper<String, 
 
 
   public static Category applicationTo(@NonNull final String href) {
-    return new CategoryMapper().apply(href);
+    return new CategoryMapping().apply(href);
   }
 
   @Override

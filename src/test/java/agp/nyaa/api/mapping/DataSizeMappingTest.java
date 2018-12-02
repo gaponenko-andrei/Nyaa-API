@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import static agp.nyaa.api.model.DataSize.Unit.BYTE;
 import static java.util.Collections.emptyMap;
@@ -15,13 +15,13 @@ import org.testng.annotations.Test;
 import agp.nyaa.api.model.DataSize;
 import agp.nyaa.api.model.DataSize.Unit;
 import agp.nyaa.api.test.TestCases;
-import agp.nyaa.api.test.TestDataSizeUnitMapper;
+import agp.nyaa.api.test.TestDataSizeUnitMapping;
 import lombok.val;
 
-public class DataSizeMapperTest {
+public class DataSizeMappingTest {
 
-  private final DataSizeUnitMapper testUnitMapper =
-    new TestDataSizeUnitMapper().from("TestUnit").to(Unit.BYTE);
+  private final DataSizeUnitMapping testUnitMapping =
+    new TestDataSizeUnitMapping().from("TestUnit").to(Unit.BYTE);
 
 
   @Test
@@ -45,60 +45,60 @@ public class DataSizeMapperTest {
                                                  final DataSize expectedResult) {
 
     // given
-    val mapper = DataSizeMapper.using(testUnitMapper);
+    val mapping = DataSizeMapping.using(testUnitMapping);
 
     // when
-    final DataSize actualMappingResult = mapper.map(inputString);
+    final DataSize actualMappingResult = mapping.apply(inputString);
 
     // then
     assertEquals(actualMappingResult, expectedResult);
   }
 
   @Test
-  public void dataSizeMapperShouldUseProvidedUnitMapper() {
+  public void dataSizeMappingShouldUseProvidedUnitMapping() {
 
     // given
-    val mapper = DataSizeMapper.using(spy(testUnitMapper));
+    val mapping = DataSizeMapping.using(spy(testUnitMapping));
 
     // when
-    mapper.map("100 TestUnit");
+    mapping.apply("100 TestUnit");
 
     // then
-    verify(mapper.getUnitMapper()).map("TestUnit");
+    verify(mapping.getUnitMapping()).apply("TestUnit");
   }
 
   /* Negative scenarios */
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void usingNullUnitMapperShouldThrow() {
-    DataSizeMapper.using((DataSizeUnitMapper) null);
+  public void usingNullUnitMappingShouldThrow() {
+    DataSizeMapping.using((DataSizeUnitMapping) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void usingUnitMapperWithoutSupportedUnitsShouldThrow() {
+  public void usingUnitMappingWithoutSupportedUnitsShouldThrow() {
 
     // given
-    val unitMapper = DataSizeUnitMapper.from(emptyMap());
-    assertTrue(unitMapper.supportedValues().isEmpty());
+    val unitMapping = DataSizeUnitMapping.from(emptyMap());
+    assertTrue(unitMapping.supportedValues().isEmpty());
 
     // when
-    DataSizeMapper.using(unitMapper);
+    DataSizeMapping.using(unitMapping);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void mappingDataSizeStringWithUnsupportedUnitShouldThrow() {
-    DataSizeMapper.using(testUnitMapper).map("100 UnsupportedUnits");
+    DataSizeMapping.using(testUnitMapping).apply("100 UnsupportedUnits");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void mappingDataSizeStringWithNonDecimalUnitsShouldThrow() {
-    DataSizeMapper.using(testUnitMapper).map("0x1 TestUnit");
+    DataSizeMapping.using(testUnitMapping).apply("0x1 TestUnit");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class,
     dataProvider = "providerOfDataSizeStringsWithZeroValues")
   public void mappingDataSizeStringWithZeroValueShouldThrow(final String value) {
-    DataSizeMapper.using(testUnitMapper).map(value);
+    DataSizeMapping.using(testUnitMapping).apply(value);
   }
 
   @DataProvider(name = "providerOfDataSizeStringsWithZeroValues")
@@ -109,7 +109,7 @@ public class DataSizeMapperTest {
   @Test(expectedExceptions = IllegalArgumentException.class,
     dataProvider = "providerOfDataSizeStringsWithNegativeValues")
   public void mappingDataSizeStringWithNegativeValueShouldThrow(final String value) {
-    DataSizeMapper.using(testUnitMapper).map(value);
+    DataSizeMapping.using(testUnitMapping).apply(value);
   }
 
   @DataProvider(name = "providerOfDataSizeStringsWithNegativeValues")

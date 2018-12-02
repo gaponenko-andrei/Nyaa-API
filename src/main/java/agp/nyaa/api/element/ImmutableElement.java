@@ -11,7 +11,7 @@ import org.jsoup.nodes.Element;
 import com.google.common.collect.ImmutableList;
 
 import agp.nyaa.api.exception.NoSuchAttributeException;
-import agp.nyaa.api.mapper.StringToUriMapper;
+import agp.nyaa.api.mapping.StringToUriMapping;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +26,7 @@ public class ImmutableElement<T extends Element> {
   @SuppressWarnings("unchecked")
   ImmutableElement(@NonNull final T sourceElement) {
     this.delegate = (T) sourceElement.clone();
-    this.uri = StringToUriMapper.applicationTo(delegate.baseUri());
+    this.uri = StringToUriMapping.applicationTo(delegate.baseUri());
   }
 
   public final URI uri() {

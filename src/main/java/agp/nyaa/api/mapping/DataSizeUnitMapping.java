@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -10,10 +10,10 @@ import com.google.common.collect.ImmutableSet;
 import agp.nyaa.api.model.DataSize;
 import lombok.NonNull;
 
-public interface DataSizeUnitMapper extends SupportedValuesAwareMapper<String, DataSize.Unit> {
+public interface DataSizeUnitMapping extends SupportedValuesAwareMapping<String, DataSize.Unit> {
 
-  static DataSizeUnitMapper impl() {
-    return DataSizeUnitMapper.from(
+  static DataSizeUnitMapping impl() {
+    return DataSizeUnitMapping.from(
       ImmutableMap.<String, DataSize.Unit>builder()
         .put("Bytes", DataSize.Unit.BYTE)
         .put("KiB", DataSize.Unit.KILOBYTE)
@@ -23,8 +23,8 @@ public interface DataSizeUnitMapper extends SupportedValuesAwareMapper<String, D
         .build());
   }
 
-  static DataSizeUnitMapper from(@NonNull final Map<String, DataSize.Unit> mappingSource) {
-    return new DataSizeUnitMapper() {
+  static DataSizeUnitMapping from(@NonNull final Map<String, DataSize.Unit> mappingSource) {
+    return new DataSizeUnitMapping() {
 
       private ImmutableMap<String, DataSize.Unit> mapping = ImmutableMap.copyOf(mappingSource);
 

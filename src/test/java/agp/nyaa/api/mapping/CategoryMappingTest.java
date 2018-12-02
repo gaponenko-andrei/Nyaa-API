@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import static org.testng.Assert.assertEquals;
 
@@ -12,9 +12,9 @@ import com.google.common.collect.ImmutableMap;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.test.TestCases;
 
-public class CategoryMapperTest {
+public class CategoryMappingTest {
 
-  private static final ImmutableMap<String, Category> MAPPING =
+  private static final ImmutableMap<String, Category> TESTED_VALUES =
     ImmutableMap.<String, Category>builder()
       .put("/?c=1_1", Category.Anime.MusicVideo.instance())
       .put("/?c=1_2", Category.Anime.EnglishTranslated.instance())
@@ -22,40 +22,40 @@ public class CategoryMapperTest {
       .put("/?c=1_4", Category.Anime.NonTranslated.instance())
       .build();
 
-  private CategoryMapper mapper = new CategoryMapper();
+  private CategoryMapping mapping = new CategoryMapping();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void mapperShouldThrowOnNulls() {
-    mapper.map(null);
+  public void mappingShouldThrowOnNull() {
+    mapping.apply(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void mapperShouldThrowOnUnsupportedCategoryHrefs() {
-    mapper.map("unsupported");
+  public void mappingShouldThrowOnUnsupportedCategoryHref() {
+    mapping.apply("unsupported");
   }
 
   @Test
   public void supportedValuesShouldMatchTestedValues() {
-    assertEquals(mapper.supportedValues(), MAPPING.keySet());
+    assertEquals(mapping.supportedValues(), TESTED_VALUES.keySet());
   }
 
   @Test(dataProvider = "categoryHrefTestCasesProvider")
   public void mappingSupportedCategoryHrefShouldProduceExpectedResult(final String categoryHref) {
 
     // given
-    final Category actualMappingResult = mapper.map(categoryHref);
+    final Category actualMappingResult = mapping.apply(categoryHref);
 
-    // Expect
+    // expect
     assertEquals(actualMappingResult, getExpectedCategoryBy(categoryHref));
   }
 
   @DataProvider(name = "categoryHrefTestCasesProvider")
   private static Iterator<Object[]> getCategoryHrefTestCases() {
-    return TestCases.from(MAPPING.keySet());
+    return TestCases.from(TESTED_VALUES.keySet());
   }
 
   private static Category getExpectedCategoryBy(final String categoryHref) {
-    return MAPPING.get(categoryHref);
+    return TESTED_VALUES.get(categoryHref);
   }
 }

@@ -1,20 +1,20 @@
 package agp.nyaa.api.test;
 
-import agp.nyaa.api.mapper.DataSizeUnitMapper;
+import agp.nyaa.api.mapping.DataSizeUnitMapping;
 import agp.nyaa.api.model.DataSize;
 import com.google.common.collect.ImmutableSet;
 
-public class TestDataSizeUnitMapper implements DataSizeUnitMapper {
+public class TestDataSizeUnitMapping implements DataSizeUnitMapping {
 
   private String unitString;
   private DataSize.Unit unit;
 
-  public TestDataSizeUnitMapper from(final String unitString) {
+  public TestDataSizeUnitMapping from(final String unitString) {
     this.unitString = unitString;
     return this;
   }
 
-  public TestDataSizeUnitMapper to(final DataSize.Unit unit) {
+  public TestDataSizeUnitMapping to(final DataSize.Unit unit) {
     this.unit = unit;
     return this;
   }

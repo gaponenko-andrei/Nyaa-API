@@ -12,7 +12,7 @@ import com.google.common.primitives.UnsignedInteger;
 
 import agp.nyaa.api.element.ImmutableDocument;
 import agp.nyaa.api.element.Tr;
-import agp.nyaa.api.mapper.StringToUriMapper;
+import agp.nyaa.api.mapping.StringToUriMapping;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
@@ -103,7 +103,7 @@ public class TorrentPreviewTrParserTest {
   @Test
   public void parsingShouldProduceExpectedTorrentDownloadLink() {
     val result = parse(validTorrentPreviewTr);
-    val expectedResult = StringToUriMapper.applicationTo("/download/1032497.torrent");
+    val expectedResult = StringToUriMapping.applicationTo("/download/1032497.torrent");
     assertEquals(result.downloadLink(), expectedResult);
   }
 
@@ -122,7 +122,7 @@ public class TorrentPreviewTrParserTest {
   @Test
   public void parsingShouldProduceExpectedMagnetLink() {
     val result = parse(validTorrentPreviewTr);
-    val expectedResult = StringToUriMapper.applicationTo(
+    val expectedResult = StringToUriMapping.applicationTo(
       "magnet:?xt=urn:btih:BGS7JJ4XMFBB36BRTQVDJ75E5BMUJISR&dn=%5BErai-raws%5D+Tokyo+Ghoul-re+-+05" +
         "+%5B720p%5D.mkv&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Fopen." +
         "stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=" +

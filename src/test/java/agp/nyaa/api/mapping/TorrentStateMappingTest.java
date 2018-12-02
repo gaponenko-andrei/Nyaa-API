@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import agp.nyaa.api.model.TorrentState;
 import agp.nyaa.api.test.TestCases;
@@ -11,49 +11,49 @@ import java.util.Iterator;
 import static agp.nyaa.api.model.TorrentState.*;
 import static org.testng.Assert.assertEquals;
 
-public class TorrentStateMapperTest {
+public class TorrentStateMappingTest {
 
-  private static final ImmutableMap<String, TorrentState> MAPPING =
+  private static final ImmutableMap<String, TorrentState> TESTED_VALUES =
     ImmutableMap.<String, TorrentState>builder()
       .put("default", NORMAL)
       .put("danger", REMAKE)
       .put("success", TRUSTED)
       .build();
 
-  private TorrentStateMapper mapper = new TorrentStateMapper();
+  private TorrentStateMapping mapping = new TorrentStateMapping();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void mappingShouldThrowOnNulls() {
-    mapper.map(null);
+  public void mappingShouldThrowOnNull() {
+    mapping.apply(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void mappingShouldThrowOnUnsupportedCssClasses() {
-    mapper.map("unsupported");
+  public void mappingShouldThrowOnUnsupportedCssClass() {
+    mapping.apply("unsupported");
   }
 
   @Test
   public void supportedValuesShouldMatchTestedValues() {
-    assertEquals(mapper.supportedValues(), MAPPING.keySet());
+    assertEquals(mapping.supportedValues(), TESTED_VALUES.keySet());
   }
 
   @Test(dataProvider = "cssClassTestCasesProvider")
   public void mappingSupportedCssClassShouldProduceExpectedResult(final String cssClass) {
 
     // given
-    final TorrentState actualMappingResult = mapper.map(cssClass);
+    final TorrentState actualMappingResult = mapping.apply(cssClass);
 
-    // Expect
+    // expect
     assertEquals(actualMappingResult, getExpectedStateBy(cssClass));
   }
 
   @DataProvider(name = "cssClassTestCasesProvider")
   private static Iterator<Object[]> getCssClassTestCases() {
-    return TestCases.from(MAPPING.keySet());
+    return TestCases.from(TESTED_VALUES.keySet());
   }
 
   private static TorrentState getExpectedStateBy(final String cssClass) {
-    return MAPPING.get(cssClass);
+    return TESTED_VALUES.get(cssClass);
   }
 }

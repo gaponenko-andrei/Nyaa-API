@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import agp.nyaa.api.model.DataSize;
 import agp.nyaa.api.test.TestCases;
@@ -10,9 +10,9 @@ import java.util.Iterator;
 
 import static org.testng.Assert.assertEquals;
 
-public class DataSizeUnitMapperImplTest {
+public class DataSizeUnitMappingImplTest {
 
-  private static final ImmutableMap<String, DataSize.Unit> MAPPING =
+  private static final ImmutableMap<String, DataSize.Unit> TESTED_MAPPINGS =
     ImmutableMap.<String, DataSize.Unit>builder()
       .put("Bytes", DataSize.Unit.BYTE)
       .put("KiB", DataSize.Unit.KILOBYTE)
@@ -21,40 +21,40 @@ public class DataSizeUnitMapperImplTest {
       .put("TiB", DataSize.Unit.TERABYTE)
       .build();
 
-  private DataSizeUnitMapper mapper = DataSizeUnitMapper.impl();
+  private DataSizeUnitMapping mapping = DataSizeUnitMapping.impl();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void mappingShouldThrowOnNulls() {
-    mapper.map(null);
+  public void mappingShouldThrowOnNull() {
+    mapping.apply(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void mappingShouldThrowOnUnsupportedUnitStrings() {
-    mapper.map("unsupported");
+    mapping.apply("unsupported");
   }
 
   @Test
   public void supportedValuesShouldMatchTestedValues() {
-    assertEquals(mapper.supportedValues(), MAPPING.keySet());
+    assertEquals(mapping.supportedValues(), TESTED_MAPPINGS.keySet());
   }
 
   @Test(dataProvider = "unitTestCasesProvider")
   public void mappingSupportedUnitStringShouldProduceExpectedResult(final String unitString) {
 
     // given
-    final DataSize.Unit actualMappingResult = mapper.map(unitString);
+    final DataSize.Unit actualMappingResult = mapping.apply(unitString);
 
-    // Expect
+    // expect
     assertEquals(actualMappingResult, getExpectedResultBy(unitString));
   }
 
   @DataProvider(name = "unitTestCasesProvider")
   private static Iterator<Object[]> getTestSiteValues() {
-    return TestCases.from(MAPPING.keySet());
+    return TestCases.from(TESTED_MAPPINGS.keySet());
   }
 
   private static DataSize.Unit getExpectedResultBy(final String siteValue) {
-    return MAPPING.get(siteValue);
+    return TESTED_MAPPINGS.get(siteValue);
   }
 }

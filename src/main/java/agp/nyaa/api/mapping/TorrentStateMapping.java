@@ -1,4 +1,4 @@
-package agp.nyaa.api.mapper;
+package agp.nyaa.api.mapping;
 
 import agp.nyaa.api.model.TorrentState;
 import com.google.common.collect.ImmutableMap;
@@ -8,7 +8,7 @@ import lombok.NonNull;
 import static agp.nyaa.api.model.TorrentState.*;
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class TorrentStateMapper implements SupportedValuesAwareMapper<String, TorrentState> {
+public final class TorrentStateMapping implements SupportedValuesAwareMapping<String, TorrentState> {
 
   private static final ImmutableMap<String, TorrentState> MAPPING =
     ImmutableMap.<String, TorrentState>builder()
@@ -19,7 +19,7 @@ public final class TorrentStateMapper implements SupportedValuesAwareMapper<Stri
 
 
   public static TorrentState applicationTo(@NonNull final String cssClass) {
-    return new TorrentStateMapper().apply(cssClass);
+    return new TorrentStateMapping().apply(cssClass);
   }
 
   @Override

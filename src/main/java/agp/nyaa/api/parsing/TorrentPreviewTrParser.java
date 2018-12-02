@@ -12,11 +12,11 @@ import agp.nyaa.api.element.Link;
 import agp.nyaa.api.element.Td;
 import agp.nyaa.api.element.Tr;
 import agp.nyaa.api.exception.parse.ParseException;
-import agp.nyaa.api.mapper.CategoryMapper;
-import agp.nyaa.api.mapper.DataSizeMapper;
-import agp.nyaa.api.mapper.DataSizeUnitMapper;
-import agp.nyaa.api.mapper.StringToUriMapper;
-import agp.nyaa.api.mapper.TorrentStateMapper;
+import agp.nyaa.api.mapping.CategoryMapping;
+import agp.nyaa.api.mapping.DataSizeMapping;
+import agp.nyaa.api.mapping.DataSizeUnitMapping;
+import agp.nyaa.api.mapping.StringToUriMapping;
+import agp.nyaa.api.mapping.TorrentStateMapping;
 import agp.nyaa.api.model.Category;
 import agp.nyaa.api.model.DataSize;
 import agp.nyaa.api.model.TorrentPreview;
@@ -97,13 +97,13 @@ public class TorrentPreviewTrParser implements Parser<Tr, TorrentPreview> {
 
   private static TorrentState parseStateOf(final Tr torrentPreviewTr) {
     val torrentCategoryString = torrentPreviewTr.attr("class");
-    return TorrentStateMapper.applicationTo(torrentCategoryString);
+    return TorrentStateMapping.applicationTo(torrentCategoryString);
   }
 
   private static Category parseCategoryOf(final Tr torrentPreviewTr) {
     val categoryTd = td(torrentPreviewTr, 0);
     val categoryLink = link(categoryTd, 0);
-    return CategoryMapper.applicationTo(categoryLink.attr("href"));
+    return CategoryMapping.applicationTo(categoryLink.attr("href"));
   }
 
   private static String parseTitleOf(final Tr torrentPreviewTr) {
@@ -115,18 +115,18 @@ public class TorrentPreviewTrParser implements Parser<Tr, TorrentPreview> {
   private static URI parseDownloadLinkOf(final Tr torrentPreviewTr) {
     val downloadTd = td(torrentPreviewTr, 2);
     val downloadLink = link(downloadTd, 0);
-    return StringToUriMapper.applicationTo(downloadLink.attr("href"));
+    return StringToUriMapping.applicationTo(downloadLink.attr("href"));
   }
 
   private static URI parseMagnetLinkOf(final Tr torrentPreviewTr) {
     val magnetTd = td(torrentPreviewTr, 2);
     val magnetLink = link(magnetTd, 1);
-    return StringToUriMapper.applicationTo(magnetLink.attr("href"));
+    return StringToUriMapping.applicationTo(magnetLink.attr("href"));
   }
 
   private static DataSize parseDataSizeOf(final Tr torrentPreviewTr) {
     val dataSizeTd = td(torrentPreviewTr, 3);
-    return DataSizeMapper.using(DataSizeUnitMapper.impl()).map(dataSizeTd.text());
+    return DataSizeMapping.using(DataSizeUnitMapping.impl()).apply(dataSizeTd.text());
   }
 
   private static Instant parseUploadInstantOf(final Tr torrentPreviewTr) {
