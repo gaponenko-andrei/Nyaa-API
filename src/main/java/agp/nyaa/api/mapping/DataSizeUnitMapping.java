@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableSet;
 import agp.nyaa.api.model.DataSize;
 import lombok.NonNull;
 
-public interface DataSizeUnitMapping extends SupportedValuesAwareMapping<String, DataSize.Unit> {
+public interface DataSizeUnitMapping extends SupportedValuesAwareFunction<String, DataSize.Unit> {
 
   static DataSizeUnitMapping impl() {
     return DataSizeUnitMapping.from(

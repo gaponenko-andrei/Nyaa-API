@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 import com.google.common.primitives.UnsignedInteger;
 
@@ -22,23 +23,21 @@ import agp.nyaa.api.model.DataSize;
 import agp.nyaa.api.model.TorrentPreview;
 import agp.nyaa.api.model.TorrentState;
 import agp.nyaa.api.util.NyaaLogWriter;
+import agp.nyaa.api.util.Try;
 import lombok.NonNull;
 import lombok.val;
 
-public class TorrentPreviewTrParser implements Parser<Tr, TorrentPreview> {
+public class TorrentPreviewTrParsing implements Function<Tr, TorrentPreview> {
 
-  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewTrParser.class);
+  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(TorrentPreviewTrParsing.class);
 
   @Override
   public TorrentPreview apply(@NonNull final Tr torrentPreviewTr) {
-    try {
-      return tryParse(torrentPreviewTr);
-    } catch (java.lang.Exception ex) {
-      throw newDetailedLoggedException(ex, torrentPreviewTr);
-    }
+    return Try.call(() -> innerApply(torrentPreviewTr))
+              .orElseThrow(ex -> newDetailedLoggedException(ex, torrentPreviewTr));
   }
 
-  private TorrentPreview tryParse(final Tr torrentPreviewTr) {
+  private TorrentPreview innerApply(final Tr torrentPreviewTr) {
     val torrentPreviewBuilder = TorrentPreview.builder();
 
     // parse and set id

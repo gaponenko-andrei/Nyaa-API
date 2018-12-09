@@ -19,15 +19,15 @@ import agp.nyaa.api.model.TorrentState;
 import agp.nyaa.api.test.TestDocuments;
 import lombok.val;
 
-public class TorrentPreviewTrParserTest {
+public class TorrentPreviewTrParsingTest {
 
-  private TorrentPreviewTrParser parser = new TorrentPreviewTrParser();
+  private TorrentPreviewTrParsing parsing = new TorrentPreviewTrParsing();
   private ImmutableDocument trSamplesDoc = TestDocuments.get("torrent-preview-tr-samples.html");
   private Tr validTorrentPreviewTr = newTorrentPreviewTr("valid");
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void parserShouldThrowOnNulls() {
+  public void parsingShouldThrowOnNull() {
     parse(null);
   }
 
@@ -39,12 +39,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.id().longValue(), 1032497L);
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutId() {
     parse(newTorrentPreviewTr("with-absent-id"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidId() {
     parse(newTorrentPreviewTr("with-invalid-id"));
   }
@@ -57,12 +57,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.state(), TorrentState.NORMAL);
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutState() {
     parse(newTorrentPreviewTr("with-absent-state"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithUnknownState() {
     parse(newTorrentPreviewTr("with-unknown-state"));
   }
@@ -75,12 +75,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.category(), Category.Anime.EnglishTranslated.instance());
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutCategory() {
     parse(newTorrentPreviewTr("with-absent-category"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithUnknownCategory() {
     parse(newTorrentPreviewTr("with-unknown-category"));
   }
@@ -93,7 +93,7 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.title(), "[Erai-raws] Tokyo Ghoul-re - 05 [720p].mkv");
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutTitle() {
     parse(newTorrentPreviewTr("with-absent-title"));
   }
@@ -107,12 +107,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.downloadLink(), expectedResult);
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutTorrentDownloadLink() {
     parse(newTorrentPreviewTr("with-absent-torrent-download-uri"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidTorrentDownloadLink() {
     parse(newTorrentPreviewTr("with-invalid-torrent-download-uri"));
   }
@@ -132,12 +132,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.magnetLink(), expectedResult);
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutMagnetLink() {
     parse(newTorrentPreviewTr("with-absent-magnet-uri"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidMagnetLink() {
     parse(newTorrentPreviewTr("with-invalid-magnet-uri"));
   }
@@ -159,12 +159,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.uploadInstant(), expectedInstant);
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutUploadInstant() {
     parse(newTorrentPreviewTr("with-absent-upload-instant"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidUploadInstant() {
     parse(newTorrentPreviewTr("with-invalid-upload-instant"));
   }
@@ -177,12 +177,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.seedersCount(), UnsignedInteger.valueOf(1));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutSeedersCount() {
     parse(newTorrentPreviewTr("with-absent-seeders-count"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidSeedersCount() {
     parse(newTorrentPreviewTr("with-invalid-seeders-count"));
   }
@@ -195,12 +195,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.leechersCount(), UnsignedInteger.valueOf(39));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutLeechersCount() {
     parse(newTorrentPreviewTr("with-absent-leechers-count"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidLeechersCount() {
     parse(newTorrentPreviewTr("with-invalid-leechers-count"));
   }
@@ -213,12 +213,12 @@ public class TorrentPreviewTrParserTest {
     assertEquals(result.downloadsCount(), UnsignedInteger.valueOf(0));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithoutDownloadsCount() {
     parse(newTorrentPreviewTr("with-absent-downloads-count"));
   }
 
-  @Test(expectedExceptions = TorrentPreviewTrParser.Exception.class)
+  @Test(expectedExceptions = TorrentPreviewTrParsing.Exception.class)
   public void parsingShouldThrowOnTrWithInvalidDownloadsCount() {
     parse(newTorrentPreviewTr("with-invalid-downloads-count"));
   }
@@ -231,6 +231,6 @@ public class TorrentPreviewTrParserTest {
   }
 
   private TorrentPreview parse(final Tr torrentPreviewTr) {
-    return parser.parse(torrentPreviewTr);
+    return parsing.apply(torrentPreviewTr);
   }
 }

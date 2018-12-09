@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import agp.nyaa.api.element.Table;
 import agp.nyaa.api.element.Tr;
@@ -16,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "using")
-public final class TorrentListTableParser implements Parser<Table, TorrentPreviewSet> {
+public final class TorrentListTableParsing implements Function<Table, TorrentPreviewSet> {
 
   @Getter
   @NonNull
-  private final Parser<Tr, TorrentPreview> torrentPreviewParser;
+  private final Function<Tr, TorrentPreview> torrentPreviewParsing;
 
   @Override
   public TorrentPreviewSet apply(@NonNull final Table torrentListTable) {
@@ -35,7 +36,7 @@ public final class TorrentListTableParser implements Parser<Table, TorrentPrevie
   }
 
   private Set<TorrentPreview> parse(final List<Tr> torrentPreviewTrs) {
-    return torrentPreviewTrs.stream().map(torrentPreviewParser).collect(toSet());
+    return torrentPreviewTrs.stream().map(torrentPreviewParsing).collect(toSet());
   }
 
   private static void validate(final Table element) {

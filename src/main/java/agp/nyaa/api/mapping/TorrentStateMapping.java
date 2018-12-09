@@ -8,7 +8,7 @@ import lombok.NonNull;
 import static agp.nyaa.api.model.TorrentState.*;
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class TorrentStateMapping implements SupportedValuesAwareMapping<String, TorrentState> {
+public final class TorrentStateMapping implements SupportedValuesAwareFunction<String, TorrentState> {
 
   private static final ImmutableMap<String, TorrentState> MAPPING =
     ImmutableMap.<String, TorrentState>builder()

@@ -7,7 +7,7 @@ import lombok.NonNull;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class CategoryMapping implements SupportedValuesAwareMapping<String, Category> {
+public final class CategoryMapping implements SupportedValuesAwareFunction<String, Category> {
 
   private static final ImmutableMap<String, Category> MAPPING =
     ImmutableMap.<String, Category>builder()

@@ -4,5 +4,5 @@ import java.util.function.Function;
 
 import agp.nyaa.api.util.SupportedValuesAware;
 
-public interface SupportedValuesAwareMapping<T, U> extends Function<T, U>, SupportedValuesAware<T> {
+public interface SupportedValuesAwareFunction<T, U> extends Function<T, U>, SupportedValuesAware<T> {
 }

@@ -13,34 +13,34 @@ import agp.nyaa.api.test.TestDocuments;
 import lombok.val;
 
 
-public class TorrentListTableParserTest {
+public class TorrentListTableParsingTest {
 
   private final Table nonEmptyTorrentListTable = newNonEmptyTorrentListTable();
 
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void usingNullTorrentPreviewParserShouldThrow() {
-    TorrentListTableParser.using((TorrentPreviewTrParser) null);
+  public void usingNullTorrentPreviewParsingShouldThrow() {
+    TorrentListTableParsing.using((TorrentPreviewTrParsing) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void parsingShouldThrowOnNulls() {
-    TorrentListTableParser.using(new TorrentPreviewTrParser()).parse((Table) null);
+  public void parsingShouldThrowOnNull() {
+    TorrentListTableParsing.using(new TorrentPreviewTrParsing()).apply((Table) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void parsingShouldThrowOnNonTorrentListTables() throws IOException {
-    TorrentListTableParser.using(new TorrentPreviewTrParser()).parse(newNonTorrentListTable());
+    TorrentListTableParsing.using(new TorrentPreviewTrParsing()).apply(newNonTorrentListTable());
   }
 
   @Test
-  public void parserUsingDefaultTorrentPreviewParserShouldProduceExpectedResult() {
+  public void parsingUsingDefaultTorrentPreviewParsingShouldProduceExpectedResult() {
 
     // given
-    val parser = TorrentListTableParser.using(new TorrentPreviewTrParser());
+    val parsing = TorrentListTableParsing.using(new TorrentPreviewTrParsing());
 
     // when
-    val result = parser.parse(nonEmptyTorrentListTable);
+    val result = parsing.apply(nonEmptyTorrentListTable);
 
     // then
     assertEquals(result.ids(), ImmutableSet.of(1060623L, 1060486L, 1060485L, 1060483L));
@@ -49,7 +49,7 @@ public class TorrentListTableParserTest {
   /* Utils */
 
   private Table newNonEmptyTorrentListTable() {
-    return selectFirstTableFrom("torrents-list-parser-test.html");
+    return selectFirstTableFrom("torrents-list-parsing-test.html");
   }
 
   private Table newNonTorrentListTable() {
