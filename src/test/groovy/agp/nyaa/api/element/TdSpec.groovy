@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class TdSpec extends Specification {
 
-  def "Constructor should accept td element"() {
+  def "Constructor should accept <td> element"() {
 
     given:
       final Element tdElement = new Element(Tag.valueOf("td"), "baseUrl")
@@ -19,7 +19,7 @@ class TdSpec extends Specification {
       notThrown(Exception)
   }
 
-  def "Constructor should throw on non-td element"() {
+  def "Constructor should throw on non <td> element"() {
 
     given:
       final Element nonTdElement = new Element(Tag.valueOf("tr"), "baseUrl")

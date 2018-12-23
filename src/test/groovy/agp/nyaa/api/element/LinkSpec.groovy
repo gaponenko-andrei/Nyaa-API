@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class LinkSpec extends Specification {
 
-  def "Constructor should accept link element"() {
+  def "Constructor should accept <a> element"() {
 
     given:
       final Element linkElement = new Element(Tag.valueOf("a"), "baseUrl")
@@ -19,7 +19,7 @@ class LinkSpec extends Specification {
       notThrown(Exception)
   }
 
-  def "Constructor should throw on non-link element"() {
+  def "Constructor should throw on non <a> element"() {
 
     given:
       final Element nonLinkElement = new Element(Tag.valueOf("tr"), "baseUrl")

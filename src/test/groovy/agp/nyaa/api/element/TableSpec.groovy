@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class TableSpec extends Specification {
 
-  def "Constructor should accept table element"() {
+  def "Constructor should accept <table> element"() {
 
     given:
       final Element tableElement = new Element(Tag.valueOf("table"), "baseUrl")
@@ -19,7 +19,7 @@ class TableSpec extends Specification {
       notThrown(Exception)
   }
 
-  def "Constructor should throw on non-table element"() {
+  def "Constructor should throw on non <table> element"() {
 
     given:
       final Element nonTableElement = new Element(Tag.valueOf("tr"), "baseUrl")
