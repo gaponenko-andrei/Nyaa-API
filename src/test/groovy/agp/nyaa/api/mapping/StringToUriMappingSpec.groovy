@@ -5,7 +5,7 @@ import spock.lang.Specification
 
 class StringToUriMappingSpec extends Specification {
 
-  StringToUriMapping mapping = new StringToUriMapping()
+  final StringToUriMapping mapping = new StringToUriMapping()
 
 
   def "Mapping should throw on null"() {

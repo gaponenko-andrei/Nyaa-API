@@ -2,16 +2,19 @@ package agp.nyaa.api.mirror;
 
 import static java.lang.String.format;
 
+import java.util.function.Function;
+
 import agp.nyaa.api.util.NyaaLogWriter;
 import lombok.NonNull;
 import lombok.val;
 
-public final class NyaaMirrorVerifier {
+public final class NyaaMirrorVerification implements Function<UnverifiedNyaaMirror, VerifiedNyaaMirror> {
 
-  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(NyaaMirrorVerifier.class);
+  private static final NyaaLogWriter LOGGER = NyaaLogWriter.of(NyaaMirrorVerification.class);
 
 
-  public VerifiedNyaaMirror verify(@NonNull final UnverifiedNyaaMirror mirror) {
+  @Override
+  public VerifiedNyaaMirror apply(@NonNull final UnverifiedNyaaMirror mirror) {
     val rs = mirror.connection().getRs().orElseThrow(cause -> newLoggedExceptionFor(mirror, cause));
 
     if (rs.document().has("table.torrent-list")) {
