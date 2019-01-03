@@ -33,8 +33,9 @@ public class TorrentPreviewTrParsing implements Function<Tr, TorrentPreview> {
 
   @Override
   public TorrentPreview apply(@NonNull final Tr torrentPreviewTr) {
-    return Try.call(() -> innerApply(torrentPreviewTr))
-              .orElseThrow(ex -> newDetailedLoggedException(ex, torrentPreviewTr));
+    return Try.call(() -> innerApply(torrentPreviewTr)).orElseThrow(
+      ex -> newDetailedLoggedException(ex, torrentPreviewTr)
+    );
   }
 
   private TorrentPreview innerApply(final Tr torrentPreviewTr) {
