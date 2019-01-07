@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import agp.nyaa.api.test.TestResources;
 import lombok.val;
 
-public class DocumentConnectionIntegrationTest {
+public class DocumentConnectionIT {
 
   @Test
   public void call() throws IOException, URISyntaxException {
