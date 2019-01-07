@@ -1,2 +1,5 @@
-next: Transition to Spock
--------------------------
+next: Request representation
+----------------------------
+- Data Access Service
+- Logic to choose the best possible mirror
+- Pagination logic
